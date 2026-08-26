@@ -132,10 +132,10 @@ export default function LocationPage() {
             </div>
           ) : (
             <div
-              className="hairline mt-8 bg-bone-deep flex items-center justify-center text-center"
+              className="photo-placeholder mt-8"
               style={{ aspectRatio: "16 / 9" }}
             >
-              <p className="muted text-fine px-6">
+              <p className="muted text-fine">
                 MAP — pin at the gate, pending coordinates
               </p>
             </div>

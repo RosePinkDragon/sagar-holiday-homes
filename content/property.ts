@@ -861,7 +861,10 @@ export const pages = {
   gallery: {
     route: confirmed("/gallery"),
     job: "Photo grid, categorised",
-    ...pendingCopy("/gallery"),
+    title: confirmed("Gallery | Sagar Holiday Homes, Dapoli"),
+    description: confirmed(
+      "Photos of the villa, the private pool, the 150m ground and the orchard at Sagar Holiday Homes in Saldure, Dapoli."
+    ),
   },
   food: {
     route: confirmed("/food"),

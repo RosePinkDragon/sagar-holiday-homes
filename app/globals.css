@@ -445,6 +445,22 @@
     min-height: 44px;
   }
 
+  /* --- Photo placeholder --------------------------------------------------
+     DESIGN.md "Photography": bone-deep ground, canopy-soft hairline, a
+     centred canopy-muted caption naming the shot required. Real photos
+     replace these blocks directly; give each one the aspect ratio the
+     delivered crop will actually have so nothing reflows when they land. */
+  .photo-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-color: var(--bone-deep);
+    border: 1px solid var(--canopy-soft);
+    border-radius: var(--radius);
+    padding: var(--gutter);
+  }
+
   /* --- The horizon band -------------------------------------------------- */
 
   /* Full-bleed by being a top-level block, not by a 100vw margin trick — the

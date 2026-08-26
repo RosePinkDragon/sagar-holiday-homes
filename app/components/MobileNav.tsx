@@ -38,9 +38,6 @@ export default function MobileNav({ items }: { items: NavItem[] }) {
 
     closeButtonRef.current?.focus();
 
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         close();
@@ -65,10 +62,7 @@ export default function MobileNav({ items }: { items: NavItem[] }) {
     };
 
     document.addEventListener("keydown", onKeyDown);
-    return () => {
-      document.removeEventListener("keydown", onKeyDown);
-      document.body.style.overflow = previousOverflow;
-    };
+    return () => document.removeEventListener("keydown", onKeyDown);
   }, [open, close]);
 
   return (

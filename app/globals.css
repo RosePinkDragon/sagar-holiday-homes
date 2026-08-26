@@ -440,9 +440,6 @@
     transform: translateX(100%);
     transition: transform 220ms ease-out;
     z-index: 50;
-    /* Belt and braces: 8 links at a 48px gap (below) can outgrow a short
-       phone's viewport height. Scrolls internally rather than clipping. */
-    overflow-y: auto;
   }
 
   .nav-drawer[data-open="true"] {
@@ -452,7 +449,7 @@
   .nav-drawer-list {
     display: flex;
     flex-direction: column;
-    gap: 3rem; /* 48px — link tap targets stay clearly separate */
+    gap: 1.5rem; /* 24px — separate without needing the drawer to scroll */
     margin-top: 0.75rem;
   }
 

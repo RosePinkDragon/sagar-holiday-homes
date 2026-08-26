@@ -866,7 +866,10 @@ export const pages = {
   food: {
     route: confirmed("/food"),
     job: "Kitchen, cook, sample menu, pricing",
-    ...pendingCopy("/food"),
+    title: confirmed("Food — Kitchen & Local Cook | Sagar Holiday Homes, Dapoli"),
+    description: confirmed(
+      "A full guest kitchen, plus a local cook for home-style Konkani food and fresh Harnai seafood on request. Priced per dish; menu cards handed over at the villa."
+    ),
   },
   location: {
     route: confirmed("/location"),

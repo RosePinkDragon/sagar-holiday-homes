@@ -277,7 +277,12 @@ export const facts = {
     approxMetres: 150,
     activities: ["cricket", "football", "badminton"],
   }),
-  orchard: confirmed({ approxTrees: 30, species: ["coconut", "mango"] }),
+  /** BRIEF §1: "Alphonso country. April–May mango season is a marketable event." */
+  orchard: confirmed({
+    approxTrees: 30,
+    species: ["coconut", "mango"],
+    season: "Alphonso, ripe April–May",
+  }),
   kitchen: confirmed("Full kitchen, guest-usable"),
   food: confirmed("Not included. Local cook available on order."),
   indoorGames: confirmed(["Carrom", "TV"]),
@@ -846,7 +851,12 @@ export const pages = {
     route: confirmed("/pool-and-grounds"),
     job: "Pool, gazebo, ground, orchard + safety disclosure",
     targetQuery: confirmed("villa with private pool in Dapoli"),
-    ...pendingCopy("/pool-and-grounds"),
+    title: confirmed(
+      "Pool & Grounds — Private Pool, 150m Ground | Sagar Holiday Homes, Dapoli"
+    ),
+    description: confirmed(
+      "A private pool under a gazebo, ~150m of open ground for cricket and football, and a 30-tree coconut-mango orchard. Pool dimensions, depth and the safety notice, stated plainly."
+    ),
   },
   gallery: {
     route: confirmed("/gallery"),

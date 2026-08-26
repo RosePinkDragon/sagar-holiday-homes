@@ -313,6 +313,8 @@ export const facts = {
       { from: "Mumbai", duration: "4.5 – 5 hrs" },
       { from: "Pune", duration: "4.5 – 5 hrs" },
     ]),
+    /** Owner, 26 Aug 2026: mostly NH66; kept as one simple note rather than turn-by-turn. */
+    routeNote: confirmed("Mostly via NH66"),
   },
 } as const;
 
@@ -845,7 +847,12 @@ export const pages = {
     route: confirmed("/location"),
     job: "Map, drive times, beaches, things to do nearby",
     targetQuery: confirmed("villa near Saldure beach"),
-    ...pendingCopy("/location"),
+    title: confirmed(
+      "Location — Villa Near Saldure Beach, Dapoli | Sagar Holiday Homes"
+    ),
+    description: confirmed(
+      "Sagar Holiday Homes is in Saldure, Dapoli — 5 minutes from Saldure beach, about 4.5–5 hrs from Mumbai or Pune via NH66. Drive times, nearby beaches and landmarks, and how to find us."
+    ),
   },
   tariff: {
     route: confirmed("/tariff"),

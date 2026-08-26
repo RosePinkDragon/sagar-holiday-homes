@@ -51,6 +51,9 @@ export default function PoolAndGroundsPage() {
               >
                 {describePoolSize()}
               </dd>
+              <p className="muted mt-2 text-fine">
+                18 × 17 feet — room for a dozen people without taking turns.
+              </p>
             </div>
             <div className="hairline p-6">
               <dt className="label">Depth</dt>

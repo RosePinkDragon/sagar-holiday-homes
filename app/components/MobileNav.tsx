@@ -8,8 +8,9 @@ type NavItem = { route: string; label: string };
 
 /**
  * Mobile-only hamburger + right-side drawer. The desktop nav in Header.tsx is
- * a separate, always-visible <nav> — this component renders nothing at
- * 768px+ (every top-level element below carries md:hidden).
+ * a separate, always-visible <nav> — this component renders nothing at the
+ * custom `nav:` breakpoint and up (1100px, globals.css — every top-level
+ * element below carries nav:hidden).
  *
  * The drawer and its backdrop are always mounted; `data-open` drives the
  * slide/fade in globals.css. A conditionally-mounted drawer can't animate an
@@ -74,7 +75,7 @@ export default function MobileNav({ items }: { items: NavItem[] }) {
       <button
         ref={buttonRef}
         type="button"
-        className="btn btn-outline nav-toggle md:hidden"
+        className="btn btn-outline nav-toggle nav:hidden"
         aria-expanded={open}
         aria-controls={drawerId}
         aria-label="Menu"
@@ -84,7 +85,7 @@ export default function MobileNav({ items }: { items: NavItem[] }) {
       </button>
 
       <div
-        className="nav-drawer-backdrop md:hidden"
+        className="nav-drawer-backdrop nav:hidden"
         data-open={open}
         aria-hidden="true"
         inert={!open}
@@ -94,7 +95,7 @@ export default function MobileNav({ items }: { items: NavItem[] }) {
       <div
         id={drawerId}
         ref={drawerRef}
-        className="nav-drawer md:hidden"
+        className="nav-drawer nav:hidden"
         data-open={open}
         inert={!open}
         role="dialog"

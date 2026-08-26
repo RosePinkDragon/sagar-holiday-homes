@@ -37,16 +37,20 @@ export default function Header() {
         </Link>
 
         {/* Mobile: hamburger + right-side drawer (client component).
-            Desktop: a separate flat nav, always visible. Only one of the two
-            is ever in the accessibility tree at a time: `hidden`/`nav:hidden`
-            remove the other from it, not just from view. The switch happens
-            at the custom `nav:` breakpoint (1100px, globals.css) rather than
-            Tailwind's stock `md` (768px) — below 1100px the flat nav doesn't
-            have room for "Pool & Grounds" / "Tariff & Booking" without
-            wrapping mid-word. */}
+            Desktop (md+, 768px): a separate flat nav, always visible. Only
+            one of the two is ever in the accessibility tree at a time:
+            `hidden`/`md:hidden` remove the other from it, not just from
+            view. Between 768-1024px there isn't room for all 8 links (two
+            of them multi-word) on one line, so the nav wraps onto a second
+            row there instead of switching back to the hamburger — .nav-link
+            keeps white-space: nowrap so it's whole links that wrap, never a
+            link's own text mid-word. */}
         <MobileNav items={navItems} />
 
-        <nav aria-label="Primary" className="hidden nav:flex items-center gap-6">
+        <nav
+          aria-label="Primary"
+          className="hidden md:flex flex-wrap items-center justify-end gap-x-4 gap-y-1"
+        >
           {navItems.map(({ route, label }) => (
             <Link key={route} href={route} className="nav-link">
               {label}

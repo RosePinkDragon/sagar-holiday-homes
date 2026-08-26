@@ -87,13 +87,6 @@
 }
 
 @theme inline {
-  /* Custom breakpoint for the header's hamburger/inline-nav switch. The flat
-     desktop nav (8 links, two multi-word) wraps mid-word at Tailwind's
-     stock `md` (768px) — it doesn't have room until ~1100px. `nav:` is used
-     in place of `md:` on both the drawer and the flat nav so they always
-     toggle together. */
-  --breakpoint-nav: 1100px;
-
   --color-canopy: var(--canopy);
   --color-canopy-deep: var(--canopy-deep);
   --color-canopy-soft: var(--canopy-soft);

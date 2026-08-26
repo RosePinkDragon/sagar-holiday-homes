@@ -99,6 +99,8 @@ Almost none. One orchestrated page-load: horizon band fades and settles by 4px o
 
 Hover: 150ms colour only. No lifts, no scales, no parallax. Respect `prefers-reduced-motion` — when set, everything is instant.
 
+**One exception: the mobile nav drawer.** Below 768px, opening the menu slides a panel in from the right over 220ms ease-out, with the backdrop fading in alongside it. This is the one place motion carries meaning a static toggle can't — it tells you the nav arrived from off-screen and where it will return to on close. Still governed by `prefers-reduced-motion`: reduced-motion visitors get the drawer instantly, no slide, same as every other transition on the site.
+
 ## Photography
 
 Photos don't exist yet. Placeholders are `--bone-deep` with a 1px `--canopy-soft` hairline border and a centred caption in `--canopy-muted` naming the shot required (e.g. "HERO — pool with orchard behind, golden hour"). The border is `--canopy-soft`; the caption is `--canopy-muted`, because the caption is text — see [What is allowed for text](#what-is-allowed-for-text). Correct aspect ratios from day one so nothing reflows when real images land.

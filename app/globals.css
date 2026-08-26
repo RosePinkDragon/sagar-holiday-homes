@@ -332,6 +332,22 @@
     cursor: not-allowed;
   }
 
+  /* --- Footer links --------------------------------------------------------
+     The footer sits on --canopy-deep. DESIGN.md "What is allowed for text"
+     only clears --bone / --bone-deep on dark grounds — --laterite (the .link
+     colour) is not measured against a dark ground and is not used here. */
+  .footer-link {
+    color: var(--bone);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+    transition: color 150ms linear;
+  }
+
+  .footer-link:hover {
+    color: var(--bone-deep);
+  }
+
   /* --- Fields ------------------------------------------------------------ */
 
   .field {
@@ -348,6 +364,85 @@
 
   .field::placeholder {
     color: var(--canopy-muted);
+  }
+
+  /* --- Nav link (desktop flat nav, Header.tsx) --------------------------- */
+
+  .nav-link {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    font-weight: 600;
+    color: var(--canopy);
+    text-decoration: none;
+    transition: color 150ms linear;
+  }
+
+  .nav-link:hover,
+  .nav-link:focus-visible {
+    color: var(--laterite);
+  }
+
+  /* --- Mobile nav drawer (MobileNav.tsx) -----------------------------------
+     220ms ease-out slide + fade — the one motion on the site beyond hover
+     colour and the page-load settle (DESIGN.md "Motion"). Both elements are
+     always mounted (see MobileNav.tsx for why) and driven by `data-open`, not
+     conditional rendering, so the transition actually has something to
+     animate from. Reduced motion needs no rule here: the sitewide
+     `@media (prefers-reduced-motion: reduce)` block at the bottom of this
+     file already forces every transition-duration to ~0, this one included. */
+
+  .nav-toggle {
+    min-width: 44px;
+  }
+
+  .nav-drawer-backdrop {
+    position: fixed;
+    inset: 0;
+    background-color: color-mix(in srgb, var(--canopy-deep) 60%, transparent);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 220ms ease-out;
+    z-index: 40;
+  }
+
+  .nav-drawer-backdrop[data-open="true"] {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .nav-drawer {
+    position: fixed;
+    inset-block: 0;
+    right: 0;
+    height: 100dvh;
+    width: min(85vw, 320px);
+    display: flex;
+    flex-direction: column;
+    padding: var(--gutter);
+    background-color: var(--canopy);
+    color: var(--bone);
+    border-radius: 0;
+    transform: translateX(100%);
+    transition: transform 220ms ease-out;
+    z-index: 50;
+  }
+
+  .nav-drawer[data-open="true"] {
+    transform: translateX(0);
+  }
+
+  .nav-drawer-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .nav-drawer-link {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
   }
 
   /* --- The horizon band -------------------------------------------------- */

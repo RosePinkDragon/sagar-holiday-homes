@@ -13,7 +13,7 @@ const nextConfig: NextConfig = {
    * origin other than localhost, so buttons render but their onClick never
    * gets wired up. No effect on the static export build.
    */
-  allowedDevOrigins: ["192.168.0.113"],
+  // allowedDevOrigins: ["your-local-ip"],
 };
 
 export default nextConfig;

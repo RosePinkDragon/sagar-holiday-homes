@@ -1,26 +1,444 @@
 @import "tailwindcss";
 
+/* ===========================================================================
+   Sagar Holiday Homes — design tokens.
+   Implements DESIGN.md "Materials", "Type", "Layout", "Motion".
+
+   Two layers of naming, on purpose:
+
+     :root      holds DESIGN.md's own token names verbatim (--canopy, --step-2)
+                so hand-written CSS reads exactly like the design doc.
+     @theme     re-exports them under Tailwind's namespaces so the same tokens
+                are also utilities (bg-canopy, text-step-2, font-display).
+
+   One source of truth, two call sites. Change a hex here and both follow.
+   =========================================================================== */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* --- Colour ------------------------------------------------------------
+     Green leads. Laterite is a minor accent — a link underline, a rule, a
+     mark — and never a filled block bigger than a button. If the page reads
+     as a red site with green trim, the balance has inverted.
+
+     Text vs non-text is not a style choice here. --canopy-soft, --pool and
+     --alphonso are all below 4.5:1 on bone and are structural colours only:
+     hairlines, fills, focus rings. Their text-safe siblings are
+     --canopy-muted and --pool-deep. See DESIGN.md "What is allowed for text"
+     for the measured table. */
+  --canopy: #234f3e;
+  --canopy-deep: #16362a;
+  --canopy-soft: #5c7f6e; /* structural only — 3.72:1 on bone */
+  --canopy-muted: #4a6658; /* the text-safe one — 5.26:1 on bone */
+  --laterite: #8a3f2b;
+  --alphonso: #e8a33d; /* focus rings only — 1.80:1 on bone */
+  --pool: #2e7c8f; /* structural only — 3.99:1 on bone */
+  --pool-deep: #276878; /* the text-safe one — 5.26:1 on bone */
+  --bone: #f0eadf;
+  --bone-deep: #e3dacb;
+  --ink: #2a241c;
+
+  /* Borders over shadows. A 1px canopy hairline at 20% beats a drop shadow. */
+  --hairline: color-mix(in srgb, var(--canopy) 20%, transparent);
+
+  /* --- Type scale --------------------------------------------------------
+     Fluid, clamp(), mobile-first. */
+  --step--1: clamp(0.83rem, 0.8rem + 0.15vw, 0.9rem);
+  --step-0: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  --step-1: clamp(1.35rem, 1.2rem + 0.7vw, 1.75rem);
+  --step-2: clamp(1.8rem, 1.5rem + 1.4vw, 2.75rem);
+  --step-3: clamp(2.4rem, 1.9rem + 2.4vw, 4.25rem);
+
+  --leading-heading: 1.05;
+  --leading-copy: 1.6;
+  /* Reserved headroom. Devanagari sits taller than Latin above and below the
+     baseline, so a Marathi pass (Noto Serif Devanagari / Mukta) would set
+     headings at this rather than 1.05. Nothing consumes it yet — it exists so
+     that pass does not mean re-tuning every heading on eight pages. */
+  --leading-deva: 1.35;
+
+  --measure: 68ch;
+
+  /* --- Layout ------------------------------------------------------------ */
+  --shell: 1180px;
+  --gutter: clamp(1.25rem, 5vw, 2.5rem);
+  --section-space: clamp(4rem, 10vw, 8rem);
+  /* Almost square. Cut stone and plaster, not a rounded app card. */
+  --radius: 2px;
+
+  /* --- The signature ----------------------------------------------------
+     One horizon, one height, all eight pages. Changing --horizon here moves
+     it everywhere at once, which is the entire point of the device. */
+  --band-ratio: 16 / 9;
+  --horizon: 62%;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* The band goes cinematic once there is width for it. The horizon stays at
+   62% regardless, so the walk between pages is unbroken.
 
-@media (prefers-color-scheme: dark) {
+   Mobile is 16:9 rather than something squarer because aspect-ratio is
+   width/height: a SMALLER ratio makes the band DEEPER. At 360px, 16:9 is 203px
+   tall and 4:3 would be 270px. The band has to stay under about a third of the
+   first screen or the page title falls below the fold, which breaks the rule
+   that the title sits below the band and is read straight after it. */
+@media (min-width: 48rem) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --band-ratio: 21 / 9;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@theme inline {
+  --color-canopy: var(--canopy);
+  --color-canopy-deep: var(--canopy-deep);
+  --color-canopy-soft: var(--canopy-soft);
+  --color-canopy-muted: var(--canopy-muted);
+  --color-laterite: var(--laterite);
+  --color-alphonso: var(--alphonso);
+  --color-pool: var(--pool);
+  --color-pool-deep: var(--pool-deep);
+  --color-bone: var(--bone);
+  --color-bone-deep: var(--bone-deep);
+  --color-ink: var(--ink);
+
+  --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
+  --font-body: var(--font-karla), system-ui, "Segoe UI", Roboto, sans-serif;
+
+  /* Steps 0–3 keep the doc's numbering. Step −1 is registered as `text-fine`
+     because `--text-step--1` would generate the utility `text-step--1`, whose
+     double hyphen is a parsing hazard and unreadable at a call site. The raw
+     token above is still `--step--1`, exactly as DESIGN.md writes it. */
+  --text-fine: var(--step--1);
+  --text-step-0: var(--step-0);
+  --text-step-1: var(--step-1);
+  --text-step-2: var(--step-2);
+  --text-step-3: var(--step-3);
+
+  /* Line heights are intentionally absent from @theme: Tailwind's namespace
+     for them is also `--leading-*`, so re-exporting would make each token
+     reference itself. Component classes read the :root tokens directly. */
+
+  --radius-sq: var(--radius);
+  --container-shell: var(--shell);
+  --spacing-gutter: var(--gutter);
+  --spacing-section: var(--section-space);
+}
+
+@layer base {
+  html {
+    /* Reserve the scrollbar so a full-width band cannot induce a horizontal
+       scroll when one appears. */
+    scrollbar-gutter: stable;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--bone);
+    color: var(--ink);
+    font-family: var(--font-karla), system-ui, "Segoe UI", Roboto, sans-serif;
+    font-size: var(--step-0);
+    line-height: var(--leading-copy);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-fraunces), Georgia, "Times New Roman", serif;
+    /* wght is left to font-weight on purpose. Putting it in
+       font-variation-settings overrides font-weight and breaks every weight
+       utility on the site. See app/fonts.ts. */
+    font-variation-settings: "SOFT" 40, "WONK" 0, "opsz" 24;
+    font-weight: 600;
+    line-height: var(--leading-heading);
+    letter-spacing: -0.015em;
+    color: var(--canopy);
+    text-wrap: balance;
+  }
+
+  /* Visible keyboard focus, everywhere, at 2px offset. Wrapped in :where() so
+     its specificity is zero and a component can still override it. */
+  :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+    outline: 2px solid var(--alphonso);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background-color: var(--alphonso);
+    color: var(--ink);
+  }
+}
+
+@layer components {
+  /* --- Structure --------------------------------------------------------- */
+
+  .shell {
+    width: 100%;
+    max-width: var(--shell);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  .measure {
+    max-width: var(--measure);
+  }
+
+  .section {
+    padding-block: var(--section-space);
+  }
+
+  .hairline {
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius);
+  }
+
+  .rule {
+    border: 0;
+    border-top: 1px solid var(--hairline);
+    margin: 0;
+  }
+
+  /* --- Type -------------------------------------------------------------- */
+
+  /* Display face, headings only, never body copy. SOFT/WONK/opsz ride on
+     custom properties so .type-display-lg can move them without restating the
+     whole font-variation-settings declaration. */
+  .type-display {
+    --fr-soft: 40;
+    --fr-wonk: 0;
+    --fr-opsz: 24;
+    font-family: var(--font-fraunces), Georgia, "Times New Roman", serif;
+    font-variation-settings:
+      "SOFT" var(--fr-soft),
+      "WONK" var(--fr-wonk),
+      "opsz" var(--fr-opsz);
+    font-weight: 600;
+    line-height: var(--leading-heading);
+    letter-spacing: -0.015em;
+    color: var(--canopy);
+  }
+
+  /* Apply alongside .type-display at step 2 and above. WONK unlocks the wonky
+     alternates and opsz opens the letterforms up — at 16px that reads as a
+     defect, at 44px it reads as warmth, which is why it is opt-in by size. */
+  .type-display-lg {
+    --fr-wonk: 1;
+    --fr-opsz: 72;
+    font-weight: 500;
+  }
+
+  /* Small upright label. Body face — the display face is headings only. */
+  .label {
+    font-family: var(--font-karla), system-ui, sans-serif;
+    font-size: var(--step--1);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    line-height: 1.3;
+    color: var(--canopy-muted);
+  }
+
+  /* Short metadata only — a caption, a label, a unit, a hex. NOT for running
+     copy: a paragraph of green is tiring to read and pulls the whole page
+     formal, which is the opposite of the direction. Paragraphs are --ink and
+     lean on size for hierarchy instead. */
+  .muted {
+    color: var(--canopy-muted);
+  }
+
+  /* --- Links ------------------------------------------------------------- */
+
+  .link {
+    color: var(--laterite);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+    transition: color 150ms linear;
+  }
+
+  .link:hover {
+    color: var(--canopy-deep);
+  }
+
+  /* Visited is deliberately identical. On an eight-page marketing site a
+     dimmed visited link reads as a dead link, and there is no navigational
+     value in marking pages a guest has already seen. */
+  .link:visited {
+    color: var(--laterite);
+  }
+
+  /* --- Buttons ----------------------------------------------------------- */
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding-inline: 1.25rem;
+    border: 1px solid transparent;
+    border-radius: var(--radius);
+    font-family: var(--font-karla), system-ui, sans-serif;
+    font-size: var(--step-0);
+    font-weight: 600;
+    line-height: 1;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    /* Colour only. No lift, no scale, no shadow. */
+    transition:
+      background-color 150ms linear,
+      border-color 150ms linear,
+      color 150ms linear;
+  }
+
+  .btn-solid {
+    background-color: var(--canopy);
+    color: var(--bone);
+  }
+
+  .btn-solid:hover {
+    background-color: var(--canopy-deep);
+  }
+
+  .btn-outline {
+    background-color: transparent;
+    border-color: var(--canopy);
+    color: var(--canopy);
+  }
+
+  .btn-outline:hover {
+    background-color: var(--canopy);
+    color: var(--bone);
+  }
+
+  .btn-quiet {
+    background-color: transparent;
+    color: var(--laterite);
+    padding-inline: 0.25rem;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .btn-quiet:hover {
+    color: var(--canopy-deep);
+  }
+
+  /* Last, so it beats every variant above at equal specificity. */
+  .btn:disabled,
+  .btn[aria-disabled="true"] {
+    background-color: var(--bone-deep);
+    border-color: var(--hairline);
+    color: var(--canopy-muted);
+    cursor: not-allowed;
+  }
+
+  /* --- Fields ------------------------------------------------------------ */
+
+  .field {
+    min-height: 44px;
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    background-color: var(--bone);
+    border: 1px solid var(--canopy-soft);
+    border-radius: var(--radius);
+    font-family: var(--font-karla), system-ui, sans-serif;
+    font-size: var(--step-0);
+    color: var(--ink);
+  }
+
+  .field::placeholder {
+    color: var(--canopy-muted);
+  }
+
+  /* --- The horizon band -------------------------------------------------- */
+
+  /* Full-bleed by being a top-level block, not by a 100vw margin trick — the
+     trick overflows by the scrollbar width on desktop. Page titles sit below
+     this, on bone. Never rounded, never scrimmed. */
+  .band {
+    position: relative;
+    width: 100%;
+    aspect-ratio: var(--band-ratio);
+    display: grid;
+    place-items: center;
+    padding-inline: var(--gutter);
+    overflow: hidden;
+    background-color: var(--bone-deep);
+    border-block: 1px solid var(--canopy-soft);
+  }
+
+  .band-caption {
+    margin: 0;
+    max-width: 40ch;
+    color: var(--canopy-muted);
+    font-size: var(--step--1);
+    letter-spacing: 0.04em;
+    text-align: center;
+    text-wrap: balance;
+  }
+
+  /* Build aid, styleguide only. Never rendered on a real page — its whole job
+     is to make the fixed 62% checkable by eye before eight pages depend on
+     it. */
+  .band-horizon {
+    position: absolute;
+    inset-inline: 0;
+    top: var(--horizon);
+    border-top: 1px dashed var(--canopy-soft);
+    pointer-events: none;
+  }
+
+  .band-horizon > span {
+    position: absolute;
+    top: 0.35rem;
+    right: var(--gutter);
+    color: var(--canopy-muted);
+    font-size: var(--step--1);
+    letter-spacing: 0.04em;
+  }
+}
+
+/* ===========================================================================
+   Motion — almost none.
+
+   One orchestrated page load: the band settles, then the heading. Written as
+   opt-in under no-preference rather than disabled under reduce, so a
+   reduced-motion visitor gets the finished state on the first paint instead of
+   a zero-duration animation that can still flash.
+   =========================================================================== */
+
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes settle {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .settle {
+    animation: settle 600ms ease-out both;
+  }
+
+  /* The heading, after the band has landed. */
+  .settle-next {
+    animation: settle 600ms ease-out 600ms both;
+  }
+}
+
+/* Belt and braces: neutralise anything added later that forgets the rule. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+    scroll-behavior: auto !important;
+  }
 }

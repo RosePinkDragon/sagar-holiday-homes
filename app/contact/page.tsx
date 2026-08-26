@@ -3,8 +3,8 @@ import Link from "next/link";
 import {
   contact,
   formatPhone,
+  pageMetadata,
   pages,
-  requireFact,
   resolved,
   whatsAppLink,
 } from "@/content/property";
@@ -12,13 +12,7 @@ import HorizonBand from "../components/HorizonBand";
 import EnquiryForm from "../components/EnquiryForm";
 
 export function generateMetadata(): Metadata {
-  return {
-    title: requireFact(pages.contact.title, "pages.contact.title"),
-    description: requireFact(
-      pages.contact.description,
-      "pages.contact.description"
-    ),
-  };
+  return pageMetadata(pages.contact, "pages.contact");
 }
 
 export default function ContactPage() {

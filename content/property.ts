@@ -935,6 +935,43 @@ export const pages = {
 /** All eight routes as plain strings — for the sitemap and nav. */
 export const routes = Object.values(pages).map((p) => p.route.value);
 
+/**
+ * Shared shape of `generateMetadata()` across every page: resolve the page's
+ * title/description (throwing if either is still `tbd`, so a page can't
+ * silently ship with no metadata — CLAUDE.md SEO requirements), and mirror
+ * them into `openGraph` so WhatsApp/social previews show the page's own
+ * copy rather than falling back to the site-wide default in layout.tsx.
+ *
+ * The OG image is repeated here rather than left to inherit from
+ * layout.tsx: Next.js does not deep-merge a segment's `openGraph` object
+ * with its parent's, it replaces it wholesale — so a page that sets
+ * `openGraph.title` without also setting `openGraph.images` would silently
+ * lose the image, not fall back to the site default.
+ *
+ * Not typed against next's `Metadata` here so this module stays
+ * framework-free; the shape is structurally compatible and every caller
+ * spreads it into one.
+ */
+export function pageMetadata(
+  page: { title: Fact<string>; description: Fact<string> },
+  label: string
+) {
+  const title = requireFact(page.title, `${label}.title`);
+  const description = requireFact(page.description, `${label}.description`);
+  const ogImage = resolved(seo.defaultOgImage);
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: ogImage
+        ? [{ url: ogImage, width: 1200, height: 630, alt: title }]
+        : [],
+    },
+  };
+}
+
 export const seo = {
   schemaType: "LodgingBusiness",
   numberOfRooms: facts.bedrooms.value,
@@ -948,6 +985,53 @@ export const seo = {
     "PLACEHOLDER - no photography exists yet (BRIEF §9). Replace with the hero shot, the pool with the orchard behind it, at 1200x630. Until then every WhatsApp share of this site previews a placeholder, so this must be swapped before the link is given to a guest."
   ),
 } as const;
+
+/**
+ * BRIEF §8 SEO requirements: "LodgingBusiness JSON-LD: name, address, geo,
+ * amenities, priceRange, numberOfRooms, photos." Rendered site-wide from the
+ * root layout rather than per page — one business, one listing. Fields with
+ * no resolved value (geo, priceRange while the rate card is still `assumed`
+ * — it isn't today, but this stays defensive) are simply omitted:
+ * JSON.stringify drops `undefined` properties on its own.
+ */
+export function lodgingBusinessJsonLd(): Record<string, unknown> {
+  const address = contact.address.value;
+  const geo = resolved(contact.geo);
+  const phone = resolved(contact.phone);
+  const email = resolved(contact.email);
+  const rateCard = resolved(tariff.rateCard);
+  const ogImage = resolved(seo.defaultOgImage);
+  const siteUrl = `https://${identity.domain}`;
+
+  return {
+    "@context": "https://schema.org",
+    "@type": seo.schemaType,
+    name: identity.name,
+    description: identity.positioning,
+    url: `${siteUrl}/`,
+    image: ogImage ? `${siteUrl}${ogImage}` : undefined,
+    telephone: phone ?? undefined,
+    email: email ?? undefined,
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: address.village,
+      addressRegion: address.state,
+      postalCode: contact.postalCode.value,
+      addressCountry: address.country,
+    },
+    geo: geo
+      ? { "@type": "GeoCoordinates", latitude: geo.lat, longitude: geo.lng }
+      : undefined,
+    numberOfRooms: seo.numberOfRooms,
+    priceRange: rateCard
+      ? `${formatInr(rateCard.weekday)} - ${formatInr(rateCard.peak)}`
+      : undefined,
+    amenityFeature: amenities.map((name) => ({
+      "@type": "LocationFeatureSpecification",
+      name,
+    })),
+  };
+}
 
 // ---------------------------------------------------------------------------
 // NOT FOR PUBLICATION

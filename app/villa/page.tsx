@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { amenities, describe, facts, pages, requireFact } from "@/content/property";
+import { amenities, describe, facts, pageMetadata, pages } from "@/content/property";
 import HorizonBand from "../components/HorizonBand";
 
 /**
@@ -10,10 +10,7 @@ import HorizonBand from "../components/HorizonBand";
  */
 
 export function generateMetadata(): Metadata {
-  return {
-    title: requireFact(pages.villa.title, "pages.villa.title"),
-    description: requireFact(pages.villa.description, "pages.villa.description"),
-  };
+  return pageMetadata(pages.villa, "pages.villa");
 }
 
 export default function VillaPage() {

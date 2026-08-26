@@ -4,6 +4,7 @@ import {
   facts,
   formatInr,
   gstNote,
+  pageMetadata,
   pages,
   policy,
   requireFact,
@@ -22,10 +23,7 @@ import HorizonBand from "../components/HorizonBand";
  */
 
 export function generateMetadata(): Metadata {
-  return {
-    title: requireFact(pages.tariff.title, "pages.tariff.title"),
-    description: requireFact(pages.tariff.description, "pages.tariff.description"),
-  };
+  return pageMetadata(pages.tariff, "pages.tariff");
 }
 
 function Indicative() {

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { food, pages, requireFact } from "@/content/property";
+import { food, pageMetadata, pages } from "@/content/property";
 import HorizonBand from "../components/HorizonBand";
 
 /**
@@ -9,10 +9,7 @@ import HorizonBand from "../components/HorizonBand";
  */
 
 export function generateMetadata(): Metadata {
-  return {
-    title: requireFact(pages.food.title, "pages.food.title"),
-    description: requireFact(pages.food.description, "pages.food.description"),
-  };
+  return pageMetadata(pages.food, "pages.food");
 }
 
 export default function FoodPage() {
@@ -41,7 +38,7 @@ export default function FoodPage() {
           <p className="measure mt-6">
             Priced per dish, not a fixed package — seafood is{" "}
             {food.seafoodPricing.value.toLowerCase()}. Menu cards are handed
-            to you at the villa; prices aren't published online yet.
+            to you at the villa; prices aren&rsquo;t published online yet.
           </p>
         </div>
       </section>

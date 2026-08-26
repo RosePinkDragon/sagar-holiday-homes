@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { pages, requireFact } from "@/content/property";
+import { pageMetadata, pages } from "@/content/property";
 import HorizonBand from "../components/HorizonBand";
 
 /**
@@ -11,13 +11,7 @@ import HorizonBand from "../components/HorizonBand";
  */
 
 export function generateMetadata(): Metadata {
-  return {
-    title: requireFact(pages.gallery.title, "pages.gallery.title"),
-    description: requireFact(
-      pages.gallery.description,
-      "pages.gallery.description"
-    ),
-  };
+  return pageMetadata(pages.gallery, "pages.gallery");
 }
 
 type Category = { title: string; shots: string[] };

@@ -5,8 +5,8 @@ import {
   facts,
   identity,
   nearbyPlaces,
+  pageMetadata,
   pages,
-  requireFact,
   resolved,
 } from "@/content/property";
 import HorizonBand from "../components/HorizonBand";
@@ -18,13 +18,7 @@ import HorizonBand from "../components/HorizonBand";
  */
 
 export function generateMetadata(): Metadata {
-  return {
-    title: requireFact(pages.location.title, "pages.location.title"),
-    description: requireFact(
-      pages.location.description,
-      "pages.location.description"
-    ),
-  };
+  return pageMetadata(pages.location, "pages.location");
 }
 
 export default function LocationPage() {

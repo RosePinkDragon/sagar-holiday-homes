@@ -4,9 +4,9 @@ import {
   describePoolDepth,
   describePoolSize,
   facts,
+  pageMetadata,
   pages,
   pool,
-  requireFact,
 } from "@/content/property";
 import HorizonBand from "../components/HorizonBand";
 
@@ -16,13 +16,7 @@ import HorizonBand from "../components/HorizonBand";
  */
 
 export function generateMetadata(): Metadata {
-  return {
-    title: requireFact(pages.poolAndGrounds.title, "pages.poolAndGrounds.title"),
-    description: requireFact(
-      pages.poolAndGrounds.description,
-      "pages.poolAndGrounds.description"
-    ),
-  };
+  return pageMetadata(pages.poolAndGrounds, "pages.poolAndGrounds");
 }
 
 export default function PoolAndGroundsPage() {

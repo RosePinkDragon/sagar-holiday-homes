@@ -47,7 +47,8 @@ export default function PoolAndGroundsPage() {
           <h2 className="type-display" style={{ fontSize: "var(--step-2)" }}>
             The pool
           </h2>
-          <dl className="grid gap-6 sm:grid-cols-3 mt-10">
+          {/* DESIGN.md Layout: two columns max, never more — three stats wrap 2+1. */}
+          <dl className="grid gap-6 sm:grid-cols-2 mt-10">
             <div className="hairline p-6">
               <dt className="label">Size</dt>
               <dd

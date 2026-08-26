@@ -834,36 +834,24 @@ export const enquiryForm = {
 // Pages & SEO (BRIEF §8)
 //
 // Titles and descriptions are content, not markup — they belong here, not
-// hardcoded into eight generateMetadata() functions. Each starts as a TBD owned
-// by the developer and is replaced with confirmed() when that page is built, so
-// a half-built site cannot ship a page with no title.
+// hardcoded into eight generateMetadata() functions. All eight are written
+// now that all eight pages are built.
 //
 // One target query per page, deliberately. Two pages chasing the same phrase
 // compete with each other.
 // ---------------------------------------------------------------------------
-
-const pendingCopy = (route: string) =>
-  ({
-    title: tbd<string>({
-      question: `Write the <title> for ${route} — unique across the site.`,
-      blocks: `${route} metadata`,
-      severity: "content",
-      owner: "developer",
-    }),
-    description: tbd<string>({
-      question: `Write the meta description for ${route}.`,
-      blocks: `${route} metadata`,
-      severity: "content",
-      owner: "developer",
-    }),
-  }) as const;
 
 export const pages = {
   home: {
     route: confirmed("/"),
     job: "Positioning, hero image, key facts, enquiry CTA",
     targetQuery: confirmed("Dapoli villa for family groups"),
-    ...pendingCopy("/"),
+    title: confirmed(
+      "Dapoli Villa for Family Groups — Private Pool, 3BHK | Sagar Holiday Homes"
+    ),
+    description: confirmed(
+      "A private-pool 3BHK villa in a Konkan orchard near Dapoli — sleeps 12, ~150m open ground for cricket, 5 minutes from Saldure beach. Built for family groups and friends from Mumbai and Pune."
+    ),
   },
   villa: {
     route: confirmed("/villa"),

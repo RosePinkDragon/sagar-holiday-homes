@@ -323,6 +323,19 @@
     color: var(--canopy-deep);
   }
 
+  /* Inverted solid — for a CTA sitting on a canopy/canopy-deep ground (e.g.
+     the sticky enquiry bar on Home), where .btn-solid's own canopy fill
+     would vanish into the section behind it. */
+  .btn-invert {
+    background-color: var(--bone);
+    color: var(--canopy);
+  }
+
+  .btn-invert:hover {
+    background-color: var(--bone-deep);
+    color: var(--canopy-deep);
+  }
+
   /* Last, so it beats every variant above at equal specificity. */
   .btn:disabled,
   .btn[aria-disabled="true"] {

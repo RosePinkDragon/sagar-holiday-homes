@@ -16,7 +16,10 @@ export function generateMetadata(): Metadata {
 export default function VillaPage() {
   return (
     <main>
-      <HorizonBand caption="BEDROOM — king bed made, lights on, golden hour" />
+      <HorizonBand
+        caption="BEDROOM — king bed made, lights on, golden hour"
+        image={{ src: "/temp-stock/bedroom.jpg", alt: "Stock photo standing in for a bedroom" }}
+      />
 
       <header className="shell settle-next" style={{ paddingBlock: "3rem" }}>
         <h1

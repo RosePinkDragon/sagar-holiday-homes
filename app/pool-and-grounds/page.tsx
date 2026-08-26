@@ -22,7 +22,10 @@ export function generateMetadata(): Metadata {
 export default function PoolAndGroundsPage() {
   return (
     <main>
-      <HorizonBand caption="POOL — wide shot showing the gazebo and fencing, golden hour" />
+      <HorizonBand
+        caption="POOL — wide shot showing the gazebo and fencing, golden hour"
+        image={{ src: "/temp-stock/pool-gazebo-fence.jpg", alt: "Stock photo standing in for the pool, gazebo and fencing" }}
+      />
 
       <header className="shell settle-next" style={{ paddingBlock: "3rem" }}>
         <h1

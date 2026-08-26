@@ -295,6 +295,18 @@ export const facts = {
       severity: "ops",
     }),
   },
+  /**
+   * Villa page job (BRIEF §8) names "floor logic" alongside rooms and
+   * occupancy, but no floor plan exists anywhere in BRIEF §2 or the owner's
+   * notes. Not guessed — a wrong floor plan (e.g. claiming a ground-floor
+   * bedroom that doesn't exist) is worse than omitting it.
+   */
+  floorLayout: tbd<string>({
+    question:
+      "How are the 3 bedrooms and common areas distributed across floors? (e.g. any ground-floor bedroom, useful for elderly guests)",
+    blocks: "Villa page floor-plan detail — the page can ship without it",
+    severity: "ops",
+  }),
   kidsPlayArea: confirmed(false),
   parking: confirmed("Large open frontage — fits multiple cars and buses"),
   airConditioning: confirmed("All bedrooms"),
@@ -825,7 +837,10 @@ export const pages = {
     route: confirmed("/villa"),
     job: "Rooms, occupancy, amenities, floor logic",
     targetQuery: confirmed("3BHK villa Dapoli"),
-    ...pendingCopy("/villa"),
+    title: confirmed("The Villa — 3BHK, Sleeps 12 | Sagar Holiday Homes, Dapoli"),
+    description: confirmed(
+      "A whole-villa buyout in Dapoli — 3 air-conditioned bedrooms, 3 king beds, sleeps up to 12. Full kitchen, Wi-Fi, generator backup and more."
+    ),
   },
   poolAndGrounds: {
     route: confirmed("/pool-and-grounds"),

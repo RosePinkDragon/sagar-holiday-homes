@@ -154,11 +154,15 @@ export default function HomePage() {
             className="shell flex flex-wrap items-center justify-between gap-4"
             style={{ paddingBlock: "0.75rem" }}
           >
-            <a
-              href={`tel:${phone}`}
-              className="footer-link text-fine hidden sm:inline"
-            >
-              Call {formatPhone(phone)}
+            <a href={`tel:${phone}`} className="footer-link text-fine">
+              {/* Full number from sm+; on mobile — the priority audience,
+                  and where a tel: link is actually one tap to dial — a
+                  short label keeps room for "Send enquiry" without hiding
+                  the phone CTA outright. */}
+              <span className="sm:hidden">Call</span>
+              <span className="hidden sm:inline">
+                Call {formatPhone(phone)}
+              </span>
             </a>
             <Link href="/contact" className="btn btn-invert">
               Send enquiry

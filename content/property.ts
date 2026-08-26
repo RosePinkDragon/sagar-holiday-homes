@@ -243,6 +243,17 @@ export const formatInr = (amount: Inr): string => inrFormatter.format(amount);
 export const formatInrBand = (band: InrBand): string =>
   `${formatInr(band.from)} – ${formatInr(band.to)}`;
 
+/**
+ * contact.phone is stored E.164 (BRIEF §8) so tel:/wa.me links and OTA
+ * fields all read from one value — display formatting is deliberately left
+ * to this helper rather than the callers. Only the +91 shape is known
+ * today; anything else renders as-is.
+ */
+export function formatPhone(e164: string): string {
+  const match = /^\+91(\d{5})(\d{5})$/.exec(e164);
+  return match ? `+91 ${match[1]} ${match[2]}` : e164;
+}
+
 /** "cricket, football and badminton" */
 const sentenceList = (items: readonly string[]): string =>
   items.length < 2
@@ -801,6 +812,22 @@ export const enquiryForm = {
     { name: "message", label: "Message", type: "textarea", required: false },
   ],
   maxGuests: facts.occupancy.max.value,
+  /**
+   * CLAUDE.md static export constraints: "The enquiry form posts to an
+   * external endpoint (Web3Forms/Formspree)." The form itself is built and
+   * submits to Web3Forms's public API from the browser (no server route
+   * needed under `output: 'export'`), but it needs a real access key —
+   * NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY — before an enquiry actually arrives
+   * anywhere. Nothing to invent here; someone has to create the Web3Forms
+   * account and set the env var.
+   */
+  endpointAccessKey: tbd<string>({
+    question:
+      "Create a Web3Forms account (or Formspree) and set NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY in the deploy environment. Until then the Contact form renders but enquiries submitted through it go nowhere.",
+    blocks: "Contact page — the site's primary job (BRIEF §8)",
+    severity: "content",
+    owner: "developer",
+  }),
 } as const;
 
 // ---------------------------------------------------------------------------
@@ -888,12 +915,20 @@ export const pages = {
   tariff: {
     route: confirmed("/tariff"),
     job: "Rate card, policy, what's included",
-    ...pendingCopy("/tariff"),
+    title: confirmed(
+      "Tariff & Booking — Rates and Policy | Sagar Holiday Homes, Dapoli"
+    ),
+    description: confirmed(
+      "Rate card (GST-inclusive), cancellation policy, what's included, and peak-date pricing for Sagar Holiday Homes, a private-pool villa in Dapoli."
+    ),
   },
   contact: {
     route: confirmed("/contact"),
     job: "Enquiry form, phone, WhatsApp, address",
-    ...pendingCopy("/contact"),
+    title: confirmed("Contact & Enquiries | Sagar Holiday Homes, Dapoli"),
+    description: confirmed(
+      "Send an enquiry, call, or message us on WhatsApp — someone answers 10am to 10pm, every day. Sagar Holiday Homes, Saldure, Dapoli."
+    ),
   },
 } as const;
 

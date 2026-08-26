@@ -1,14 +1,10 @@
-import { identity, contact, resolved, whatsAppLink } from "@/content/property";
-
-/**
- * contact.phone is stored E.164 (BRIEF §8) so tel:/wa.me links and OTA fields
- * all read from one value — display formatting is deliberately left to the
- * component. Only the +91 shape is known today; anything else renders as-is.
- */
-function formatPhoneDisplay(e164: string): string {
-  const match = /^\+91(\d{5})(\d{5})$/.exec(e164);
-  return match ? `+91 ${match[1]} ${match[2]}` : e164;
-}
+import {
+  identity,
+  contact,
+  formatPhone,
+  resolved,
+  whatsAppLink,
+} from "@/content/property";
 
 export default function Footer() {
   const address = resolved(contact.address);
@@ -39,7 +35,7 @@ export default function Footer() {
             {phone ? (
               <p>
                 <a href={`tel:${phone}`} className="footer-link">
-                  {formatPhoneDisplay(phone)}
+                  {formatPhone(phone)}
                 </a>
               </p>
             ) : null}

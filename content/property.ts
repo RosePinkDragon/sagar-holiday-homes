@@ -243,6 +243,17 @@ export const formatInr = (amount: Inr): string => inrFormatter.format(amount);
 export const formatInrBand = (band: InrBand): string =>
   `${formatInr(band.from)} – ${formatInr(band.to)}`;
 
+/**
+ * contact.phone is stored E.164 (BRIEF §8) so tel:/wa.me links and OTA
+ * fields all read from one value — display formatting is deliberately left
+ * to this helper rather than the callers. Only the +91 shape is known
+ * today; anything else renders as-is.
+ */
+export function formatPhone(e164: string): string {
+  const match = /^\+91(\d{5})(\d{5})$/.exec(e164);
+  return match ? `+91 ${match[1]} ${match[2]}` : e164;
+}
+
 /** "cricket, football and badminton" */
 const sentenceList = (items: readonly string[]): string =>
   items.length < 2
@@ -277,7 +288,12 @@ export const facts = {
     approxMetres: 150,
     activities: ["cricket", "football", "badminton"],
   }),
-  orchard: confirmed({ approxTrees: 30, species: ["coconut", "mango"] }),
+  /** BRIEF §1: "Alphonso country. April–May mango season is a marketable event." */
+  orchard: confirmed({
+    approxTrees: 30,
+    species: ["coconut", "mango"],
+    season: "Alphonso, ripe April–May",
+  }),
   kitchen: confirmed("Full kitchen, guest-usable"),
   food: confirmed("Not included. Local cook available on order."),
   indoorGames: confirmed(["Carrom", "TV"]),
@@ -295,6 +311,18 @@ export const facts = {
       severity: "ops",
     }),
   },
+  /**
+   * Villa page job (BRIEF §8) names "floor logic" alongside rooms and
+   * occupancy, but no floor plan exists anywhere in BRIEF §2 or the owner's
+   * notes. Not guessed — a wrong floor plan (e.g. claiming a ground-floor
+   * bedroom that doesn't exist) is worse than omitting it.
+   */
+  floorLayout: tbd<string>({
+    question:
+      "How are the 3 bedrooms and common areas distributed across floors? (e.g. any ground-floor bedroom, useful for elderly guests)",
+    blocks: "Villa page floor-plan detail — the page can ship without it",
+    severity: "ops",
+  }),
   kidsPlayArea: confirmed(false),
   parking: confirmed("Large open frontage — fits multiple cars and buses"),
   airConditioning: confirmed("All bedrooms"),
@@ -313,6 +341,8 @@ export const facts = {
       { from: "Mumbai", duration: "4.5 – 5 hrs" },
       { from: "Pune", duration: "4.5 – 5 hrs" },
     ]),
+    /** Owner, 26 Aug 2026: mostly NH66; kept as one simple note rather than turn-by-turn. */
+    routeNote: confirmed("Mostly via NH66"),
   },
 } as const;
 
@@ -782,85 +812,153 @@ export const enquiryForm = {
     { name: "message", label: "Message", type: "textarea", required: false },
   ],
   maxGuests: facts.occupancy.max.value,
+  /**
+   * CLAUDE.md static export constraints: "The enquiry form posts to an
+   * external endpoint (Web3Forms/Formspree)." The form itself is built and
+   * submits to Web3Forms's public API from the browser (no server route
+   * needed under `output: 'export'`), but it needs a real access key —
+   * NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY — before an enquiry actually arrives
+   * anywhere. Nothing to invent here; someone has to create the Web3Forms
+   * account and set the env var.
+   */
+  endpointAccessKey: tbd<string>({
+    question:
+      "Create a Web3Forms account (or Formspree) and set NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY in the deploy environment. Until then the Contact form renders but enquiries submitted through it go nowhere.",
+    blocks: "Contact page — the site's primary job (BRIEF §8)",
+    severity: "content",
+    owner: "developer",
+  }),
 } as const;
 
 // ---------------------------------------------------------------------------
 // Pages & SEO (BRIEF §8)
 //
 // Titles and descriptions are content, not markup — they belong here, not
-// hardcoded into eight generateMetadata() functions. Each starts as a TBD owned
-// by the developer and is replaced with confirmed() when that page is built, so
-// a half-built site cannot ship a page with no title.
+// hardcoded into eight generateMetadata() functions. All eight are written
+// now that all eight pages are built.
 //
 // One target query per page, deliberately. Two pages chasing the same phrase
 // compete with each other.
 // ---------------------------------------------------------------------------
-
-const pendingCopy = (route: string) =>
-  ({
-    title: tbd<string>({
-      question: `Write the <title> for ${route} — unique across the site.`,
-      blocks: `${route} metadata`,
-      severity: "content",
-      owner: "developer",
-    }),
-    description: tbd<string>({
-      question: `Write the meta description for ${route}.`,
-      blocks: `${route} metadata`,
-      severity: "content",
-      owner: "developer",
-    }),
-  }) as const;
 
 export const pages = {
   home: {
     route: confirmed("/"),
     job: "Positioning, hero image, key facts, enquiry CTA",
     targetQuery: confirmed("Dapoli villa for family groups"),
-    ...pendingCopy("/"),
+    title: confirmed(
+      "Dapoli Villa for Family Groups — Private Pool, 3BHK | Sagar Holiday Homes"
+    ),
+    description: confirmed(
+      "A private-pool 3BHK villa in a Konkan orchard near Dapoli — sleeps 12, ~150m open ground for cricket, 5 minutes from Saldure beach. Built for family groups and friends from Mumbai and Pune."
+    ),
   },
   villa: {
     route: confirmed("/villa"),
     job: "Rooms, occupancy, amenities, floor logic",
     targetQuery: confirmed("3BHK villa Dapoli"),
-    ...pendingCopy("/villa"),
+    title: confirmed("The Villa — 3BHK, Sleeps 12 | Sagar Holiday Homes, Dapoli"),
+    description: confirmed(
+      "A whole-villa buyout in Dapoli — 3 air-conditioned bedrooms, 3 king beds, sleeps up to 12. Full kitchen, Wi-Fi, generator backup and more."
+    ),
   },
   poolAndGrounds: {
     route: confirmed("/pool-and-grounds"),
     job: "Pool, gazebo, ground, orchard + safety disclosure",
     targetQuery: confirmed("villa with private pool in Dapoli"),
-    ...pendingCopy("/pool-and-grounds"),
+    title: confirmed(
+      "Pool & Grounds — Private Pool, 150m Ground | Sagar Holiday Homes, Dapoli"
+    ),
+    description: confirmed(
+      "A private pool under a gazebo, ~150m of open ground for cricket and football, and a 30-tree coconut-mango orchard. Pool dimensions, depth and the safety notice, stated plainly."
+    ),
   },
   gallery: {
     route: confirmed("/gallery"),
     job: "Photo grid, categorised",
-    ...pendingCopy("/gallery"),
+    title: confirmed("Gallery | Sagar Holiday Homes, Dapoli"),
+    description: confirmed(
+      "Photos of the villa, the private pool, the 150m ground and the orchard at Sagar Holiday Homes in Saldure, Dapoli."
+    ),
   },
   food: {
     route: confirmed("/food"),
     job: "Kitchen, cook, sample menu, pricing",
-    ...pendingCopy("/food"),
+    title: confirmed("Food — Kitchen & Local Cook | Sagar Holiday Homes, Dapoli"),
+    description: confirmed(
+      "A full guest kitchen, plus a local cook for home-style Konkani food and fresh Harnai seafood on request. Priced per dish; menu cards handed over at the villa."
+    ),
   },
   location: {
     route: confirmed("/location"),
     job: "Map, drive times, beaches, things to do nearby",
     targetQuery: confirmed("villa near Saldure beach"),
-    ...pendingCopy("/location"),
+    title: confirmed(
+      "Location — Villa Near Saldure Beach, Dapoli | Sagar Holiday Homes"
+    ),
+    description: confirmed(
+      "Sagar Holiday Homes is in Saldure, Dapoli — 5 minutes from Saldure beach, about 4.5–5 hrs from Mumbai or Pune via NH66. Drive times, nearby beaches and landmarks, and how to find us."
+    ),
   },
   tariff: {
     route: confirmed("/tariff"),
     job: "Rate card, policy, what's included",
-    ...pendingCopy("/tariff"),
+    title: confirmed(
+      "Tariff & Booking — Rates and Policy | Sagar Holiday Homes, Dapoli"
+    ),
+    description: confirmed(
+      "Rate card (GST-inclusive), cancellation policy, what's included, and peak-date pricing for Sagar Holiday Homes, a private-pool villa in Dapoli."
+    ),
   },
   contact: {
     route: confirmed("/contact"),
     job: "Enquiry form, phone, WhatsApp, address",
-    ...pendingCopy("/contact"),
+    title: confirmed("Contact & Enquiries | Sagar Holiday Homes, Dapoli"),
+    description: confirmed(
+      "Send an enquiry, call, or message us on WhatsApp — someone answers 10am to 10pm, every day. Sagar Holiday Homes, Saldure, Dapoli."
+    ),
   },
 } as const;
 
 /** All eight routes as plain strings — for the sitemap and nav. */
 export const routes = Object.values(pages).map((p) => p.route.value);
+
+/**
+ * Shared shape of `generateMetadata()` across every page: resolve the page's
+ * title/description (throwing if either is still `tbd`, so a page can't
+ * silently ship with no metadata — CLAUDE.md SEO requirements), and mirror
+ * them into `openGraph` so WhatsApp/social previews show the page's own
+ * copy rather than falling back to the site-wide default in layout.tsx.
+ *
+ * The OG image is repeated here rather than left to inherit from
+ * layout.tsx: Next.js does not deep-merge a segment's `openGraph` object
+ * with its parent's, it replaces it wholesale — so a page that sets
+ * `openGraph.title` without also setting `openGraph.images` would silently
+ * lose the image, not fall back to the site default.
+ *
+ * Not typed against next's `Metadata` here so this module stays
+ * framework-free; the shape is structurally compatible and every caller
+ * spreads it into one.
+ */
+export function pageMetadata(
+  page: { title: Fact<string>; description: Fact<string> },
+  label: string
+) {
+  const title = requireFact(page.title, `${label}.title`);
+  const description = requireFact(page.description, `${label}.description`);
+  const ogImage = resolved(seo.defaultOgImage);
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: ogImage
+        ? [{ url: ogImage, width: 1200, height: 630, alt: title }]
+        : [],
+    },
+  };
+}
 
 export const seo = {
   schemaType: "LodgingBusiness",
@@ -875,6 +973,53 @@ export const seo = {
     "PLACEHOLDER - no photography exists yet (BRIEF §9). Replace with the hero shot, the pool with the orchard behind it, at 1200x630. Until then every WhatsApp share of this site previews a placeholder, so this must be swapped before the link is given to a guest."
   ),
 } as const;
+
+/**
+ * BRIEF §8 SEO requirements: "LodgingBusiness JSON-LD: name, address, geo,
+ * amenities, priceRange, numberOfRooms, photos." Rendered site-wide from the
+ * root layout rather than per page — one business, one listing. Fields with
+ * no resolved value (geo, priceRange while the rate card is still `assumed`
+ * — it isn't today, but this stays defensive) are simply omitted:
+ * JSON.stringify drops `undefined` properties on its own.
+ */
+export function lodgingBusinessJsonLd(): Record<string, unknown> {
+  const address = contact.address.value;
+  const geo = resolved(contact.geo);
+  const phone = resolved(contact.phone);
+  const email = resolved(contact.email);
+  const rateCard = resolved(tariff.rateCard);
+  const ogImage = resolved(seo.defaultOgImage);
+  const siteUrl = `https://${identity.domain}`;
+
+  return {
+    "@context": "https://schema.org",
+    "@type": seo.schemaType,
+    name: identity.name,
+    description: identity.positioning,
+    url: `${siteUrl}/`,
+    image: ogImage ? `${siteUrl}${ogImage}` : undefined,
+    telephone: phone ?? undefined,
+    email: email ?? undefined,
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: address.village,
+      addressRegion: address.state,
+      postalCode: contact.postalCode.value,
+      addressCountry: address.country,
+    },
+    geo: geo
+      ? { "@type": "GeoCoordinates", latitude: geo.lat, longitude: geo.lng }
+      : undefined,
+    numberOfRooms: seo.numberOfRooms,
+    priceRange: rateCard
+      ? `${formatInr(rateCard.weekday)} - ${formatInr(rateCard.peak)}`
+      : undefined,
+    amenityFeature: amenities.map((name) => ({
+      "@type": "LocationFeatureSpecification",
+      name,
+    })),
+  };
+}
 
 // ---------------------------------------------------------------------------
 // NOT FOR PUBLICATION

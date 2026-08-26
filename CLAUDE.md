@@ -71,3 +71,4 @@ Tone: warm, plain, specific. Concrete details beat adjectives — "a 150m open g
 - One page per session where possible. Commit between pages.
 - Photos are not available yet. Use placeholder blocks with correct aspect ratios and real alt text.
 - Flag any conflict between an instruction and `BRIEF.md` rather than resolving it silently.
+- **Every layout change is verified at 360, 768, 1024, 1280 and 1440px** before it's considered done — not just the breakpoint it targets. The header nav-wrap bug (visible only between 768–1100px) shipped once precisely because it fell between the two widths that got checked.

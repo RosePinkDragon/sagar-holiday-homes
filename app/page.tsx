@@ -1,69 +1,168 @@
-import Image from "next/image";
+import type { Metadata } from "next";
+import Link from "next/link";
+import {
+  contact,
+  facts,
+  formatPhone,
+  identity,
+  pageMetadata,
+  pages,
+  pool,
+  resolved,
+} from "@/content/property";
+import HorizonBand from "./components/HorizonBand";
 
-export default function Home() {
+/**
+ * BRIEF §8, Home: hero + H1 (must contain "Dapoli" and "private pool") +
+ * three-fact strip + positioning paragraph + the three differentiators +
+ * photo teaser + testimonials (empty at launch, designed for now) + sticky
+ * enquiry CTA. Built last (CLAUDE.md build order) because it summarises the
+ * other seven pages rather than introducing new facts.
+ */
+
+export function generateMetadata(): Metadata {
+  return pageMetadata(pages.home, "pages.home");
+}
+
+const TEASER_SHOTS = [
+  { href: "/pool-and-grounds", caption: "Pool — gazebo and fencing" },
+  { href: "/pool-and-grounds", caption: "The open ground" },
+  { href: "/pool-and-grounds", caption: "The orchard" },
+  { href: "/villa", caption: "Bedroom, king bed" },
+  { href: "/food", caption: "The guest kitchen" },
+  { href: "/gallery", caption: "A group at the villa" },
+];
+
+export default function HomePage() {
+  const phone = resolved(contact.phone);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <main>
+      <HorizonBand caption="HERO — pool with orchard behind, golden hour" />
+
+      <header className="shell settle-next" style={{ paddingBlock: "3rem" }}>
+        <h1
+          className="type-display type-display-lg mt-3"
+          style={{ fontSize: "var(--step-3)" }}
+        >
+          A private pool villa in Dapoli, built for big groups
+        </h1>
+        <p className="measure mt-6">{identity.positioning}</p>
+      </header>
+
+      <section className="section bg-bone-deep">
+        <div className="shell">
+          <dl className="grid gap-6 sm:grid-cols-2">
+            <div className="hairline p-6">
+              <dt className="label">Sleeps</dt>
+              <dd
+                className="type-display mt-2"
+                style={{ fontSize: "var(--step-1)" }}
+              >
+                {facts.occupancy.max.value}
+              </dd>
+            </div>
+            <div className="hairline p-6">
+              <dt className="label">Pool</dt>
+              <dd
+                className="type-display mt-2"
+                style={{ fontSize: "var(--step-1)" }}
+              >
+                Private, {pool.access.value.display}
+              </dd>
+            </div>
+            <div className="hairline p-6 sm:col-span-2">
+              <dt className="label">Ground</dt>
+              <dd
+                className="type-display mt-2"
+                style={{ fontSize: "var(--step-1)" }}
+              >
+                ~{facts.ground.value.approxMetres}m open
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </section>
+
+      <section className="section bg-bone">
+        <div className="shell">
+          <h2 className="type-display" style={{ fontSize: "var(--step-2)" }}>
+            What makes it different
+          </h2>
+          <div className="grid gap-8 md:grid-cols-2 mt-10">
+            {identity.differentiators.map((d) => (
+              <div key={d.title} className="hairline p-6">
+                <h3
+                  className="type-display"
+                  style={{ fontSize: "var(--step-1)" }}
+                >
+                  {d.title}
+                </h3>
+                <p className="measure mt-3">{d.body}</p>
+              </div>
+            ))}
+          </div>
+          <p className="measure mt-8">{identity.supporting}</p>
+        </div>
+      </section>
+
+      <section className="section bg-bone-deep">
+        <div className="shell">
+          <h2 className="type-display" style={{ fontSize: "var(--step-2)" }}>
+            A closer look
+          </h2>
+          <div className="grid gap-6 sm:grid-cols-2 mt-10">
+            {TEASER_SHOTS.map((shot) => (
+              <Link
+                key={shot.caption}
+                href={shot.href}
+                className="photo-placeholder"
+                style={{ aspectRatio: "4 / 3" }}
+              >
+                <p className="muted text-fine">{shot.caption}</p>
+              </Link>
+            ))}
+          </div>
+          <p className="mt-8">
+            <Link href="/gallery" className="link">
+              See the full gallery
+            </Link>
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+
+      <section className="section bg-bone">
+        <div className="shell">
+          <h2 className="type-display" style={{ fontSize: "var(--step-2)" }}>
+            What guests say
+          </h2>
+          <div className="hairline mt-10 p-6">
+            <p className="muted">
+              No reviews yet — the villa is in its finishing stages.
+              Testimonials will appear here once guests have stayed.
+            </p>
+          </div>
         </div>
-      </main>
-    </div>
+      </section>
+
+      {phone ? (
+        <div
+          className="bg-canopy"
+          style={{ position: "sticky", bottom: 0, zIndex: 30 }}
+        >
+          <div
+            className="shell flex flex-wrap items-center justify-between gap-4"
+            style={{ paddingBlock: "0.75rem" }}
+          >
+            <a href={`tel:${phone}`} className="footer-link text-fine">
+              Call {formatPhone(phone)}
+            </a>
+            <Link href="/contact" className="btn btn-invert">
+              Send enquiry
+            </Link>
+          </div>
+        </div>
+      ) : null}
+    </main>
   );
 }

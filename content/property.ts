@@ -608,6 +608,73 @@ export const gstNote = (): string =>
     ? `Inclusive of ${tariff.gst.ratePercent.value}% GST`
     : `Plus ${tariff.gst.ratePercent.value}% GST`;
 
+/**
+ * BRIEF §4 / audit finding: the guest-count and pricing story (sleeps 12,
+ * rates built around 8, 9 comfortable) is confusing without a worked
+ * number. Computed from the same `tariff`/`facts` values the rate card
+ * renders — never a second, hand-typed set of numbers — so it can't drift
+ * from the table above it. Returns null while the rate card is still `tbd`
+ * (it isn't today; stays defensive per the same pattern as
+ * `lodgingBusinessJsonLd`).
+ */
+export function describeWorkedExample(): {
+  nights: number;
+  guests: number;
+  extraGuests: number;
+  nightlyRate: Inr;
+  nightsTotal: Inr;
+  extrasTotal: Inr;
+  grandTotal: Inr;
+  perPersonPerNight: Inr;
+} | null {
+  const rateCard = resolved(tariff.rateCard);
+  if (!rateCard) return null;
+
+  const nights = 2;
+  const guests = facts.occupancy.max.value;
+  const base = facts.occupancy.base.value;
+  const extraGuests = guests - base;
+  const nightlyRate = rateCard.weekend;
+  const nightsTotal = nightlyRate * nights;
+  const extrasTotal = tariff.extraGuest.value * extraGuests * nights;
+  const grandTotal = nightsTotal + extrasTotal;
+
+  return {
+    nights,
+    guests,
+    extraGuests,
+    nightlyRate,
+    nightsTotal,
+    extrasTotal,
+    grandTotal,
+    perPersonPerNight: Math.round(grandTotal / guests / nights),
+  };
+}
+
+/**
+ * `Offer` schema for /tariff (audit §3.3). `priceRange` already renders
+ * site-wide via `lodgingBusinessJsonLd()`; this is the page-specific,
+ * more detailed sibling. Omits `price` entirely while the rate card is
+ * still `assumed` rather than publish an unconfirmed figure as structured
+ * data search engines may surface directly.
+ */
+export function tariffOfferJsonLd(): Record<string, unknown> | null {
+  if (tariff.rateCard.status === "assumed") return null;
+  const rateCard = tariff.rateCard.value;
+  return {
+    "@context": "https://schema.org",
+    "@type": "Offer",
+    url: `https://${identity.domain}/tariff/`,
+    priceCurrency: "INR",
+    lowPrice: rateCard.weekday,
+    highPrice: rateCard.peak,
+    eligibleQuantity: {
+      "@type": "QuantitativeValue",
+      maxValue: facts.occupancy.max.value,
+    },
+  };
+}
+
 // ---------------------------------------------------------------------------
 // Booking & cancellation policy (BRIEF §5)
 // ---------------------------------------------------------------------------
@@ -927,6 +994,15 @@ export const pages = {
       "Call, WhatsApp or send an enquiry — someone answers 10am to 10pm every day. Sagar Holiday Homes, Saldure, Dapoli, Ratnagiri."
     ),
   },
+  faq: {
+    route: confirmed("/faq"),
+    job: "Answer booking-deciding questions with real, sourced facts",
+    targetQuery: confirmed("Dapoli villa frequently asked questions"),
+    title: confirmed("FAQ | Sagar Holiday Homes, Dapoli"),
+    description: confirmed(
+      "Capacity, pool safety, food, Wi-Fi, parking, mango season and booking policy — straight answers about Sagar Holiday Homes in Dapoli."
+    ),
+  },
 } as const;
 
 /** All eight routes as plain strings — for the sitemap and nav. */
@@ -1052,6 +1128,91 @@ export function lodgingBusinessJsonLd(): Record<string, unknown> {
 }
 
 // ---------------------------------------------------------------------------
+// FAQ (BRIEF §8 gap — audit finding) — every answer sourced from a fact
+// already confirmed elsewhere in this module. CLAUDE.md rule 2: never invent
+// a property fact. Questions the module has no confirmed answer for
+// (unmarried couples/mixed groups, pets, alcohol, advance payment method,
+// bringing an outside cook) are deliberately left off this list rather than
+// guessed — a wrong published policy is worse than no FAQ entry.
+// ---------------------------------------------------------------------------
+
+export const faq: readonly { question: string; answer: string }[] = [
+  {
+    question: "How many guests does the villa sleep?",
+    answer: `${describe.occupancy()}. Rates are built around ${facts.occupancy.base.value} guests, ${facts.occupancy.comfortable.value} is the comfortable number to plan a group around, and ${facts.occupancy.max.value} is the most the villa takes.`,
+  },
+  {
+    question: "Is the pool private, or shared with other guests?",
+    answer: `${pool.summary.value}. ${facts.saleModel.value}`,
+  },
+  {
+    question: "Is the pool safe for children?",
+    answer: pool.disclosure.value,
+  },
+  {
+    question: "How far is the beach?",
+    answer: `Saldure beach is ${describe.beachDistance()}. The villa itself is inland, in the orchard — not sea-facing.`,
+  },
+  {
+    question: "Is there parking for a bus or tempo traveller?",
+    answer: facts.parking.value,
+  },
+  {
+    question: "What happens during a power cut?",
+    answer: `${facts.backupPower.available.value} backup, covering the ${facts.backupPower.coverage.value}.`,
+  },
+  {
+    question: "Is there Wi-Fi?",
+    answer: `Yes — ${describe.wifi()}.`,
+  },
+  {
+    question: "When is mango season?",
+    answer: `The orchard's ${facts.orchard.value.season} — that's when the mangoes are ready to pick.`,
+  },
+  {
+    question: "What are check-in and check-out times?",
+    answer: `Check-in ${policy.stay.checkIn.value.display}, check-out ${policy.stay.checkOut.value.display}. ${policy.stay.flexibleTimings.value.condition} Early check-in from ${policy.stay.flexibleTimings.value.earlyCheckIn}, late check-out until ${policy.stay.flexibleTimings.value.lateCheckOut}.`,
+  },
+  {
+    question: "Is there a caretaker on site?",
+    answer:
+      "Yes — a caretaker is on site and can secure the pool enclosure on request.",
+  },
+  {
+    question: "Is there a minimum stay?",
+    answer: `${policy.stay.minimumNights.value.standard} night by default, ${policy.stay.minimumNights.value.peak} nights on peak dates. A single-night Saturday carries a ${policy.stay.singleNightSaturdaySurchargePercent.value}% surcharge, since it blocks both the Friday and the Sunday.`,
+  },
+  {
+    question: "Are loud music or late-night parties allowed?",
+    answer: policy.stay.quietHours.value.line,
+  },
+  {
+    question: "Is food included, and can we cook ourselves?",
+    answer: `${food.kitchen.value}. ${food.cook.value} for home-style Konkani food and fresh Harnai seafood on request — priced per dish, and you settle with the cook directly.`,
+  },
+  {
+    question: "How does booking work?",
+    answer: policy.confirmation.value.line,
+  },
+] as const;
+
+/**
+ * FAQPage schema (audit §3.3) — rendered only on /faq, from the same list
+ * the page itself displays, so the two can't drift apart.
+ */
+export function faqJsonLd(): Record<string, unknown> {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: { "@type": "Answer", text: item.answer },
+    })),
+  };
+}
+
+// ---------------------------------------------------------------------------
 // NOT FOR PUBLICATION
 //
 // Real facts that must never reach a page or an OTA field. Kept here so nobody
@@ -1095,6 +1256,7 @@ export const content = {
   enquiryForm,
   pages,
   seo,
+  faq,
 } as const;
 
 /** Everything collectOpenItems() walks — public content plus internal decisions. */

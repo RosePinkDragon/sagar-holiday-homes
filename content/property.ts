@@ -398,8 +398,17 @@ export const amenities = [
 export const identity = {
   name: "Sagar Holiday Homes",
   domain: "sagarholidayhomes.com",
-  /** Pre-launch. Website and property go live together. */
-  live: false,
+  /**
+   * Pre-launch. Website and property go live together (BRIEF §10). Drives
+   * `siteRobots()` below — noindex until this flips. Set
+   * NEXT_PUBLIC_SITE_LIVE=true in the deploy environment at cutover.
+   *
+   * `next-sitemap.config.js` reads the same env var independently to keep
+   * `robots.txt` in sync — it can't import this module (plain CommonJS
+   * postbuild script, no ts-node in this repo), so the env var itself is
+   * the shared source of truth, not this computed field.
+   */
+  live: process.env.NEXT_PUBLIC_SITE_LIVE === "true",
   positioning:
     "A private villa in a Konkan orchard — the whole house, the whole pool, and a ground big enough for a real cricket match. Beach five minutes away.",
   /** In priority order. The ground is the lead, not the beach. */
@@ -847,19 +856,19 @@ export const pages = {
     job: "Positioning, hero image, key facts, enquiry CTA",
     targetQuery: confirmed("Dapoli villa for family groups"),
     title: confirmed(
-      "Dapoli Villa for Family Groups — Private Pool, 3BHK | Sagar Holiday Homes"
+      "Dapoli Private Pool Villa for Groups | Sagar Holiday Homes"
     ),
     description: confirmed(
-      "A private-pool 3BHK villa in a Konkan orchard near Dapoli — sleeps 12, ~150m open ground for cricket, 5 minutes from Saldure beach. Built for family groups and friends from Mumbai and Pune."
+      "A 3BHK private-pool villa near Dapoli, sleeping 12. Whole-villa buyout, a 150m cricket ground, orchard, and Saldure beach five minutes away."
     ),
   },
   villa: {
     route: confirmed("/villa"),
     job: "Rooms, occupancy, amenities, floor logic",
     targetQuery: confirmed("3BHK villa Dapoli"),
-    title: confirmed("The Villa — 3BHK, Sleeps 12 | Sagar Holiday Homes, Dapoli"),
+    title: confirmed("3BHK Villa in Dapoli, Sleeps 12 | Sagar Holiday Homes"),
     description: confirmed(
-      "A whole-villa buyout in Dapoli — 3 air-conditioned bedrooms, 3 king beds, sleeps up to 12. Full kitchen, Wi-Fi, generator backup and more."
+      "Three air-conditioned bedrooms, three king beds, sleeps 12. Full kitchen, Wi-Fi, generator backup. Whole-villa buyout only — no per-room sales."
     ),
   },
   poolAndGrounds: {
@@ -867,26 +876,26 @@ export const pages = {
     job: "Pool, gazebo, ground, orchard + safety disclosure",
     targetQuery: confirmed("villa with private pool in Dapoli"),
     title: confirmed(
-      "Pool & Grounds — Private Pool, 150m Ground | Sagar Holiday Homes, Dapoli"
+      "Private Pool & 150m Ground, Dapoli | Sagar Holiday Homes"
     ),
     description: confirmed(
-      "A private pool under a gazebo, ~150m of open ground for cricket and football, and a 30-tree coconut-mango orchard. Pool dimensions, depth and the safety notice, stated plainly."
+      "A private pool under a gazebo, 150m of open ground for cricket, and a 30-tree orchard. Pool dimensions, depth and safety notes, stated plainly."
     ),
   },
   gallery: {
     route: confirmed("/gallery"),
     job: "Photo grid, categorised",
-    title: confirmed("Gallery | Sagar Holiday Homes, Dapoli"),
+    title: confirmed("Photos — Dapoli Pool Villa | Sagar Holiday Homes"),
     description: confirmed(
-      "Photos of the villa, the private pool, the 150m ground and the orchard at Sagar Holiday Homes in Saldure, Dapoli."
+      "Photographs of the villa, private pool, 150m ground and coconut-mango orchard at Sagar Holiday Homes in Saldure, Dapoli."
     ),
   },
   food: {
     route: confirmed("/food"),
     job: "Kitchen, cook, sample menu, pricing",
-    title: confirmed("Food — Kitchen & Local Cook | Sagar Holiday Homes, Dapoli"),
+    title: confirmed("Kitchen & Konkani Cook | Sagar Holiday Homes, Dapoli"),
     description: confirmed(
-      "A full guest kitchen, plus a local cook for home-style Konkani food and fresh Harnai seafood on request. Priced per dish; menu cards handed over at the villa."
+      "A full guest kitchen plus a local cook for home-style Konkani food and fresh Harnai seafood on request. Priced per dish — you settle with the cook directly."
     ),
   },
   location: {
@@ -894,20 +903,20 @@ export const pages = {
     job: "Map, drive times, beaches, things to do nearby",
     targetQuery: confirmed("villa near Saldure beach"),
     title: confirmed(
-      "Location — Villa Near Saldure Beach, Dapoli | Sagar Holiday Homes"
+      "Villa Near Saldure Beach, Dapoli | Sagar Holiday Homes"
     ),
     description: confirmed(
-      "Sagar Holiday Homes is in Saldure, Dapoli — 5 minutes from Saldure beach, about 4.5–5 hrs from Mumbai or Pune via NH66. Drive times, nearby beaches and landmarks, and how to find us."
+      "Sagar Holiday Homes is in Saldure, Dapoli — 5 minutes from Saldure beach, about 4.5–5 hrs from Mumbai or Pune via NH66. Drive times, nearby beaches and landmarks."
     ),
   },
   tariff: {
     route: confirmed("/tariff"),
     job: "Rate card, policy, what's included",
     title: confirmed(
-      "Tariff & Booking — Rates and Policy | Sagar Holiday Homes, Dapoli"
+      "Tariff & Booking — Dapoli Villa | Sagar Holiday Homes"
     ),
     description: confirmed(
-      "Rate card (GST-inclusive), cancellation policy, what's included, and peak-date pricing for Sagar Holiday Homes, a private-pool villa in Dapoli."
+      "Weekday, weekend and peak rates inclusive of GST, plus the cancellation policy, what the rate covers and stay details for our Dapoli villa."
     ),
   },
   contact: {
@@ -915,7 +924,7 @@ export const pages = {
     job: "Enquiry form, phone, WhatsApp, address",
     title: confirmed("Contact & Enquiries | Sagar Holiday Homes, Dapoli"),
     description: confirmed(
-      "Send an enquiry, call, or message us on WhatsApp — someone answers 10am to 10pm, every day. Sagar Holiday Homes, Saldure, Dapoli."
+      "Call, WhatsApp or send an enquiry — someone answers 10am to 10pm every day. Sagar Holiday Homes, Saldure, Dapoli, Ratnagiri."
     ),
   },
 } as const;
@@ -941,15 +950,22 @@ export const routes = Object.values(pages).map((p) => p.route.value);
  * spreads it into one.
  */
 export function pageMetadata(
-  page: { title: Fact<string>; description: Fact<string> },
+  page: { title: Fact<string>; description: Fact<string>; route: Fact<string> },
   label: string
 ) {
   const title = requireFact(page.title, `${label}.title`);
   const description = requireFact(page.description, `${label}.description`);
+  const route = requireFact(page.route, `${label}.route`);
   const ogImage = resolved(seo.defaultOgImage);
+  // trailingSlash: true (next.config.ts) serves every route as
+  // /path/index.html except the root — match that shape here so the
+  // canonical URL matches how the page is actually served.
+  const canonicalPath = route === "/" ? "/" : `${route}/`;
   return {
     title,
     description,
+    alternates: { canonical: canonicalPath },
+    robots: siteRobots(),
     openGraph: {
       title,
       description,
@@ -958,6 +974,20 @@ export function pageMetadata(
         : [],
     },
   };
+}
+
+/**
+ * Site-wide indexability gate (CLAUDE.md SEO requirements): noindex until
+ * `identity.live` flips at launch. Applied per-page via `pageMetadata()`
+ * and as the root-layout default so any route that skips `pageMetadata()`
+ * (Next's own /_not-found, or a future page a developer forgets to wire up)
+ * still inherits the safe default instead of Next's actual default
+ * (indexable).
+ */
+export function siteRobots(): { index: boolean; follow: boolean } {
+  return identity.live
+    ? { index: true, follow: true }
+    : { index: false, follow: false };
 }
 
 export const seo = {

@@ -321,7 +321,7 @@ Nothing launches without this. A ₹18,000/night property cannot be sold on phon
 3. **Google Business Profile created** — start early, postcard verification can take weeks and needs someone in Dapoli to receive it. Category: Holiday Home or Villa, never Hotel. Pin at the gate.
 4. Photographer shoot
 5. Website content written and built
-6. Website live
+6. Website live — set `NEXT_PUBLIC_SITE_LIVE=true` in the deploy environment and redeploy; this flips per-page `robots`, `robots.txt`, and lifts the site-wide noindex
 7. Airbnb + Booking.com listings — last, because they need photos, rates, and a person answering the phone
 
 ---

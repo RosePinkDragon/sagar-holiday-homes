@@ -225,7 +225,17 @@ export default function TariffPage() {
                 className="pl-4"
                 style={{ borderLeft: "2px solid var(--laterite)" }}
               >
-                {term}
+                {term.includes("pool safety notice") ? (
+                  <>
+                    {term.split("pool safety notice")[0]}
+                    <Link href="/pool-and-grounds" className="link">
+                      pool safety notice
+                    </Link>
+                    {term.split("pool safety notice")[1]}
+                  </>
+                ) : (
+                  term
+                )}
               </li>
             ))}
           </ul>

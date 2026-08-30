@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { identity, lodgingBusinessJsonLd, resolved, seo } from "@/content/property";
+import { identity, lodgingBusinessJsonLd, resolved, seo, siteRobots } from "@/content/property";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import { fontVariables } from "./fonts";
@@ -18,6 +18,10 @@ export const metadata: Metadata = {
   metadataBase: new URL(`https://${identity.domain}`),
   title: identity.name,
   description: identity.positioning,
+  // Safety net for any route that skips pageMetadata() (Next's own
+  // /_not-found, or a page a developer forgets to wire up) — inherits
+  // noindex-by-default pre-launch instead of Next's actual default.
+  robots: siteRobots(),
   openGraph: {
     siteName: identity.name,
     type: "website",

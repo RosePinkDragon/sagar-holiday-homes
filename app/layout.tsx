@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import { identity, lodgingBusinessJsonLd, resolved, seo, siteRobots } from "@/content/property";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -51,6 +52,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           {children}
         </div>
         <Footer />
+        {/*
+         * Vercel Analytics (audit §4.5): no external account signup needed,
+         * just enabling "Analytics" for this project in the Vercel
+         * dashboard once deployed — this component is inert (no requests,
+         * no cookies) anywhere else, including local dev and Cloudflare
+         * Pages (CLAUDE.md: deployed to Vercel OR Cloudflare Pages).
+         */}
+        <Analytics />
       </body>
     </html>
   );

@@ -43,8 +43,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        <a href="#main-content" className="skip-link">
+          Skip to content
+        </a>
         <Header />
-        <div className="flex-1">{children}</div>
+        <div id="main-content" className="flex-1">
+          {children}
+        </div>
         <Footer />
       </body>
     </html>

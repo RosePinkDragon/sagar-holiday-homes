@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import {
   contact,
   describe,
@@ -7,6 +8,7 @@ import {
   nearbyPlaces,
   pageMetadata,
   pages,
+  policy,
   resolved,
 } from "@/content/property";
 import HorizonBand from "../components/HorizonBand";
@@ -49,8 +51,11 @@ export default function LocationPage() {
           Sagar Holiday Homes sits in {address.village} village,{" "}
           {address.taluka} taluka, {address.district} district,{" "}
           {address.state} — inland, in the orchard, not on the seafront.
-          Saldure beach is {describe.beachDistance()} away, and the wider
-          Dapoli coastline is a short drive further along.
+          That&rsquo;s what makes room for {describe.ground()} and a
+          working orchard on the property — a seafront plot in Dapoli
+          rarely has space for either. Saldure beach is still just{" "}
+          {describe.beachDistance()} away, and the wider Dapoli coastline
+          is a short drive further along.
         </p>
       </header>
 
@@ -74,6 +79,15 @@ export default function LocationPage() {
           </dl>
           <p className="muted mt-6 text-fine">
             {facts.distances.routeNote.value}.
+          </p>
+          <p className="measure mt-6">
+            Given the drive, most groups stay more than one night — minimum
+            stay is {policy.stay.minimumNights.value.standard} night
+            ({policy.stay.minimumNights.value.peak} on peak dates). See{" "}
+            <Link href="/tariff" className="link">
+              rates and booking
+            </Link>
+            .
           </p>
         </div>
       </section>

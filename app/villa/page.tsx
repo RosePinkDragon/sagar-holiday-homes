@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { amenities, describe, facts, pageMetadata, pages } from "@/content/property";
 import HorizonBand from "../components/HorizonBand";
 
@@ -64,6 +65,17 @@ export default function VillaPage() {
               </li>
             ))}
           </ul>
+          <p className="measure mt-8">
+            More on the{" "}
+            <Link href="/pool-and-grounds" className="link">
+              pool, ground and orchard
+            </Link>{" "}
+            and on{" "}
+            <Link href="/food" className="link">
+              food and the kitchen
+            </Link>
+            .
+          </p>
         </div>
       </section>
     </main>

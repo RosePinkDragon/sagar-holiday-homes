@@ -3,13 +3,17 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   contact,
+  describe,
   facts,
+  faq,
   formatPhone,
   identity,
   pageMetadata,
   pages,
+  policy,
   pool,
   resolved,
+  tariff,
 } from "@/content/property";
 import HorizonBand from "./components/HorizonBand";
 
@@ -60,6 +64,8 @@ const TEASER_SHOTS = [
 
 export default function HomePage() {
   const phone = resolved(contact.phone);
+  const launchOffer = resolved(tariff.launchOffer);
+  const launchOfferIndicative = tariff.launchOffer.status === "assumed";
 
   return (
     <main>
@@ -137,6 +143,82 @@ export default function HomePage() {
       <section className="section bg-bone-deep">
         <div className="shell">
           <h2 className="type-display" style={{ fontSize: "var(--step-2)" }}>
+            Who this villa is for
+          </h2>
+          <ul className="measure mt-10 space-y-4">
+            {identity.segments.map((segment) => (
+              <li
+                key={segment}
+                className="pl-4"
+                style={{ borderLeft: "2px solid var(--laterite)" }}
+              >
+                {segment}
+              </li>
+            ))}
+          </ul>
+          <p className="measure mt-8">
+            The pull is the same for all three:{" "}
+            <Link href="/pool-and-grounds" className="link">
+              {describe.ground()}
+            </Link>
+            , a private pool that&rsquo;s never shared with another
+            booking, and enough bedrooms and beds for{" "}
+            {facts.occupancy.max.value} people under one roof.
+          </p>
+        </div>
+      </section>
+
+      <section className="section bg-bone">
+        <div className="shell">
+          <h2 className="type-display" style={{ fontSize: "var(--step-2)" }}>
+            How booking works
+          </h2>
+          <p className="measure mt-6">{policy.confirmation.value.line}</p>
+          <p className="measure mt-4">
+            Cancel {policy.cancellation.value[0].noticeBeforeCheckIn} out and
+            you get a {policy.cancellation.value[0].refundPercent}% refund,
+            less a small processing fee. Closer to your dates, partial
+            refunds apply on a sliding scale — see the{" "}
+            <Link href="/tariff" className="link">
+              full rate card and cancellation policy
+            </Link>
+            , including weekday and weekend rates.
+          </p>
+        </div>
+      </section>
+
+      <section className="section bg-bone-deep">
+        <div className="shell">
+          <h2 className="type-display" style={{ fontSize: "var(--step-2)" }}>
+            Getting here from Mumbai and Pune
+          </h2>
+          <dl className="grid gap-6 sm:grid-cols-2 mt-10">
+            {facts.distances.driveTimes.value.map((drive) => (
+              <div key={drive.from} className="hairline p-6">
+                <dt className="label">{drive.from}</dt>
+                <dd
+                  className="type-display mt-2"
+                  style={{ fontSize: "var(--step-1)" }}
+                >
+                  {drive.duration}
+                </dd>
+              </div>
+            ))}
+          </dl>
+          <p className="measure mt-6">
+            {facts.distances.routeNote.value}. Full drive-time and directions
+            on the{" "}
+            <Link href="/location" className="link">
+              location page
+            </Link>
+            .
+          </p>
+        </div>
+      </section>
+
+      <section className="section bg-bone">
+        <div className="shell">
+          <h2 className="type-display" style={{ fontSize: "var(--step-2)" }}>
             A closer look
           </h2>
           <div className="grid gap-6 sm:grid-cols-2 mt-10">
@@ -178,17 +260,56 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="section bg-bone">
+      <section className="section bg-bone-deep">
         <div className="shell">
           <h2 className="type-display" style={{ fontSize: "var(--step-2)" }}>
             What guests say
           </h2>
           <div className="hairline mt-10 p-6">
-            <p className="muted">
+            <p className="measure">
               No reviews yet — the villa is in its finishing stages.
-              Testimonials will appear here once guests have stayed.
+              {launchOffer ? (
+                <>
+                  {" "}
+                  We&rsquo;re taking bookings for our first season at{" "}
+                  {launchOffer.discountPercent.from}–
+                  {launchOffer.discountPercent.to}% off the published rate
+                  for the first {launchOffer.durationMonths} months,{" "}
+                  {launchOffer.condition.charAt(0).toLowerCase() +
+                    launchOffer.condition.slice(1)}
+                  .{launchOfferIndicative ? " · indicative" : ""}
+                </>
+              ) : (
+                " Testimonials will appear here once guests have stayed."
+              )}
             </p>
           </div>
+        </div>
+      </section>
+
+      <section className="section bg-bone">
+        <div className="shell">
+          <h2 className="type-display" style={{ fontSize: "var(--step-2)" }}>
+            Straight answers
+          </h2>
+          <div className="grid gap-8 mt-10">
+            {faq.slice(0, 5).map((item) => (
+              <div key={item.question} className="hairline p-6">
+                <h3
+                  className="type-display"
+                  style={{ fontSize: "var(--step-0)" }}
+                >
+                  {item.question}
+                </h3>
+                <p className="measure mt-3">{item.answer}</p>
+              </div>
+            ))}
+          </div>
+          <p className="mt-8">
+            <Link href="/faq" className="link">
+              See all FAQs
+            </Link>
+          </p>
         </div>
       </section>
 

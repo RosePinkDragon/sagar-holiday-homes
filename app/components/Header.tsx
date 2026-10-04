@@ -17,6 +17,7 @@ const NAV_LABELS: Record<string, string> = {
   "/location": "Location",
   "/tariff": "Tariff & Booking",
   "/contact": "Contact",
+  "/faq": "FAQ",
 };
 
 export default function Header() {

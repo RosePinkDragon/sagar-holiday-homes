@@ -75,6 +75,9 @@ export default function EnquiryForm() {
               id={field.name}
               rows={4}
               className="field mt-2"
+              aria-required={field.required}
+              aria-invalid={errors[field.name] ? true : undefined}
+              aria-describedby={errors[field.name] ? `${field.name}-error` : undefined}
               {...register(field.name, { required: field.required })}
             />
           ) : field.type === "select" ? (
@@ -82,6 +85,9 @@ export default function EnquiryForm() {
               id={field.name}
               className="field mt-2"
               defaultValue=""
+              aria-required={field.required}
+              aria-invalid={errors[field.name] ? true : undefined}
+              aria-describedby={errors[field.name] ? `${field.name}-error` : undefined}
               {...register(field.name, { required: field.required })}
             >
               <option value="" disabled>
@@ -102,12 +108,20 @@ export default function EnquiryForm() {
               className="field mt-2"
               max={field.name === "guests" ? enquiryForm.maxGuests : undefined}
               min={field.name === "guests" ? 1 : undefined}
+              aria-required={field.required}
+              aria-invalid={errors[field.name] ? true : undefined}
+              aria-describedby={errors[field.name] ? `${field.name}-error` : undefined}
               {...register(field.name, { required: field.required })}
             />
           )}
 
           {errors[field.name] ? (
-            <p className="text-fine mt-1" style={{ color: "var(--laterite)" }}>
+            <p
+              id={`${field.name}-error`}
+              role="alert"
+              className="text-fine mt-1"
+              style={{ color: "var(--laterite)" }}
+            >
               {field.label} is required.
             </p>
           ) : null}
@@ -115,7 +129,7 @@ export default function EnquiryForm() {
       ))}
 
       {status === "error" ? (
-        <p className="text-fine" style={{ color: "var(--laterite)" }}>
+        <p role="alert" className="text-fine" style={{ color: "var(--laterite)" }}>
           Something went wrong sending that. Call or WhatsApp us instead —
           the numbers are above.
         </p>

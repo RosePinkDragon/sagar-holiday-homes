@@ -345,6 +345,28 @@
     cursor: not-allowed;
   }
 
+  /* Skip-to-content: off-screen until keyboard focus, then pinned top-left.
+     The duplicated nav (desktop + mobile, both always in the DOM) means a
+     keyboard user tabs through up to 16 links before reaching content —
+     this is the escape hatch. */
+  .skip-link {
+    position: absolute;
+    top: -100%;
+    left: var(--gutter);
+    z-index: 50;
+    background-color: var(--canopy);
+    color: var(--bone);
+    padding: 0.75rem 1.25rem;
+    border-radius: var(--radius);
+    font-family: var(--font-karla), system-ui, sans-serif;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .skip-link:focus-visible {
+    top: 0.75rem;
+  }
+
   /* --- Footer links --------------------------------------------------------
      The footer sits on --canopy-deep. DESIGN.md "What is allowed for text"
      only clears --bone / --bone-deep on dark grounds — --laterite (the .link

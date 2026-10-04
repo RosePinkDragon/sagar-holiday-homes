@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
-import { identity, lodgingBusinessJsonLd, resolved, seo } from "@/content/property";
+import { identity, lodgingBusinessJsonLd, resolved, seo, siteRobots } from "@/content/property";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import { fontVariables } from "./fonts";
@@ -19,6 +19,10 @@ export const metadata: Metadata = {
   metadataBase: new URL(`https://${identity.domain}`),
   title: identity.name,
   description: identity.positioning,
+  // Safety net for any route that skips pageMetadata() (Next's own
+  // /_not-found, or a page a developer forgets to wire up) — inherits
+  // noindex-by-default pre-launch instead of Next's actual default.
+  robots: siteRobots(),
   openGraph: {
     siteName: identity.name,
     type: "website",
@@ -40,9 +44,21 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        <a href="#main-content" className="skip-link">
+          Skip to content
+        </a>
         <Header />
-        <div className="flex-1">{children}</div>
+        <div id="main-content" className="flex-1">
+          {children}
+        </div>
         <Footer />
+        {/*
+         * Vercel Analytics (audit §4.5): no external account signup needed,
+         * just enabling "Analytics" for this project in the Vercel
+         * dashboard once deployed — this component is inert (no requests,
+         * no cookies) anywhere else, including local dev and Cloudflare
+         * Pages (CLAUDE.md: deployed to Vercel OR Cloudflare Pages).
+         */}
         <Analytics />
       </body>
     </html>

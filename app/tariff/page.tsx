@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import {
+  describeWorkedExample,
   facts,
   formatInr,
   gstNote,
@@ -10,6 +11,7 @@ import {
   requireFact,
   resolved,
   tariff,
+  tariffOfferJsonLd,
 } from "@/content/property";
 import HorizonBand from "../components/HorizonBand";
 
@@ -40,8 +42,18 @@ export default function TariffPage() {
   const deposit = resolved(policy.securityDeposit);
   const depositIndicative = policy.securityDeposit.status === "assumed";
 
+  const worked = describeWorkedExample();
+  const offerJsonLd = tariffOfferJsonLd();
+
   return (
     <main>
+      {offerJsonLd ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(offerJsonLd) }}
+        />
+      ) : null}
+
       <HorizonBand
         caption="POOL — pool at night, lit"
         image={{ src: "/temp-stock/pool-night.jpg", alt: "Stock photo standing in for the pool at night" }}
@@ -101,8 +113,39 @@ export default function TariffPage() {
           <p className="measure mt-6 text-fine">
             Extra guest: {formatInr(tariff.extraGuest.value)} per night above{" "}
             {facts.occupancy.base.value} guests, up to the maximum of{" "}
-            {facts.occupancy.max.value}.
+            {facts.occupancy.max.value}. See the{" "}
+            <Link href="/villa" className="link">
+              villa page
+            </Link>{" "}
+            for the room and bed breakdown behind that number.
           </p>
+
+          {worked ? (
+            <div className="hairline mt-8 p-6">
+              <p className="label">
+                Worked example
+                {rateCardIndicative ? <Indicative /> : null}
+              </p>
+              <p className="measure mt-3">
+                A group of {worked.guests}, {worked.nights} weekend nights:
+              </p>
+              <p className="measure mt-2 text-fine">
+                {formatInr(worked.nightlyRate)} × {worked.nights} nights ={" "}
+                {formatInr(worked.nightsTotal)}
+                <br />
+                Extra guests ({worked.extraGuests} above{" "}
+                {facts.occupancy.base.value}) — {formatInr(tariff.extraGuest.value)} ×{" "}
+                {worked.extraGuests} × {worked.nights} = {formatInr(worked.extrasTotal)}
+              </p>
+              <p className="type-display mt-4" style={{ fontSize: "var(--step-1)" }}>
+                Total {formatInr(worked.grandTotal)}
+              </p>
+              <p className="muted mt-2 text-fine">
+                {gstNote()}. That&rsquo;s {formatInr(worked.perPersonPerNight)} per
+                person, per night.
+              </p>
+            </div>
+          ) : null}
         </div>
       </section>
 
@@ -228,7 +271,17 @@ export default function TariffPage() {
                 className="pl-4"
                 style={{ borderLeft: "2px solid var(--laterite)" }}
               >
-                {term}
+                {term.includes("pool safety notice") ? (
+                  <>
+                    {term.split("pool safety notice")[0]}
+                    <Link href="/pool-and-grounds" className="link">
+                      pool safety notice
+                    </Link>
+                    {term.split("pool safety notice")[1]}
+                  </>
+                ) : (
+                  term
+                )}
               </li>
             ))}
           </ul>

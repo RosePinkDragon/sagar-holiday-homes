@@ -41,7 +41,7 @@ Non-negotiable on every page:
 - Descriptive `alt` on every image
 - Explicit image dimensions (avoid layout shift)
 
-Site-wide: `LodgingBusiness` JSON-LD, `sitemap.xml`, `robots.txt`.
+Site-wide: `LodgingBusiness` JSON-LD, `sitemap.xml`, `robots.txt`, canonical tags (`pageMetadata()` in `content/property.ts`), and the pre-launch noindex toggle (`identity.live` / `NEXT_PUBLIC_SITE_LIVE`, mirrored in `next-sitemap.config.js`) — keep all of these wired through `pageMetadata()` so they can't drift apart.
 
 Target queries: "villa with private pool in Dapoli", "3BHK villa Dapoli", "villa near Saldure beach", "Dapoli villa for family groups".
 

@@ -15,7 +15,10 @@ export function generateMetadata(): Metadata {
 export default function FoodPage() {
   return (
     <main>
-      <HorizonBand caption="KITCHEN — the guest kitchen, in use" />
+      <HorizonBand
+        caption="KITCHEN — the guest kitchen, in use"
+        image={{ src: "/temp-stock/kitchen.jpg", alt: "Stock photo standing in for the guest kitchen" }}
+      />
 
       <header className="shell settle-next" style={{ paddingBlock: "3rem" }}>
         <h1

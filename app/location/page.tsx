@@ -12,6 +12,7 @@ import {
   resolved,
 } from "@/content/property";
 import HorizonBand from "../components/HorizonBand";
+import LocationMap from "../components/LocationMap";
 
 /**
  * BRIEF §8, Location: "Embedded map pin at the actual gate ... this page is
@@ -116,52 +117,49 @@ export default function LocationPage() {
           <h2 className="type-display" style={{ fontSize: "var(--step-2)" }}>
             Find us
           </h2>
-          <address className="measure mt-6 not-italic">
-            {address.lines.map((line) => (
-              <span key={line} className="block">
-                {line}
-              </span>
-            ))}
-            <span className="block">{contact.postalCode.value}</span>
-          </address>
-
-          {geo ? (
-            <div
-              className="hairline mt-8 overflow-hidden"
-              style={{ aspectRatio: "16 / 9" }}
-            >
-              <iframe
-                src={`https://www.openstreetmap.org/export/embed.html?bbox=${
-                  geo.lng - 0.01
-                }%2C${geo.lat - 0.01}%2C${geo.lng + 0.01}%2C${
-                  geo.lat + 0.01
-                }&layer=mapnik&marker=${geo.lat}%2C${geo.lng}`}
-                title={`Map showing ${identity.name} in Saldure, Dapoli`}
-                loading="lazy"
-                style={{ width: "100%", height: "100%", border: 0 }}
-              />
-            </div>
-          ) : (
-            <div
-              className="photo-placeholder mt-8"
-              style={{ aspectRatio: "16 / 9" }}
-            >
-              <p className="muted text-fine">
-                MAP — pin at the gate, pending coordinates
+          <div className="mt-6 grid gap-8 lg:grid-cols-2 lg:items-start">
+            <div>
+              <address className="measure not-italic">
+                {address.lines.map((line) => (
+                  <span key={line} className="block">
+                    {line}
+                  </span>
+                ))}
+                <span className="block">{contact.postalCode.value}</span>
+              </address>
+              <p className="mt-6">
+                <a
+                  className="btn btn-outline"
+                  href={directionsHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Get directions
+                </a>
               </p>
+              {geo ? (
+                <p className="muted mt-4 text-fine">
+                  Tap a pin to open it in Google Maps.
+                </p>
+              ) : null}
             </div>
-          )}
 
-          <p className="mt-6">
-            <a
-              className="btn btn-outline"
-              href={directionsHref}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Get directions
-            </a>
-          </p>
+            {geo ? (
+              <LocationMap
+                title={`Map showing ${identity.name} in ${address.village}, ${address.taluka}`}
+                pins={[{ label: identity.name, ...geo, primary: true }]}
+              />
+            ) : (
+              <div
+                className="photo-placeholder"
+                style={{ aspectRatio: "4 / 3" }}
+              >
+                <p className="muted text-fine">
+                  MAP — pin at the gate, pending coordinates
+                </p>
+              </div>
+            )}
+          </div>
         </div>
       </section>
     </main>

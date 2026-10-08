@@ -20,10 +20,13 @@ module.exports = {
   // DESIGN.md: delete /styleguide before launch, or exclude it and noindex
   // it in the meantime. The page already sets robots: {index:false}; this
   // keeps it out of sitemap.xml too.
-  exclude: ["/styleguide", "/styleguide/"],
+  // /admin is the private booking panel (docs/superpowers/specs/
+  // 2026-10-08-admin-panel-design.md): never in the sitemap, always
+  // disallowed, even after launch. Its layout also sets noindex.
+  exclude: ["/styleguide", "/styleguide/", "/admin", "/admin/*"],
   robotsTxtOptions: {
     policies: siteIsLive
-      ? [{ userAgent: "*", allow: "/" }]
+      ? [{ userAgent: "*", allow: "/", disallow: "/admin/" }]
       : [{ userAgent: "*", disallow: "/" }],
   },
 };

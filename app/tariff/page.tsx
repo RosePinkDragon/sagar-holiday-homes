@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { CalendarDays, CalendarHeart, LogIn, LogOut, Moon, Star, CalendarX } from "lucide-react";
 import {
   describeLaunchOffer,
   describeWorkedExample,
@@ -96,7 +97,7 @@ export default function TariffPage() {
           </h2>
           <dl className="grid gap-6 sm:grid-cols-2 mt-10">
             <div className="hairline p-6">
-              <dt className="label">Weekday · {tariff.periods.value.weekday}</dt>
+              <dt className="label with-icon"><CalendarDays className="icon" aria-hidden="true" />Weekday · {tariff.periods.value.weekday}</dt>
               <dd
                 className="type-display mt-2"
                 style={{ fontSize: "var(--step-1)" }}
@@ -105,7 +106,7 @@ export default function TariffPage() {
               </dd>
             </div>
             <div className="hairline p-6">
-              <dt className="label">Weekend · {tariff.periods.value.weekend}</dt>
+              <dt className="label with-icon"><CalendarHeart className="icon" aria-hidden="true" />Weekend · {tariff.periods.value.weekend}</dt>
               <dd
                 className="type-display mt-2"
                 style={{ fontSize: "var(--step-1)" }}
@@ -114,7 +115,7 @@ export default function TariffPage() {
               </dd>
             </div>
             <div className="hairline p-6 sm:col-span-2">
-              <dt className="label">Peak dates</dt>
+              <dt className="label with-icon"><Star className="icon" aria-hidden="true" />Peak dates</dt>
               <dd
                 className="type-display mt-2"
                 style={{ fontSize: "var(--step-1)" }}
@@ -237,21 +238,21 @@ export default function TariffPage() {
           </h2>
           <dl className="grid gap-6 sm:grid-cols-2 mt-10">
             <div className="hairline p-6">
-              <dt className="label">Check-in</dt>
+              <dt className="label with-icon"><LogIn className="icon" aria-hidden="true" />Check-in</dt>
               <dd className="mt-2">{policy.stay.checkIn.value.display}</dd>
             </div>
             <div className="hairline p-6">
-              <dt className="label">Check-out</dt>
+              <dt className="label with-icon"><LogOut className="icon" aria-hidden="true" />Check-out</dt>
               <dd className="mt-2">{policy.stay.checkOut.value.display}</dd>
             </div>
             <div className="hairline p-6">
-              <dt className="label">Minimum stay</dt>
+              <dt className="label with-icon"><Moon className="icon" aria-hidden="true" />Minimum stay</dt>
               <dd className="mt-2">
                 {policy.stay.minimumNights.value.standard} night, {policy.stay.minimumNights.value.peak} on peak dates
               </dd>
             </div>
             <div className="hairline p-6">
-              <dt className="label">Single-night Saturday</dt>
+              <dt className="label with-icon"><CalendarX className="icon" aria-hidden="true" />Single-night Saturday</dt>
               <dd className="mt-2">
                 +{policy.stay.singleNightSaturdaySurchargePercent.value}%
               </dd>

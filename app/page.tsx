@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import { ArrowRight, Car, Maximize2, MessageSquare, Phone, Users, Waves } from "lucide-react";
 import Link from "next/link";
 import {
   contact,
@@ -71,6 +72,11 @@ export default function HomePage() {
       <HorizonBand
         caption="HERO — pool with orchard behind, golden hour"
         image={{ src: "/temp-stock/hero-pool-orchard.jpg", alt: "Stock photo standing in for the hero pool shot" }}
+        facts={[
+          { icon: Users, text: `Sleeps ${facts.occupancy.max.value}` },
+          { icon: Waves, text: "Private pool" },
+          { icon: Maximize2, text: `~${facts.ground.value.approxMetres}m open ground` },
+        ]}
       />
 
       <header className="shell settle-next" style={{ paddingBlock: "3rem" }}>
@@ -87,7 +93,7 @@ export default function HomePage() {
         <div className="shell">
           <dl className="grid gap-6 sm:grid-cols-2">
             <div className="hairline p-6">
-              <dt className="label">Sleeps</dt>
+              <dt className="label with-icon"><Users className="icon" aria-hidden="true" />Sleeps</dt>
               <dd
                 className="type-display mt-2"
                 style={{ fontSize: "var(--step-1)" }}
@@ -96,7 +102,7 @@ export default function HomePage() {
               </dd>
             </div>
             <div className="hairline p-6">
-              <dt className="label">Pool</dt>
+              <dt className="label with-icon"><Waves className="icon" aria-hidden="true" />Pool</dt>
               <dd
                 className="type-display mt-2"
                 style={{ fontSize: "var(--step-1)" }}
@@ -105,7 +111,7 @@ export default function HomePage() {
               </dd>
             </div>
             <div className="hairline p-6 sm:col-span-2">
-              <dt className="label">Ground</dt>
+              <dt className="label with-icon"><Maximize2 className="icon" aria-hidden="true" />Ground</dt>
               <dd
                 className="type-display mt-2"
                 style={{ fontSize: "var(--step-1)" }}
@@ -194,7 +200,7 @@ export default function HomePage() {
           <dl className="grid gap-6 sm:grid-cols-2 mt-10">
             {facts.distances.driveTimes.value.map((drive) => (
               <div key={drive.from} className="hairline p-6">
-                <dt className="label">{drive.from}</dt>
+                <dt className="label with-icon"><Car className="icon" aria-hidden="true" />{drive.from}</dt>
                 <dd
                   className="type-display mt-2"
                   style={{ fontSize: "var(--step-1)" }}
@@ -225,7 +231,7 @@ export default function HomePage() {
               <Link
                 key={shot.caption}
                 href={shot.href}
-                className={shot.image ? undefined : "photo-placeholder"}
+                className={shot.image ? "zoom-frame" : "photo-placeholder"}
                 style={{
                   aspectRatio: "4 / 3",
                   position: "relative",
@@ -253,7 +259,10 @@ export default function HomePage() {
           </div>
           <p className="mt-8">
             <Link href="/gallery" className="link">
-              See the full gallery
+              <span className="with-icon">
+                See the full gallery
+                <ArrowRight className="icon arrow" aria-hidden="true" />
+              </span>
             </Link>
           </p>
         </div>
@@ -301,7 +310,10 @@ export default function HomePage() {
           </div>
           <p className="mt-8">
             <Link href="/faq" className="link">
-              See all FAQs
+              <span className="with-icon">
+                See all FAQs
+                <ArrowRight className="icon arrow" aria-hidden="true" />
+              </span>
             </Link>
           </p>
         </div>
@@ -316,10 +328,12 @@ export default function HomePage() {
             className="shell flex flex-wrap items-center justify-between gap-4"
             style={{ paddingBlock: "0.75rem" }}
           >
-            <a href={`tel:${phone}`} className="footer-link text-fine">
+            <a href={`tel:${phone}`} className="footer-link text-fine with-icon">
+              <Phone className="icon" aria-hidden="true" />
               Call {formatPhone(phone)}
             </a>
-            <Link href="/contact" className="btn btn-invert">
+            <Link href="/contact" className="btn btn-invert pulse-ring">
+              <MessageSquare className="icon" aria-hidden="true" />
               Send enquiry
             </Link>
           </div>

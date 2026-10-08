@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { identity, routes } from "@/content/property";
 import MobileNav from "./MobileNav";
+import NavLinks from "./NavLinks";
 
 /**
  * `routes` (content/property.ts) is plain path strings with no display name
@@ -48,16 +49,7 @@ export default function Header() {
             link's own text mid-word. */}
         <MobileNav items={navItems} />
 
-        <nav
-          aria-label="Primary"
-          className="hidden md:flex flex-wrap items-center justify-end gap-x-4 gap-y-1"
-        >
-          {navItems.map(({ route, label }) => (
-            <Link key={route} href={route} className="nav-link">
-              {label}
-            </Link>
-          ))}
-        </nav>
+        <NavLinks items={navItems} />
       </div>
     </header>
   );

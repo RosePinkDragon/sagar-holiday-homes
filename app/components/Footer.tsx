@@ -1,3 +1,4 @@
+import { MapPin, MessageCircle, Phone } from "lucide-react";
 import {
   identity,
   contact,
@@ -21,20 +22,24 @@ export default function Footer() {
 
         <div className="grid gap-8 md:grid-cols-2 mt-8">
           {address ? (
-            <address style={{ fontStyle: "normal" }}>
+            <address className="with-icon" style={{ fontStyle: "normal", alignItems: "flex-start" }}>
+              <MapPin className="icon" style={{ marginTop: "0.3em" }} aria-hidden="true" />
+              <span>
               {/* lines[0] is the property name — already the heading above. */}
               {address.lines.slice(1).map((line) => (
                 <span key={line} className="block">
                   {line}
                 </span>
               ))}
+              </span>
             </address>
           ) : null}
 
           <div>
             {phone ? (
               <p>
-                <a href={`tel:${phone}`} className="footer-link">
+                <a href={`tel:${phone}`} className="footer-link with-icon">
+                  <Phone className="icon" aria-hidden="true" />
                   {formatPhone(phone)}
                 </a>
               </p>
@@ -52,8 +57,9 @@ export default function Footer() {
                   href={wa}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="footer-link"
+                  className="footer-link with-icon"
                 >
+                  <MessageCircle className="icon" aria-hidden="true" />
                   Chat on WhatsApp
                 </a>
               </p>

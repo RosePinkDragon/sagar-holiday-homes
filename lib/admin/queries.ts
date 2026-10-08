@@ -16,7 +16,11 @@ import type {
  * whose message is safe to show the owner or caretaker as-is.
  */
 
+const OFFLINE_MESSAGE = "Couldn't reach the server. Check your internet connection and try again.";
+const isNetworkFailure = (message: string) => /failed to fetch|network|load failed/i.test(message);
+
 export function friendlyError(error: Pick<PostgrestError, "code" | "message">): string {
+  if (isNetworkFailure(error.message ?? "")) return OFFLINE_MESSAGE;
   switch (error.code) {
     case "23P01":
       return "These dates overlap another booking or blocked dates. Check the calendar and try again.";
@@ -51,7 +55,9 @@ export async function signIn(email: string, password: string): Promise<void> {
     throw new Error(
       error.message === "Invalid login credentials"
         ? "That email and password don't match."
-        : error.message
+        : isNetworkFailure(error.message)
+          ? OFFLINE_MESSAGE
+          : error.message
     );
   }
 }

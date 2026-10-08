@@ -34,13 +34,13 @@ export default function AdminNav({ email }: { email: string }) {
           </button>
         </div>
       </div>
-      <nav aria-label="Admin" className="shell flex gap-1 overflow-x-auto pb-2">
+      <nav aria-label="Admin" className="shell flex overflow-x-auto pb-2 sm:gap-1">
         {LINKS.map((l) => (
           <Link
             key={l.href}
             href={l.href}
             aria-current={isActive(l.href) ? "page" : undefined}
-            className="flex items-center whitespace-nowrap px-3 font-semibold"
+            className="flex items-center whitespace-nowrap px-2 font-semibold sm:px-3"
             style={{
               minHeight: 44,
               borderBottom: isActive(l.href) ? "3px solid var(--alphonso)" : "3px solid transparent",
@@ -51,10 +51,10 @@ export default function AdminNav({ email }: { email: string }) {
         ))}
         <Link
           href="/admin/booking/?new=booking"
-          className="ml-auto flex items-center whitespace-nowrap px-3 font-semibold"
+          className="ml-auto flex items-center whitespace-nowrap px-2 font-semibold sm:px-3"
           style={{ minHeight: 44 }}
         >
-          + New booking
+          + New<span className="hidden sm:inline">&nbsp;booking</span>
         </Link>
       </nav>
     </header>

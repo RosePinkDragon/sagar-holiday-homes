@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Loader2, Send } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { contact, enquiryForm, resolved } from "@/content/property";
+import { saveEnquiry } from "@/lib/enquiries";
 
 /**
  * Fields are read from content/property.ts (BRIEF §8 field list) — never
@@ -15,6 +16,9 @@ import { contact, enquiryForm, resolved } from "@/content/property";
  * still `tbd` — see content/property.ts — so this posts with an empty
  * access key until NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY is set, and the error
  * state below is what a visitor sees in the meantime.
+ *
+ * Also saved to Supabase (lib/enquiries.ts) so it appears in /admin. With
+ * either destination configured the form works; with neither, it errors.
  */
 
 const ACCESS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY ?? "";
@@ -29,8 +33,8 @@ export default function EnquiryForm() {
   } = useForm<FormValues>();
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
 
-  const onSubmit = async (data: FormValues) => {
-    setStatus("idle");
+  const sendEmail = async (data: FormValues): Promise<boolean> => {
+    if (!ACCESS_KEY) return false;
     try {
       const res = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
@@ -42,10 +46,18 @@ export default function EnquiryForm() {
         }),
       });
       const result = await res.json();
-      setStatus(result.success ? "success" : "error");
+      return Boolean(result.success);
     } catch {
-      setStatus("error");
+      return false;
     }
+  };
+
+  // Saved to the admin panel (Supabase) and emailed (Web3Forms) in parallel.
+  // Either one landing means someone will see it, so either counts as sent.
+  const onSubmit = async (data: FormValues) => {
+    setStatus("idle");
+    const [saved, emailed] = await Promise.all([saveEnquiry(data), sendEmail(data)]);
+    setStatus(saved || emailed ? "success" : "error");
   };
 
   if (status === "success") {

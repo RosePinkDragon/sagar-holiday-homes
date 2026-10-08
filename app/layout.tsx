@@ -4,6 +4,7 @@ import { identity, lodgingBusinessJsonLd, resolved, seo, siteRobots } from "@/co
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import ScrollReveal from "./components/ScrollReveal";
+import SiteChrome from "./components/SiteChrome";
 import { fontVariables } from "./fonts";
 import "./globals.css";
 
@@ -48,11 +49,15 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <a href="#main-content" className="skip-link">
           Skip to content
         </a>
-        <Header />
+        <SiteChrome>
+          <Header />
+        </SiteChrome>
         <div id="main-content" className="flex-1">
           {children}
         </div>
-        <Footer />
+        <SiteChrome>
+          <Footer />
+        </SiteChrome>
         <ScrollReveal />
         {/*
          * Vercel Analytics (audit §4.5): no external account signup needed,

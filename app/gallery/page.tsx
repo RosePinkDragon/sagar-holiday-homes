@@ -1,16 +1,14 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { pageMetadata, pages } from "@/content/property";
 import type { PhotoId } from "@/content/photos";
 import HorizonBand from "../components/HorizonBand";
 import Photo from "../components/Photo";
 
 /**
- * Real photos (content/photos.ts) are used wherever we have one. Tiles that
- * still carry a stock stand-in (public/temp-stock/README.md) are badged so
- * they can't be mistaken for the property; they are the shots still to be
- * taken: open ground, orchard, a group using the villa. The aspect ratios
- * match the site's landscape crop so nothing reflows when they land.
+ * Real photos (content/photos.ts) are used wherever we have one. Shots not
+ * taken yet (`pending`) render a labelled placeholder, never a stock photo;
+ * the list lives in docs/photos-pending.md. The aspect ratios match the
+ * site's landscape crop so nothing reflows when they land.
  */
 
 export function generateMetadata(): Metadata {
@@ -20,7 +18,8 @@ export function generateMetadata(): Metadata {
 type Shot = {
   caption: string;
   photo?: PhotoId;
-  image?: { src: string; alt: string };
+  /** Shot not taken yet; renders a labelled placeholder. Tracked in docs/photos-pending.md. */
+  pending?: true;
 };
 type Category = { title: string; shots: Shot[] };
 
@@ -57,14 +56,8 @@ const CATEGORIES: Category[] = [
       { caption: "From above, at dusk", photo: "aerial-dusk" },
       { caption: "From above, the path to the villa", photo: "aerial-approach" },
       { caption: "From above, at night", photo: "aerial-night" },
-      {
-        caption: "The open ground, wide enough to show the full 150m",
-        image: { src: "/temp-stock/open-ground.jpg", alt: "Stock photo standing in for the open ground" },
-      },
-      {
-        caption: "The orchard",
-        image: { src: "/temp-stock/orchard.jpg", alt: "Stock photo standing in for the orchard" },
-      },
+      { caption: "The open ground, wide enough to show the full 150m", pending: true },
+      { caption: "The orchard", pending: true },
     ],
   },
   {
@@ -78,19 +71,16 @@ const CATEGORIES: Category[] = [
   {
     title: "Life at the villa",
     shots: [
-      {
-        caption: "A group actually using the space — not an empty house",
-        image: { src: "/temp-stock/group-pool.jpg", alt: "Stock photo standing in for a group at the villa" },
-      },
+      { caption: "A group actually using the space — not an empty house", pending: true },
     ],
   },
 ];
 
-function PhotoTile({ caption, photo, image }: Shot) {
-  if (!photo && !image) {
+function PhotoTile({ caption, photo }: Shot) {
+  if (!photo) {
     return (
       <div className="photo-placeholder" style={{ aspectRatio: "4 / 3" }}>
-        <p className="muted text-fine">{caption}</p>
+        <p className="muted text-fine">Photo to come: {caption}</p>
       </div>
     );
   }
@@ -104,20 +94,7 @@ function PhotoTile({ caption, photo, image }: Shot) {
           borderRadius: "var(--radius)",
         }}
       >
-        {photo ? (
-          <Photo id={photo} sizes="(min-width: 640px) 50vw, 100vw" />
-        ) : image ? (
-          <>
-            <Image
-              src={image.src}
-              alt={image.alt}
-              fill
-              sizes="(min-width: 640px) 50vw, 100vw"
-              style={{ objectFit: "cover" }}
-            />
-            <span className="stock-badge">Stock — temp</span>
-          </>
-        ) : null}
+        <Photo id={photo} sizes="(min-width: 640px) 50vw, 100vw" />
       </div>
       <figcaption className="muted text-fine mt-2">{caption}</figcaption>
     </figure>

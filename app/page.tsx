@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import {
   contact,
@@ -34,8 +33,7 @@ export function generateMetadata(): Metadata {
 type TeaserShot = {
   href: string;
   caption: string;
-  photo?: PhotoId;
-  image?: { src: string; alt: string };
+  photo: PhotoId;
 };
 
 const TEASER_SHOTS: TeaserShot[] = [
@@ -45,14 +43,14 @@ const TEASER_SHOTS: TeaserShot[] = [
     photo: "pool-wide",
   },
   {
-    href: "/pool-and-grounds",
-    caption: "The open ground",
-    image: { src: "/temp-stock/open-ground.jpg", alt: "Stock photo standing in for the open ground" },
+    href: "/gallery",
+    caption: "From above, at dusk",
+    photo: "aerial-dusk",
   },
   {
     href: "/pool-and-grounds",
-    caption: "The orchard",
-    image: { src: "/temp-stock/orchard.jpg", alt: "Stock photo standing in for the orchard" },
+    caption: "Seating beside the pool",
+    photo: "pool-seating",
   },
   {
     href: "/villa",
@@ -65,9 +63,9 @@ const TEASER_SHOTS: TeaserShot[] = [
     photo: "kitchen-counter",
   },
   {
-    href: "/gallery",
-    caption: "A group at the villa",
-    image: { src: "/temp-stock/group-pool.jpg", alt: "Stock photo standing in for a group at the villa" },
+    href: "/villa",
+    caption: "The villa at night",
+    photo: "exterior-night",
   },
 ];
 
@@ -234,31 +232,15 @@ export default function HomePage() {
               <Link
                 key={shot.caption}
                 href={shot.href}
-                className={shot.image || shot.photo ? undefined : "photo-placeholder"}
                 style={{
                   aspectRatio: "4 / 3",
                   position: "relative",
                   display: "block",
                   overflow: "hidden",
-                  borderRadius: shot.image || shot.photo ? "var(--radius)" : undefined,
+                  borderRadius: "var(--radius)",
                 }}
               >
-                {shot.photo ? (
-                  <Photo id={shot.photo} sizes="(min-width: 640px) 50vw, 100vw" />
-                ) : shot.image ? (
-                  <>
-                    <Image
-                      src={shot.image.src}
-                      alt={shot.image.alt}
-                      fill
-                      sizes="(min-width: 640px) 50vw, 100vw"
-                      style={{ objectFit: "cover" }}
-                    />
-                    <span className="stock-badge">Stock — temp</span>
-                  </>
-                ) : (
-                  <p className="muted text-fine">{shot.caption}</p>
-                )}
+                <Photo id={shot.photo} sizes="(min-width: 640px) 50vw, 100vw" />
               </Link>
             ))}
           </div>

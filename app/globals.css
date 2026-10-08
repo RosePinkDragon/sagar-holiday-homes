@@ -677,6 +677,60 @@
     border-block: 1px solid var(--canopy-soft);
   }
 
+  /* Key numbers for the page. Solid bone plaques with a hairline,
+     square-cornered — not pills, not glass, no scrim, so the sky stays
+     untouched. The temp stock badge moves to the top corner to clear them. */
+  .band .stock-badge {
+    top: 0.6rem;
+    bottom: auto;
+  }
+
+  .band-wrap {
+    position: relative;
+  }
+
+  /* Phones: a row of plaques directly under the photo, so the picture itself
+     stays clear. Overlaid on the image from 768px up (see below). */
+  .band-facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 0;
+    padding: 0.75rem var(--gutter) 0;
+    list-style: none;
+  }
+
+  .band-fact {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.3rem 0.65rem;
+    background-color: var(--bone);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius);
+    color: var(--canopy);
+    font-size: var(--step--1);
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  @media (min-width: 48rem) {
+    .band-facts {
+      position: absolute;
+      inset-inline: 0;
+      bottom: 0;
+      z-index: 1;
+      gap: 0.6rem;
+      padding: 0 var(--gutter) 1.25rem;
+      pointer-events: none;
+    }
+
+    .band-fact {
+      padding: 0.45rem 0.9rem;
+      font-size: var(--step-0);
+    }
+  }
+
   .band-caption {
     margin: 0;
     max-width: 40ch;
@@ -791,6 +845,12 @@
       opacity: 1;
       transform: none;
     }
+  }
+
+  /* Band plaques arrive after the photo has landed, one by one. */
+  .band-fact {
+    animation: settle 600ms ease-out both;
+    animation-delay: calc(700ms + var(--i, 0) * 120ms);
   }
 
   /* Hero photo: a slow settle from slightly zoomed, 18s. Compositor-only. */

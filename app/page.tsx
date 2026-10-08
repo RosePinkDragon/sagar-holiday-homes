@@ -72,6 +72,11 @@ export default function HomePage() {
       <HorizonBand
         caption="HERO — pool with orchard behind, golden hour"
         image={{ src: "/temp-stock/hero-pool-orchard.jpg", alt: "Stock photo standing in for the hero pool shot" }}
+        facts={[
+          { icon: Users, text: `Sleeps ${facts.occupancy.max.value}` },
+          { icon: Waves, text: "Private pool" },
+          { icon: Maximize2, text: `~${facts.ground.value.approxMetres}m open ground` },
+        ]}
       />
 
       <header className="shell settle-next" style={{ paddingBlock: "3rem" }}>

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ArrowDownToLine, Clock, Ruler, ShieldCheck } from "lucide-react";
+import { ArrowDownToLine, Clock, Ruler, ShieldCheck, Waves } from "lucide-react";
 import {
   describe,
   describePoolDepth,
@@ -26,6 +26,11 @@ export default function PoolAndGroundsPage() {
       <HorizonBand
         caption="POOL — wide shot showing the gazebo and fencing, golden hour"
         image={{ src: "/temp-stock/pool-gazebo-fence.jpg", alt: "Stock photo standing in for the pool, gazebo and fencing" }}
+        facts={[
+          { icon: Ruler, text: describePoolSize() },
+          { icon: ArrowDownToLine, text: `${pool.depth.value.feet} ft deep` },
+          { icon: Waves, text: "Private pool" },
+        ]}
       />
 
       <header className="shell settle-next" style={{ paddingBlock: "3rem" }}>

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Car, ExternalLink, MapPin, Navigation } from "lucide-react";
+import { Car, ExternalLink, MapPin, Navigation, Waves } from "lucide-react";
 import {
   contact,
   describe,
@@ -41,6 +41,13 @@ export default function LocationPage() {
       <HorizonBand
         caption="VILLA APPROACH — full villa from the entrance, golden hour"
         image={{ src: "/temp-stock/villa-exterior-golden.jpg", alt: "Stock photo standing in for the villa entrance approach" }}
+        facts={[
+          { icon: Waves, text: `Saldure beach · ${describe.beachDistance()}` },
+          ...facts.distances.driveTimes.value.map((d) => ({
+            icon: Car,
+            text: `${d.from} · ${d.duration}`,
+          })),
+        ]}
       />
 
       <header className="shell settle-next" style={{ paddingBlock: "3rem" }}>
@@ -104,7 +111,7 @@ export default function LocationPage() {
             {nearbyPlaces.map((place) => (
               <li
                 key={place.name}
-                className="pl-4 with-icon"
+                className="pl-4 flex items-start gap-2"
                 style={{ borderLeft: "2px solid var(--laterite)" }}
               >
                 <MapPin className="icon" aria-hidden="true" style={{ color: "var(--laterite)", alignSelf: "flex-start", marginTop: "0.3em" }} />

@@ -39,6 +39,7 @@ const CATEGORIES: Category[] = [
     shots: [
       { caption: "The villa at sunset", photo: "exterior-sunset" },
       { caption: "The villa lit up at night", photo: "exterior-night" },
+      { caption: "The villa at night, with a courtyard lamp", photo: "exterior-night-lamp" },
       { caption: "A bedroom with blue walls", photo: "bedroom-blue" },
       { caption: "A bedroom with blue walls, with air conditioner", photo: "bedroom-blue-ac" },
       { caption: "A bedroom with lilac walls", photo: "bedroom-lilac" },
@@ -46,18 +47,18 @@ const CATEGORIES: Category[] = [
       { caption: "A bedroom with cream walls", photo: "bedroom-cream" },
       { caption: "A bedroom with cream walls, with TV", photo: "bedroom-cream-2" },
       { caption: "The bed in the cream bedroom", photo: "bedroom-cream-bed" },
+      { caption: "A blue bedroom, bed and mirrored dressing table", photo: "bedroom-blue-dresser" },
       { caption: "A bathroom with patterned tiles", photo: "bathroom-patterned" },
       { caption: "A bathroom with grey tiles", photo: "bathroom-grey" },
     ],
   },
   {
-    title: "Ground & orchard",
+    title: "From above",
     shots: [
       { caption: "From above, at dusk", photo: "aerial-dusk" },
       { caption: "From above, the path to the villa", photo: "aerial-approach" },
+      { caption: "From above, the fields around the villa", photo: "aerial-fields" },
       { caption: "From above, at night", photo: "aerial-night" },
-      { caption: "The open ground, wide enough to show the full 150m", pending: true },
-      { caption: "The orchard", pending: true },
     ],
   },
   {
@@ -66,12 +67,6 @@ const CATEGORIES: Category[] = [
       { caption: "The kitchen counter", photo: "kitchen-counter" },
       { caption: "The sitting area beside the kitchen", photo: "sitting-kitchen" },
       { caption: "The sofa set", photo: "sitting-sofa" },
-    ],
-  },
-  {
-    title: "Life at the villa",
-    shots: [
-      { caption: "A group actually using the space — not an empty house", pending: true },
     ],
   },
 ];

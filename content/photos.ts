@@ -43,6 +43,25 @@ export const photos = {
     alt: "Aerial view of the villa and the tiled path leading to it, with fields and trees on both sides",
     focus: "50% 75%",
   },
+  "aerial-fields": {
+    file: "dji-0958",
+    width: 4032,
+    height: 3024,
+    alt: "Aerial view of the villa and its tiled path, with green fields and trees around and a neighbouring building in the foreground",
+    focus: "50% 60%",
+  },
+  "exterior-night-lamp": {
+    file: "dsc3343",
+    width: 6000,
+    height: 4000,
+    alt: "Two-storey villa lit up at night, seen past a glowing courtyard lamp",
+  },
+  "bedroom-blue-dresser": {
+    file: "dsc3366",
+    width: 6000,
+    height: 4000,
+    alt: "Bedroom with blue walls, a wooden bed, a mirrored dressing table and a large wooden wardrobe",
+  },
   "aerial-night": {
     file: "dji-0013",
     width: 4032,

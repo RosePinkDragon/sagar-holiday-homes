@@ -1,17 +1,24 @@
 # Photos still needed
 
-The site uses real photos only. No stock images ship. Where a shot does not
-exist yet, the page shows a labelled placeholder block ("Photo to come: ...").
+The site uses real photos only. No stock images ship and no "photo to come"
+blocks show on any page: for the client preview, the three empty gallery
+slots were filled with extra real photos of the villa (below). The shots we
+actually want are still missing.
 
 ## Shots not yet taken
 
-| # | Shot | Where it appears | Notes |
-|---|------|------------------|-------|
-| 1 | The open ground, wide enough to show the full 150 m | Gallery > Ground & orchard | Landscape, ideally daylight. Supports the "150m cricket ground" claim. |
-| 2 | The orchard | Gallery > Ground & orchard | Daylight; the mango trees should be identifiable. |
-| 3 | A group actually using the villa (not an empty house) | Gallery > Life at the villa | Needs permission from the people shown. |
+| # | Shot | Was meant for | Stand-in used for now |
+|---|------|---------------|-----------------------|
+| 1 | The open ground, wide enough to show the full 150 m | Gallery, "Ground & orchard" | Gallery section renamed "From above"; aerial photo of the fields around the villa (`aerial-fields`) |
+| 2 | The orchard | Gallery, "Ground & orchard" | None; tile removed |
+| 3 | A group actually using the villa (not an empty house) | Gallery, "Life at the villa" | None; section removed. Two extra villa photos (`exterior-night-lamp`, `bedroom-blue-dresser`) were added to "The villa" |
 
-The Location page map block is a map placeholder, not a photo slot.
+When these are taken: add them to `content/photos.ts`, restore the gallery
+sections (`Ground & orchard`, `Life at the villa`), and drop the stand-ins
+that no longer fit. The gallery still supports a labelled placeholder tile
+(`pending: true` on a shot) if one is needed again.
+
+The Location page map block is a map, not a photo slot.
 
 ## Facts to confirm against the photos (copy not changed)
 
@@ -35,5 +42,4 @@ road (`IMG_0496`), and frames that duplicate a better shot. Originals stay in
 2. `node scripts/optimize-images.mjs "raw photos" public/photos --only <file>.jpg`
 3. Add an entry to `content/photos.ts` (file stem, width/height from
    `public/photos/manifest.json`, factual alt text).
-4. Replace the `pending: true` shot in `app/gallery/page.tsx` with
-   `photo: "<id>"`, and delete its line from this table.
+4. Add it to a shot list in `app/gallery/page.tsx` (`photo: "<id>"`).

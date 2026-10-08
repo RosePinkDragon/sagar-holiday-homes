@@ -57,6 +57,21 @@ export interface Booking {
 /** What the booking form sends — server fills id and timestamps. */
 export type BookingInput = Omit<Booking, "id" | "created_at" | "updated_at">;
 
+export const toBookingInput = (b: Booking): BookingInput => ({
+  kind: b.kind,
+  status: b.status,
+  check_in: b.check_in,
+  check_out: b.check_out,
+  guest_name: b.guest_name,
+  phone: b.phone,
+  email: b.email,
+  guests: b.guests,
+  source: b.source,
+  total_amount: b.total_amount,
+  notes: b.notes,
+  enquiry_id: b.enquiry_id,
+});
+
 export interface Payment {
   id: string;
   booking_id: string;

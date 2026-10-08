@@ -371,6 +371,7 @@ export const nearbyPlaces = [
   "Harnai fish market",
   "Kelshi",
   "Suvarnadurg fort",
+  "International cricket stadium at Royal Goldfield Club Resort",
 ] as const;
 
 /**
@@ -590,15 +591,37 @@ export const tariff = {
   /**
    * A discount OFF a published rate — never a lower base rate. Anchoring low
    * is hard to undo.
+   *
+   * Owner, 8 Oct 2026: the launch offer IS the gap between `published` and
+   * `offer` in rateCard — already included in the rates, not stacked on top.
+   * The percentage is derived by launchOfferPercent(), never typed here, and
+   * no duration is stated on the site. Replaces the BRIEF §4 draft of 20–25%
+   * in exchange for a Google review.
    */
-  launchOffer: assumed(
-    {
-      discountPercent: { from: 20, to: 25 },
-      condition: "In exchange for a Google review",
-    },
-    "Recommended launch offer (BRIEF §4). Owner may override the depth or drop it entirely; it must stay framed as a discount off the published rate. Owner, 8 Oct 2026: do not state a duration on the site."
-  ),
+  launchOffer: confirmed({ includedInRates: true }),
 } as const;
+
+/**
+ * Launch-offer depth across the rate card, rounded DOWN so the site never
+ * overstates the saving (e.g. ₹12,000 → ₹10,000 is 16.7%, shown as 16%).
+ */
+export function launchOfferPercent(): { from: number; to: number } | null {
+  const rateCard = resolved(tariff.rateCard);
+  if (!rateCard) return null;
+  const percents = Object.values(rateCard).map(({ published, offer }) =>
+    Math.floor(((published - offer) / published) * 100)
+  );
+  return { from: Math.min(...percents), to: Math.max(...percents) };
+}
+
+/** e.g. "16–33% off the published rate". Null when there's no rate card. */
+export function describeLaunchOffer(): string | null {
+  const range = launchOfferPercent();
+  if (!range) return null;
+  const span =
+    range.from === range.to ? `${range.to}%` : `${range.from}–${range.to}%`;
+  return `${span} off the published rate`;
+}
 
 /**
  * CLAUDE.md hard rule 7: no rate appears without its GST treatment. Render this

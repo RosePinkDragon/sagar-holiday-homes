@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   contact,
+  describeLaunchOffer,
   describe,
   facts,
   faq,
@@ -13,7 +14,6 @@ import {
   policy,
   pool,
   resolved,
-  tariff,
 } from "@/content/property";
 import HorizonBand from "./components/HorizonBand";
 
@@ -64,8 +64,7 @@ const TEASER_SHOTS = [
 
 export default function HomePage() {
   const phone = resolved(contact.phone);
-  const launchOffer = resolved(tariff.launchOffer);
-  const launchOfferIndicative = tariff.launchOffer.status === "assumed";
+  const launchOffer = describeLaunchOffer();
 
   return (
     <main>
@@ -272,11 +271,7 @@ export default function HomePage() {
                 <>
                   {" "}
                   We&rsquo;re taking bookings for our first season at{" "}
-                  {launchOffer.discountPercent.from}–
-                  {launchOffer.discountPercent.to}% off the published rate,{" "}
-                  {launchOffer.condition.charAt(0).toLowerCase() +
-                    launchOffer.condition.slice(1)}
-                  .{launchOfferIndicative ? " · indicative" : ""}
+                  {launchOffer}.
                 </>
               ) : (
                 " Testimonials will appear here once guests have stayed."

@@ -513,10 +513,20 @@ export const describePoolDepth = (): string =>
 // Tariff (BRIEF §4) — owner sign-off required on everything below
 // ---------------------------------------------------------------------------
 
+/**
+ * A published rate and the discounted rate guests actually pay. The site
+ * shows `published` struck through beside `offer`; anything that needs a
+ * single number (worked example, structured data) uses `offer`.
+ */
+export type Rate = {
+  readonly published: Inr;
+  readonly offer: Inr;
+};
+
 export type RateCard = {
-  readonly weekday: Inr;
-  readonly weekend: Inr;
-  readonly peak: Inr;
+  readonly weekday: Rate;
+  readonly weekend: Rate;
+  readonly peak: Rate;
 };
 
 export const tariff = {
@@ -547,22 +557,15 @@ export const tariff = {
   },
 
   /**
-   * PLACEHOLDER, at the owner's request 17 Aug 2026 — NOT signed off.
-   *
-   * These are the midpoints of the BRIEF §4 benchmark bands (weekday
-   * ₹10,000–12,000, weekend ₹15,000–18,000, peak ₹22,000–26,000), which were
-   * set against Dapoli villas with pools and adjusted down for 3BHK and no sea
-   * view. Held as `assumed` so /tariff can be built and previewed; it stays in
-   * the open register, and assertLaunchReady() refuses to pass while any
-   * assumed value remains.
-   *
-   * Treated as GST-INCLUSIVE, matching gst.displayTreatment. If the owner meant
-   * these as pre-GST numbers, every figure below rises by 18%.
+   * Owner, 8 Oct 2026: published rate and discounted rate per band, both
+   * GST-inclusive (matching gst.displayTreatment). Replaces the BRIEF §4
+   * benchmark-midpoint placeholder.
    */
-  rateCard: assumed(
-    { weekday: 11_000, weekend: 16_500, peak: 24_000 } satisfies RateCard,
-    "PLACEHOLDER - midpoints of the BRIEF §4 benchmark bands, not owner-approved. Must be signed off before the site is public, and read as GST-inclusive. Any page rendering these should label them indicative."
-  ),
+  rateCard: confirmed({
+    weekday: { published: 12_000, offer: 10_000 },
+    weekend: { published: 18_000, offer: 12_000 },
+    peak: { published: 24_000, offer: 20_000 },
+  } satisfies RateCard),
 
   periods: confirmed({
     weekday: "Monday – Thursday",
@@ -591,10 +594,9 @@ export const tariff = {
   launchOffer: assumed(
     {
       discountPercent: { from: 20, to: 25 },
-      durationMonths: 3,
       condition: "In exchange for a Google review",
     },
-    "Recommended launch offer (BRIEF §4). Owner may override the depth or drop it entirely; it must stay framed as a discount off the published rate."
+    "Recommended launch offer (BRIEF §4). Owner may override the depth or drop it entirely; it must stay framed as a discount off the published rate. Owner, 8 Oct 2026: do not state a duration on the site."
   ),
 } as const;
 
@@ -634,7 +636,7 @@ export function describeWorkedExample(): {
   const guests = facts.occupancy.max.value;
   const base = facts.occupancy.base.value;
   const extraGuests = guests - base;
-  const nightlyRate = rateCard.weekend;
+  const nightlyRate = rateCard.weekend.offer;
   const nightsTotal = nightlyRate * nights;
   const extrasTotal = tariff.extraGuest.value * extraGuests * nights;
   const grandTotal = nightsTotal + extrasTotal;
@@ -659,15 +661,16 @@ export function describeWorkedExample(): {
  * data search engines may surface directly.
  */
 export function tariffOfferJsonLd(): Record<string, unknown> | null {
-  if (tariff.rateCard.status === "assumed") return null;
-  const rateCard = tariff.rateCard.value;
+  const fact: Fact<RateCard> = tariff.rateCard;
+  if (fact.status !== "confirmed") return null;
+  const rateCard = fact.value;
   return {
     "@context": "https://schema.org",
     "@type": "Offer",
     url: `https://${identity.domain}/tariff/`,
     priceCurrency: "INR",
-    lowPrice: rateCard.weekday,
-    highPrice: rateCard.peak,
+    lowPrice: rateCard.weekday.offer,
+    highPrice: rateCard.peak.offer,
     eligibleQuantity: {
       "@type": "QuantitativeValue",
       maxValue: facts.occupancy.max.value,
@@ -820,15 +823,15 @@ export const contact = {
   }),
   postalCode: confirmed("415713"),
   /** Pinned at the gate, not the village centre (BRIEF §8). */
-  geo: confirmed({ lat: 17.786092, lng: 73.11703 }),
+  geo: confirmed({ lat: 17.786472, lng: 73.116167 }),
   /**
-   * Confirmed 17 Aug 2026. Stored in E.164 so tel: links, wa.me links and the
+   * Updated 8 Oct 2026 (owner). Stored in E.164 so tel: links, wa.me links and the
    * OTA listings all read from one value. Display formatting belongs in the
    * component, not here.
    */
-  phone: confirmed("+919833512020"),
+  phone: confirmed("+919657582999"),
   /** Same line as the phone number. */
-  whatsapp: confirmed("+919833512020"),
+  whatsapp: confirmed("+919657582999"),
   /**
    * Interim address — a Gmail, not one on sagarholidayhomes.com. Usable now,
    * so it renders; stays in the open-items register until a domain mailbox
@@ -1118,7 +1121,7 @@ export function lodgingBusinessJsonLd(): Record<string, unknown> {
       : undefined,
     numberOfRooms: seo.numberOfRooms,
     priceRange: rateCard
-      ? `${formatInr(rateCard.weekday)} - ${formatInr(rateCard.peak)}`
+      ? `${formatInr(rateCard.weekday.offer)} - ${formatInr(rateCard.peak.offer)}`
       : undefined,
     amenityFeature: amenities.map((name) => ({
       "@type": "LocationFeatureSpecification",

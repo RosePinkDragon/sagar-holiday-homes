@@ -5,6 +5,9 @@ import {
   facts,
   formatInr,
   gstNote,
+  type Fact,
+  type Rate,
+  type RateCard,
   pageMetadata,
   pages,
   policy,
@@ -18,10 +21,9 @@ import HorizonBand from "../components/HorizonBand";
 /**
  * BRIEF §4 hard-gates all site copy on the GST decision — resolved
  * (tariff.gst.displayTreatment) — and CLAUDE.md rule 7: no rate appears
- * without gstNote() beside it. tariff.rateCard and policy.securityDeposit
- * are `assumed`, not `confirmed` (content/property.ts) — this page labels
- * them "Indicative" per the module's own instruction, so the flag clears
- * itself automatically the day someone promotes them to `confirmed`.
+ * without gstNote() beside it. Any fact still `assumed` rather than
+ * `confirmed` (content/property.ts) is labelled "Indicative", so the flag
+ * clears itself automatically the day someone promotes it to `confirmed`.
  */
 
 export function generateMetadata(): Metadata {
@@ -32,9 +34,23 @@ function Indicative() {
   return <span className="label"> · indicative</span>;
 }
 
+function RateValue({ rate }: { rate: Rate }) {
+  return (
+    <>
+      <s className="muted" style={{ fontSize: "var(--step-0)" }}>
+        <span className="sr-only">Was </span>
+        {formatInr(rate.published)}
+      </s>{" "}
+      <span className="sr-only">now </span>
+      {formatInr(rate.offer)}
+    </>
+  );
+}
+
 export default function TariffPage() {
-  const rateCard = requireFact(tariff.rateCard, "tariff.rateCard");
-  const rateCardIndicative = tariff.rateCard.status === "assumed";
+  const rateCardFact: Fact<RateCard> = tariff.rateCard;
+  const rateCard = requireFact(rateCardFact, "tariff.rateCard");
+  const rateCardIndicative = rateCardFact.status !== "confirmed";
 
   const launchOffer = resolved(tariff.launchOffer);
   const launchOfferIndicative = tariff.launchOffer.status === "assumed";
@@ -85,7 +101,7 @@ export default function TariffPage() {
                 className="type-display mt-2"
                 style={{ fontSize: "var(--step-1)" }}
               >
-                {formatInr(rateCard.weekday)}
+                <RateValue rate={rateCard.weekday} />
               </dd>
             </div>
             <div className="hairline p-6">
@@ -94,7 +110,7 @@ export default function TariffPage() {
                 className="type-display mt-2"
                 style={{ fontSize: "var(--step-1)" }}
               >
-                {formatInr(rateCard.weekend)}
+                <RateValue rate={rateCard.weekend} />
               </dd>
             </div>
             <div className="hairline p-6 sm:col-span-2">
@@ -103,7 +119,7 @@ export default function TariffPage() {
                 className="type-display mt-2"
                 style={{ fontSize: "var(--step-1)" }}
               >
-                {formatInr(rateCard.peak)}
+                <RateValue rate={rateCard.peak} />
               </dd>
               <p className="muted mt-3 text-fine">
                 {tariff.peakDates.value.join(" · ")}
@@ -158,8 +174,7 @@ export default function TariffPage() {
             </h2>
             <p className="measure mt-6">
               {launchOffer.discountPercent.from}–
-              {launchOffer.discountPercent.to}% off the published rate for
-              the first {launchOffer.durationMonths} months,{" "}
+              {launchOffer.discountPercent.to}% off the published rate,{" "}
               {launchOffer.condition.charAt(0).toLowerCase() +
                 launchOffer.condition.slice(1)}
               .

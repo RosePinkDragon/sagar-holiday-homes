@@ -6,7 +6,14 @@
  * size, kept here so the markup can reserve space and avoid layout shift.
  */
 
-type PhotoMeta = { file: string; width: number; height: number; alt: string };
+type PhotoMeta = {
+  file: string;
+  width: number;
+  height: number;
+  alt: string;
+  /** CSS object-position, for photos whose subject sits off-centre and gets cropped in wide bands. */
+  focus?: string;
+};
 
 export const photos = {
   // Exterior
@@ -27,12 +34,14 @@ export const photos = {
     width: 4032,
     height: 3024,
     alt: "Aerial view at dusk of the villa and its tiled approach, with green fields and trees all around",
+    focus: "50% 78%",
   },
   "aerial-approach": {
     file: "dji-0957",
     width: 4032,
     height: 3024,
     alt: "Aerial view of the villa and the tiled path leading to it, with fields and trees on both sides",
+    focus: "50% 75%",
   },
   "aerial-night": {
     file: "dji-0013",

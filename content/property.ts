@@ -820,7 +820,7 @@ export const contact = {
   }),
   postalCode: confirmed("415713"),
   /** Pinned at the gate, not the village centre (BRIEF §8). */
-  geo: confirmed({ lat: 17.786092, lng: 73.11703 }),
+  geo: confirmed({ lat: 17.786472, lng: 73.116167 }),
   /**
    * Confirmed 17 Aug 2026. Stored in E.164 so tel: links, wa.me links and the
    * OTA listings all read from one value. Display formatting belongs in the

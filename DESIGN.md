@@ -84,7 +84,7 @@ Ratios: **16:9 below 768px, 21:9 at and above it.** Note that `aspect-ratio` is 
 
 Rules: full-bleed, never letterboxed with rounded corners, never overlaid with a scrim heavy enough to grey the sky. Page titles sit _below_ the band, on bone, not floated over the image — which only works if the title is actually visible without scrolling. Cheap to build, impossible to mistake for a template.
 
-**Key-fact plaques.** A band may carry up to three short plaques of the page's key numbers (sleeps, pool size, drive times). Solid bone, 1px hairline, square-cornered — not pills, not glass, and still no scrim. On phones they sit in a row directly under the photo so the picture stays clear; from 768px up they overlay the bottom edge. Strings are built from `content/property.ts` by the page and passed to `HorizonBand`. The page title stays below the band regardless.
+**Key-fact plaques.** A band may carry up to three short plaques of the page's key numbers (sleeps, pool size, drive times). Solid bone, 1px hairline, square-cornered — not pills, not glass, and still no scrim. On phones they sit in a row directly under the photo so the picture stays clear; from 768px up they stack in a column on the right of the photo, vertically centred, on the content edge. Strings are built from `content/property.ts` by the page and passed to `HorizonBand`. The page title stays below the band regardless.
 
 ## Layout
 

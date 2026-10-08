@@ -715,13 +715,23 @@
   }
 
   @media (min-width: 48rem) {
+    /* A stacked column on the right of the photo, vertically centred, its
+       right edge on the same line as the page content (the .shell edge). The
+       top/bottom inset keeps it clear of the stock badge. */
     .band-facts {
       position: absolute;
+      inset-block: 0;
       inset-inline: 0;
-      bottom: 0;
       z-index: 1;
+      width: 100%;
+      max-width: var(--shell);
+      margin-inline: auto;
+      padding: 0 var(--gutter);
+      flex-direction: column;
+      flex-wrap: nowrap;
+      align-items: flex-end;
+      justify-content: center;
       gap: 0.6rem;
-      padding: 0 var(--gutter) 1.25rem;
       pointer-events: none;
     }
 

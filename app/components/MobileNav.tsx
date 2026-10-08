@@ -109,11 +109,12 @@ export default function MobileNav({ items }: { items: NavItem[] }) {
         </button>
 
         <nav aria-label="Primary" className="nav-drawer-list">
-          {items.map(({ route, label }) => (
+          {items.map(({ route, label }, i) => (
             <Link
               key={route}
               href={route}
               className="footer-link nav-drawer-link"
+              style={{ "--i": i } as React.CSSProperties}
               onClick={close}
             >
               {label}

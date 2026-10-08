@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ArrowDownToLine, Clock, Ruler, ShieldCheck, Waves } from "lucide-react";
 import {
   describe,
   describePoolDepth,
@@ -25,6 +26,11 @@ export default function PoolAndGroundsPage() {
       <HorizonBand
         caption="POOL — wide shot showing the gazebo and fencing, golden hour"
         photo="pool-wide"
+        facts={[
+          { icon: Ruler, text: describePoolSize() },
+          { icon: ArrowDownToLine, text: `${pool.depth.value.feet} ft deep` },
+          { icon: Waves, text: "Private pool" },
+        ]}
       />
 
       <header className="shell settle-next" style={{ paddingBlock: "3rem" }}>
@@ -44,10 +50,11 @@ export default function PoolAndGroundsPage() {
           <h2 className="type-display" style={{ fontSize: "var(--step-2)" }}>
             The pool
           </h2>
+          <span className="ripple" aria-hidden="true" />
           {/* DESIGN.md Layout: two columns max, never more — three stats wrap 2+1. */}
           <dl className="grid gap-6 sm:grid-cols-2 mt-10">
             <div className="hairline p-6">
-              <dt className="label">Size</dt>
+              <dt className="label with-icon"><Ruler className="icon" aria-hidden="true" />Size</dt>
               <dd
                 className="type-display mt-2"
                 style={{ fontSize: "var(--step-1)" }}
@@ -59,7 +66,7 @@ export default function PoolAndGroundsPage() {
               </p>
             </div>
             <div className="hairline p-6">
-              <dt className="label">Depth</dt>
+              <dt className="label with-icon"><ArrowDownToLine className="icon" aria-hidden="true" />Depth</dt>
               <dd
                 className="type-display mt-2"
                 style={{ fontSize: "var(--step-1)" }}
@@ -68,7 +75,7 @@ export default function PoolAndGroundsPage() {
               </dd>
             </div>
             <div className="hairline p-6">
-              <dt className="label">Open</dt>
+              <dt className="label with-icon"><Clock className="icon" aria-hidden="true" />Open</dt>
               <dd
                 className="type-display mt-2"
                 style={{ fontSize: "var(--step-1)" }}
@@ -79,7 +86,7 @@ export default function PoolAndGroundsPage() {
           </dl>
 
           <div className="hairline mt-10 p-6">
-            <p className="label">Pool safety</p>
+            <p className="label with-icon"><ShieldCheck className="icon" aria-hidden="true" />Pool safety</p>
             <p className="measure mt-3">{pool.disclosure.value}</p>
           </div>
         </div>

@@ -20,7 +20,7 @@ export default function Photo({
   priority?: boolean;
 }) {
   const { alt, width, height } = photos[id];
-  const focus = "focus" in photos[id] ? photos[id].focus : undefined;
+  const focus = (photos[id] as { focus?: string }).focus;
   return (
     <picture>
       <source type="image/avif" srcSet={photoSrcSet(id, "avif")} sizes={sizes} />

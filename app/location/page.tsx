@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Car, ExternalLink, MapPin, Navigation, Waves } from "lucide-react";
 import {
   contact,
   describe,
@@ -40,6 +41,13 @@ export default function LocationPage() {
       <HorizonBand
         caption="VILLA APPROACH — full villa from the entrance, golden hour"
         photo="aerial-approach"
+        facts={[
+          { icon: Waves, text: `Saldure beach · ${describe.beachDistance()}` },
+          ...facts.distances.driveTimes.value.map((d) => ({
+            icon: Car,
+            text: `${d.from} · ${d.duration}`,
+          })),
+        ]}
       />
 
       <header className="shell settle-next" style={{ paddingBlock: "3rem" }}>
@@ -69,7 +77,7 @@ export default function LocationPage() {
           <dl className="grid gap-6 sm:grid-cols-2 mt-10">
             {facts.distances.driveTimes.value.map((drive) => (
               <div key={drive.from} className="hairline p-6">
-                <dt className="label">{drive.from}</dt>
+                <dt className="label with-icon"><Car className="icon" aria-hidden="true" />{drive.from}</dt>
                 <dd
                   className="type-display mt-2"
                   style={{ fontSize: "var(--step-1)" }}
@@ -103,19 +111,23 @@ export default function LocationPage() {
             {nearbyPlaces.map((place) => (
               <li
                 key={place.name}
-                className="pl-4"
+                className="pl-4 flex items-start gap-2"
                 style={{ borderLeft: "2px solid var(--laterite)" }}
               >
+                <MapPin className="icon" aria-hidden="true" style={{ color: "var(--laterite)", alignSelf: "flex-start", marginTop: "0.3em" }} />
+                <span>
                 <a
-                  className="link"
+                  className="link with-icon"
                   href={mapsSearchHref(place.mapsQuery)}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   {place.name}
+                  <ExternalLink className="icon arrow" aria-hidden="true" style={{ width: "0.85em", height: "0.85em" }} />
                   <span className="sr-only"> (opens Google Maps)</span>
                 </a>
                 {place.detail ? <> — {place.detail}</> : null}
+                </span>
               </li>
             ))}
           </ul>
@@ -147,6 +159,7 @@ export default function LocationPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
+                  <Navigation className="icon" aria-hidden="true" />
                   Get directions
                 </a>
               </p>

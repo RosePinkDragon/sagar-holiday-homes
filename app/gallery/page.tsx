@@ -87,6 +87,7 @@ function PhotoTile({ caption, photo }: Shot) {
   return (
     <figure style={{ margin: 0 }}>
       <div
+        className="zoom-frame"
         style={{
           position: "relative",
           aspectRatio: "4 / 3",

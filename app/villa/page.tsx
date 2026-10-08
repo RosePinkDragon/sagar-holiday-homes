@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { BedDouble, Snowflake, Users } from "lucide-react";
 import { amenities, describe, facts, pageMetadata, pages } from "@/content/property";
 import HorizonBand from "../components/HorizonBand";
 
@@ -20,6 +21,11 @@ export default function VillaPage() {
       <HorizonBand
         caption="BEDROOM — king bed made, lights on, golden hour"
         photo="bedroom-blue"
+        facts={[
+          { icon: BedDouble, text: `${facts.configuration.value} · ${facts.beds.value.count} ${facts.beds.value.size} beds` },
+          { icon: Users, text: `Sleeps ${facts.occupancy.max.value}` },
+          { icon: Snowflake, text: `AC: ${facts.airConditioning.value.toLowerCase()}` },
+        ]}
       />
 
       <header className="shell settle-next" style={{ paddingBlock: "3rem" }}>

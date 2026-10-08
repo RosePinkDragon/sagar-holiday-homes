@@ -95,11 +95,33 @@ Rules: full-bleed, never letterboxed with rounded corners, never overlaid with a
 
 ## Motion
 
-Almost none. One orchestrated page-load: horizon band fades and settles by 4px over 600ms, then the heading. Nothing else animates on load.
+Alive, not flashy. The site should feel like a place with weather in it, but nothing may shout, and nothing may get in the way of reading.
 
-Hover: 150ms colour only. No lifts, no scales, no parallax. Respect `prefers-reduced-motion` — when set, everything is instant.
+**Page load.** The horizon band settles by 4px over 600ms, then the heading. The hero photo drifts from a slight zoom to rest over 18s.
 
-**One exception: the mobile nav drawer.** Below 768px, opening the menu slides a panel in from the right over 220ms ease-out, with the backdrop fading in alongside it. This is the one place motion carries meaning a static toggle can't — it tells you the nav arrived from off-screen and where it will return to on close. Still governed by `prefers-reduced-motion`: reduced-motion visitors get the drawer instantly, no slide, same as every other transition on the site.
+**Scroll.** Content below the fold eases in as it arrives: a 12px rise and fade over 550ms, lists and grids staggered 80ms apiece (capped at five). Done by `ScrollReveal.tsx`, which only hides what starts below the fold, so nothing flashes and nothing is ever stranded.
+
+**Hover and press.** 150-250ms.
+- Links: underline thickens. Desktop nav: a laterite underline draws in from the left; the current page keeps it.
+- Buttons: colour change, a 1px press-down on `:active`. Trailing arrows slide 3px.
+- Fact cards: the hairline darkens and the icon tips slightly. Cards are not lifted, because most of them are not links.
+- Picture tiles that are links: the photo zooms 5% inside a fixed frame over 700ms.
+
+**Small signals.** Focus on a form field adds a soft alphonso halo. Sending shows a spinner; success draws a tick. The pool heading carries a slow water line in `--pool`. The sticky enquiry button gives one quiet ring every few seconds.
+
+**Mobile nav drawer.** Slides in from the right over 220ms ease-out with the backdrop fading alongside; its links then arrive one after another.
+
+**Rules that don't bend.**
+- `transform` and `opacity` only, so a mid-range Android phone keeps 60fps. (The ripple and the form halo are the two tiny exceptions.)
+- Nothing hides content when JavaScript is off.
+- `prefers-reduced-motion`: everything is instant and reveals are skipped entirely.
+- Still banned: parallax, animated counters, autoplaying carousels, anything that loops loudly.
+
+## Icons
+
+`lucide-react`, 1.5px stroke, inheriting the text colour, always `aria-hidden` (the words carry the meaning). Sized 1.15em and set **beside** a label, phone number or link, never inside a tile, circle or coloured badge.
+
+Used to mark kinds of information (a car for drive times, a pin for places, a phone for calling, a clock for hours) and actions (send, directions, external link). **Amenities remain a typographic list with no icons**: the words are the content, and an icon grid is the pattern this site avoids.
 
 ## Photography
 
@@ -124,11 +146,11 @@ Bone sits close to that cream, so the differentiation has to be carried elsewher
 1. **Green is primary, red is a minor accent** — the default is red-led
 2. **Square corners** — 2px, not 12px
 3. **Full-bleed horizon hero** — not a rounded card with text floated over it
-4. **Amenities as a typographic list** — not a three-column icon grid
+4. **Amenities as a typographic list** — not a three-column icon grid (icons elsewhere are fine, see Icons)
 
 If any one of those slips, the whole thing collapses into the template. Check all four before calling a page done.
 
-Also banned: stock icons for amenities (write the words), pill-shaped badges, glassmorphism, animated counters, autoplaying testimonial carousels.
+Also banned: icon grids and icons for amenities (write the words), icons inside circles or tiles, pill-shaped badges, glassmorphism, animated counters, autoplaying testimonial carousels.
 
 ## Quality floor
 

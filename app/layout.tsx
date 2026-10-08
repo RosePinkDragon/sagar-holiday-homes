@@ -3,6 +3,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { identity, lodgingBusinessJsonLd, resolved, seo, siteRobots } from "@/content/property";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import ScrollReveal from "./components/ScrollReveal";
 import { fontVariables } from "./fonts";
 import "./globals.css";
 
@@ -52,6 +53,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           {children}
         </div>
         <Footer />
+        <ScrollReveal />
         {/*
          * Vercel Analytics (audit §4.5): no external account signup needed,
          * just enabling "Analytics" for this project in the Vercel

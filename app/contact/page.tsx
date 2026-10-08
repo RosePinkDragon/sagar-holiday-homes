@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { MessageCircle, Phone } from "lucide-react";
 import {
   contact,
   formatPhone,
@@ -49,7 +50,7 @@ export default function ContactPage() {
           <div className="grid gap-6 sm:grid-cols-2 mt-10">
             {phone ? (
               <div className="hairline p-6">
-                <p className="label">Phone</p>
+                <p className="label with-icon"><Phone className="icon" aria-hidden="true" />Phone</p>
                 <p className="mt-2">
                   <a
                     href={`tel:${phone}`}
@@ -69,7 +70,7 @@ export default function ContactPage() {
 
             {wa ? (
               <div className="hairline p-6">
-                <p className="label">WhatsApp</p>
+                <p className="label with-icon"><MessageCircle className="icon" aria-hidden="true" />WhatsApp</p>
                 <p className="mt-2">
                   <a
                     href={wa}

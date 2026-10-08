@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Loader2, Send } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { contact, enquiryForm, resolved } from "@/content/property";
 
@@ -51,6 +52,16 @@ export default function EnquiryForm() {
     const callback = resolved(contact.callbackWindow);
     return (
       <div className="hairline p-6" role="status">
+        <svg
+          viewBox="0 0 40 40"
+          width="40"
+          height="40"
+          aria-hidden="true"
+          className="mb-3"
+        >
+          <circle className="tick-ring" cx="20" cy="20" r="16" pathLength={100} />
+          <path className="tick-check" d="M12 21 l6 6 l11 -12" pathLength={30} />
+        </svg>
         <p className="type-display" style={{ fontSize: "var(--step-1)" }}>
           Enquiry sent.
         </p>
@@ -136,7 +147,17 @@ export default function EnquiryForm() {
       ) : null}
 
       <button type="submit" className="btn btn-solid" disabled={isSubmitting}>
-        {isSubmitting ? "Sending…" : "Send enquiry"}
+        {isSubmitting ? (
+          <>
+            <Loader2 className="icon spinner" aria-hidden="true" />
+            Sending…
+          </>
+        ) : (
+          <>
+            <Send className="icon" aria-hidden="true" />
+            Send enquiry
+          </>
+        )}
       </button>
     </form>
   );

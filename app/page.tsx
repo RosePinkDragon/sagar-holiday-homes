@@ -15,7 +15,9 @@ import {
   pool,
   resolved,
 } from "@/content/property";
+import type { PhotoId } from "@/content/photos";
 import HorizonBand from "./components/HorizonBand";
+import Photo from "./components/Photo";
 
 /**
  * BRIEF §8, Home: hero + H1 (must contain "Dapoli" and "private pool") +
@@ -29,11 +31,18 @@ export function generateMetadata(): Metadata {
   return pageMetadata(pages.home, "pages.home");
 }
 
-const TEASER_SHOTS = [
+type TeaserShot = {
+  href: string;
+  caption: string;
+  photo?: PhotoId;
+  image?: { src: string; alt: string };
+};
+
+const TEASER_SHOTS: TeaserShot[] = [
   {
     href: "/pool-and-grounds",
-    caption: "Pool — gazebo and fencing",
-    image: { src: "/temp-stock/pool-gazebo-fence.jpg", alt: "Stock photo standing in for the pool, gazebo and fencing" },
+    caption: "The pool terrace",
+    photo: "pool-wide",
   },
   {
     href: "/pool-and-grounds",
@@ -47,13 +56,13 @@ const TEASER_SHOTS = [
   },
   {
     href: "/villa",
-    caption: "Bedroom, king bed",
-    image: { src: "/temp-stock/bedroom.jpg", alt: "Stock photo standing in for a bedroom" },
+    caption: "A bedroom",
+    photo: "bedroom-blue",
   },
   {
     href: "/food",
-    caption: "The guest kitchen",
-    image: { src: "/temp-stock/kitchen.jpg", alt: "Stock photo standing in for the guest kitchen" },
+    caption: "The kitchen",
+    photo: "kitchen-counter",
   },
   {
     href: "/gallery",
@@ -70,7 +79,7 @@ export default function HomePage() {
     <main>
       <HorizonBand
         caption="HERO — pool with orchard behind, golden hour"
-        image={{ src: "/temp-stock/hero-pool-orchard.jpg", alt: "Stock photo standing in for the hero pool shot" }}
+        photo="exterior-sunset"
       />
 
       <header className="shell settle-next" style={{ paddingBlock: "3rem" }}>
@@ -225,16 +234,18 @@ export default function HomePage() {
               <Link
                 key={shot.caption}
                 href={shot.href}
-                className={shot.image ? undefined : "photo-placeholder"}
+                className={shot.image || shot.photo ? undefined : "photo-placeholder"}
                 style={{
                   aspectRatio: "4 / 3",
                   position: "relative",
                   display: "block",
                   overflow: "hidden",
-                  borderRadius: shot.image ? "var(--radius)" : undefined,
+                  borderRadius: shot.image || shot.photo ? "var(--radius)" : undefined,
                 }}
               >
-                {shot.image ? (
+                {shot.photo ? (
+                  <Photo id={shot.photo} sizes="(min-width: 640px) 50vw, 100vw" />
+                ) : shot.image ? (
                   <>
                     <Image
                       src={shot.image.src}

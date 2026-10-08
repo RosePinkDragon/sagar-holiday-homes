@@ -24,7 +24,7 @@ export default function PoolAndGroundsPage() {
     <main>
       <HorizonBand
         caption="POOL — wide shot showing the gazebo and fencing, golden hour"
-        image={{ src: "/temp-stock/pool-gazebo-fence.jpg", alt: "Stock photo standing in for the pool, gazebo and fencing" }}
+        photo="pool-wide"
       />
 
       <header className="shell settle-next" style={{ paddingBlock: "3rem" }}>

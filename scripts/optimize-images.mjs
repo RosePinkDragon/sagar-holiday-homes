@@ -32,12 +32,20 @@ fs.mkdirSync(out, { recursive: true })
 const manifestPath = path.join(out, 'manifest.json')
 const manifest = fs.existsSync(manifestPath) ? JSON.parse(fs.readFileSync(manifestPath, 'utf8')) : {}
 
-const files = fs.readdirSync(src).filter((f) => {
+// Walks sub-folders too (the raw folder is sorted into per-room folders); skips _duplicates.
+const walk = (dir) =>
+  fs.readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
+    const p = path.join(dir, e.name)
+    if (e.isDirectory()) return e.name === '_duplicates' ? [] : walk(p)
+    return [path.relative(src, p)]
+  })
+
+const files = walk(src).filter((f) => {
   if (/\.(heic|heif)$/i.test(f)) {
     console.warn(`skipped (convert HEIC to JPG first): ${f}`)
     return false
   }
-  return /\.(jpe?g|png|webp|tiff?)$/i.test(f) && (!only || only.has(f.toLowerCase()))
+  return /\.(jpe?g|png|webp|tiff?)$/i.test(f) && (!only || only.has(path.basename(f).toLowerCase()))
 })
 
 let done = 0

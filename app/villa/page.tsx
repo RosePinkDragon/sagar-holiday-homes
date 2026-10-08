@@ -19,7 +19,7 @@ export default function VillaPage() {
     <main>
       <HorizonBand
         caption="BEDROOM — king bed made, lights on, golden hour"
-        image={{ src: "/temp-stock/bedroom.jpg", alt: "Stock photo standing in for a bedroom" }}
+        photo="bedroom-blue"
       />
 
       <header className="shell settle-next" style={{ paddingBlock: "3rem" }}>

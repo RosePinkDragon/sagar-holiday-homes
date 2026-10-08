@@ -25,7 +25,7 @@ export default function ContactPage() {
     <main>
       <HorizonBand
         caption="VILLA — front of the house, daytime"
-        image={{ src: "/temp-stock/front-house-daytime.jpg", alt: "Stock photo standing in for the front of the house" }}
+        photo="exterior-night"
       />
 
       <header className="shell settle-next" style={{ paddingBlock: "3rem" }}>

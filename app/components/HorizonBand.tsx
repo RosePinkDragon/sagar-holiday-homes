@@ -1,4 +1,6 @@
 import Image from "next/image";
+import type { PhotoId } from "@/content/photos";
+import Photo from "./Photo";
 
 /**
  * DESIGN.md "The signature: a continuous horizon" — the same band, at the
@@ -8,19 +10,24 @@ import Image from "next/image";
  * No `band-horizon` guide line: that dashed rule is a styleguide-only build
  * aid and never ships on a real page.
  *
- * `image` is a stand-in only (see public/temp-stock/README.md) — swap it out
- * the moment real photography lands and drop the badge with it.
+ * `photo` is a real villa photo (content/photos.ts). `image` is a stock
+ * stand-in only (see public/temp-stock/README.md) for shots we don't have yet
+ * — drop it, and its badge, as soon as the real photo exists.
  */
 export default function HorizonBand({
   caption,
   image,
+  photo,
 }: {
   caption: string;
   image?: { src: string; alt: string };
+  photo?: PhotoId;
 }) {
   return (
     <div className="band settle">
-      {image ? (
+      {photo ? (
+        <Photo id={photo} sizes="100vw" priority />
+      ) : image ? (
         <>
           <Image
             src={image.src}

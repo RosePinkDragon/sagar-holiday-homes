@@ -17,7 +17,7 @@ export default function FoodPage() {
     <main>
       <HorizonBand
         caption="KITCHEN — the guest kitchen, in use"
-        image={{ src: "/temp-stock/kitchen.jpg", alt: "Stock photo standing in for the guest kitchen" }}
+        photo="kitchen-counter"
       />
 
       <header className="shell settle-next" style={{ paddingBlock: "3rem" }}>

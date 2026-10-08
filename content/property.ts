@@ -1118,10 +1118,7 @@ export const seo = {
    * more than usual. Per-page OG images can be added as photos arrive; until
    * then every page falls back to the hero shot (BRIEF §9).
    */
-  defaultOgImage: assumed(
-    "/og/placeholder-1200x630.png",
-    "PLACEHOLDER - no photography exists yet (BRIEF §9). Replace with the hero shot, the pool with the orchard behind it, at 1200x630. Until then every WhatsApp share of this site previews a placeholder, so this must be swapped before the link is given to a guest."
-  ),
+  defaultOgImage: confirmed("/og/home-1200x630.jpg"),
 } as const;
 
 /**

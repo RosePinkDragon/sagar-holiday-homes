@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import {
+  describeLaunchOffer,
   describeWorkedExample,
   facts,
   formatInr,
@@ -52,8 +53,7 @@ export default function TariffPage() {
   const rateCard = requireFact(rateCardFact, "tariff.rateCard");
   const rateCardIndicative = rateCardFact.status !== "confirmed";
 
-  const launchOffer = resolved(tariff.launchOffer);
-  const launchOfferIndicative = tariff.launchOffer.status === "assumed";
+  const launchOffer = describeLaunchOffer();
 
   const deposit = resolved(policy.securityDeposit);
   const depositIndicative = policy.securityDeposit.status === "assumed";
@@ -170,14 +170,9 @@ export default function TariffPage() {
           <div className="shell">
             <h2 className="type-display" style={{ fontSize: "var(--step-2)" }}>
               Launch offer
-              {launchOfferIndicative ? <Indicative /> : null}
             </h2>
             <p className="measure mt-6">
-              {launchOffer.discountPercent.from}–
-              {launchOffer.discountPercent.to}% off the published rate,{" "}
-              {launchOffer.condition.charAt(0).toLowerCase() +
-                launchOffer.condition.slice(1)}
-              .
+              {launchOffer}, already included in the rates above.
             </p>
           </div>
         </section>

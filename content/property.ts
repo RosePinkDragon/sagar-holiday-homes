@@ -364,14 +364,33 @@ export const describe = {
   wifi: () => `${facts.wifi.speed.value.downloadMbps} Mbps Wi-Fi`,
 } as const;
 
+export type NearbyPlace = {
+  readonly name: string;
+  /** Drive time, only where confirmed. */
+  readonly detail?: string;
+  /** Google Maps search text. A search, not a pin, until coordinates are confirmed. */
+  readonly mapsQuery: string;
+};
+
 /** BRIEF §8, Location — name the landmarks people actually search for. */
-export const nearbyPlaces = [
-  `Saldure beach — ${facts.distances.saldureBeach.value.minutesByCar} minutes`,
-  "Murud beach",
-  "Harnai fish market",
-  "Kelshi",
-  "Suvarnadurg fort",
-] as const;
+export const nearbyPlaces: readonly NearbyPlace[] = [
+  {
+    name: "Saldure beach",
+    detail: `${facts.distances.saldureBeach.value.minutesByCar} minutes`,
+    mapsQuery: "Saldure beach, Dapoli",
+  },
+  { name: "Murud beach", mapsQuery: "Murud beach, Dapoli" },
+  { name: "Harnai fish market", mapsQuery: "Harnai fish market, Dapoli" },
+  { name: "Kelshi", mapsQuery: "Kelshi, Dapoli" },
+  { name: "Suvarnadurg fort", mapsQuery: "Suvarnadurg fort, Harnai" },
+  {
+    name: "International cricket stadium at Royal Goldfield Club Resort",
+    mapsQuery: "Royal Goldfield Club Resort, Dapoli",
+  },
+];
+
+export const mapsSearchHref = (query: string): string =>
+  `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
 
 /**
  * Property-level amenity list (BRIEF §2). Deliberately NOT hotel-room inventory
@@ -590,15 +609,37 @@ export const tariff = {
   /**
    * A discount OFF a published rate — never a lower base rate. Anchoring low
    * is hard to undo.
+   *
+   * Owner, 8 Oct 2026: the launch offer IS the gap between `published` and
+   * `offer` in rateCard — already included in the rates, not stacked on top.
+   * The percentage is derived by launchOfferPercent(), never typed here, and
+   * no duration is stated on the site. Replaces the BRIEF §4 draft of 20–25%
+   * in exchange for a Google review.
    */
-  launchOffer: assumed(
-    {
-      discountPercent: { from: 20, to: 25 },
-      condition: "In exchange for a Google review",
-    },
-    "Recommended launch offer (BRIEF §4). Owner may override the depth or drop it entirely; it must stay framed as a discount off the published rate. Owner, 8 Oct 2026: do not state a duration on the site."
-  ),
+  launchOffer: confirmed({ includedInRates: true }),
 } as const;
+
+/**
+ * Launch-offer depth across the rate card, rounded DOWN so the site never
+ * overstates the saving (e.g. ₹12,000 → ₹10,000 is 16.7%, shown as 16%).
+ */
+export function launchOfferPercent(): { from: number; to: number } | null {
+  const rateCard = resolved(tariff.rateCard);
+  if (!rateCard) return null;
+  const percents = Object.values(rateCard).map(({ published, offer }) =>
+    Math.floor(((published - offer) / published) * 100)
+  );
+  return { from: Math.min(...percents), to: Math.max(...percents) };
+}
+
+/** e.g. "16–33% off the published rate". Null when there's no rate card. */
+export function describeLaunchOffer(): string | null {
+  const range = launchOfferPercent();
+  if (!range) return null;
+  const span =
+    range.from === range.to ? `${range.to}%` : `${range.from}–${range.to}%`;
+  return `${span} off the published rate`;
+}
 
 /**
  * CLAUDE.md hard rule 7: no rate appears without its GST treatment. Render this

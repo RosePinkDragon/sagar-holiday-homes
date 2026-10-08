@@ -273,8 +273,7 @@ export default function HomePage() {
                   {" "}
                   We&rsquo;re taking bookings for our first season at{" "}
                   {launchOffer.discountPercent.from}–
-                  {launchOffer.discountPercent.to}% off the published rate
-                  for the first {launchOffer.durationMonths} months,{" "}
+                  {launchOffer.discountPercent.to}% off the published rate,{" "}
                   {launchOffer.condition.charAt(0).toLowerCase() +
                     launchOffer.condition.slice(1)}
                   .{launchOfferIndicative ? " · indicative" : ""}

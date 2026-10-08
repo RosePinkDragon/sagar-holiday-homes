@@ -1,5 +1,6 @@
-import Image from "next/image";
 import type { LucideIcon } from "lucide-react";
+import type { PhotoId } from "@/content/photos";
+import Photo from "./Photo";
 
 export type BandFact = { icon: LucideIcon; text: string };
 
@@ -17,33 +18,24 @@ export type BandFact = { icon: LucideIcon; text: string };
  * here. The page title still sits BELOW the band; plaques are solid, never a
  * scrim, so the sky is never greyed.
  *
- * `image` is a stand-in only (see public/temp-stock/README.md) — swap it out
- * the moment real photography lands and drop the badge with it.
+ * `photo` is a real villa photo (content/photos.ts). Without one the band
+ * shows the caption naming the shot required. No stock photos: nothing on
+ * this site may be mistaken for the property.
  */
 export default function HorizonBand({
   caption,
-  image,
+  photo,
   facts,
 }: {
   caption: string;
-  image?: { src: string; alt: string };
+  photo?: PhotoId;
   facts?: BandFact[];
 }) {
   return (
     <div className="band-wrap">
     <div className="band settle">
-      {image ? (
-        <>
-          <Image
-            src={image.src}
-            alt={image.alt}
-            fill
-            sizes="100vw"
-            priority
-            style={{ objectFit: "cover" }}
-          />
-          <span className="stock-badge">Stock photo — temp</span>
-        </>
+      {photo ? (
+        <Photo id={photo} sizes="100vw" priority />
       ) : (
         <p className="band-caption">{caption}</p>
       )}

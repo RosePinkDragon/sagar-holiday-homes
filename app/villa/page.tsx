@@ -20,7 +20,7 @@ export default function VillaPage() {
     <main>
       <HorizonBand
         caption="BEDROOM — king bed made, lights on, golden hour"
-        image={{ src: "/temp-stock/bedroom.jpg", alt: "Stock photo standing in for a bedroom" }}
+        photo="bedroom-blue"
         facts={[
           { icon: BedDouble, text: `${facts.configuration.value} · ${facts.beds.value.count} ${facts.beds.value.size} beds` },
           { icon: Users, text: `Sleeps ${facts.occupancy.max.value}` },

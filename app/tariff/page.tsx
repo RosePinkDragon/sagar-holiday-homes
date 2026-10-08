@@ -73,7 +73,7 @@ export default function TariffPage() {
 
       <HorizonBand
         caption="POOL — pool at night, lit"
-        image={{ src: "/temp-stock/pool-night.jpg", alt: "Stock photo standing in for the pool at night" }}
+        photo="pool-loungers"
       />
 
       <header className="shell settle-next" style={{ paddingBlock: "3rem" }}>

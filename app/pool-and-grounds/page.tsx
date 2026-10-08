@@ -25,7 +25,7 @@ export default function PoolAndGroundsPage() {
     <main>
       <HorizonBand
         caption="POOL — wide shot showing the gazebo and fencing, golden hour"
-        image={{ src: "/temp-stock/pool-gazebo-fence.jpg", alt: "Stock photo standing in for the pool, gazebo and fencing" }}
+        photo="pool-wide"
         facts={[
           { icon: Ruler, text: describePoolSize() },
           { icon: ArrowDownToLine, text: `${pool.depth.value.feet} ft deep` },

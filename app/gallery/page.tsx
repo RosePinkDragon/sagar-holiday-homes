@@ -1,93 +1,81 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { pageMetadata, pages } from "@/content/property";
+import type { PhotoId } from "@/content/photos";
 import HorizonBand from "../components/HorizonBand";
+import Photo from "../components/Photo";
 
 /**
- * No real photography exists yet (BRIEF §9, CLAUDE.md working style). Tiles
- * below carry a stock stand-in (public/temp-stock/README.md) so the layout
- * can be reviewed before the shoot; each is badged so it can't be mistaken
- * for the real property. Swap `image` for the delivered photo per tile —
- * the aspect ratios already match the site's landscape crop so nothing
- * reflows when they do.
+ * Real photos (content/photos.ts) are used wherever we have one. Shots not
+ * taken yet (`pending`) render a labelled placeholder, never a stock photo;
+ * the list lives in docs/photos-pending.md. The aspect ratios match the
+ * site's landscape crop so nothing reflows when they land.
  */
 
 export function generateMetadata(): Metadata {
   return pageMetadata(pages.gallery, "pages.gallery");
 }
 
-type Shot = { caption: string; image?: { src: string; alt: string } };
+type Shot = {
+  caption: string;
+  photo?: PhotoId;
+  /** Shot not taken yet; renders a labelled placeholder. Tracked in docs/photos-pending.md. */
+  pending?: true;
+};
 type Category = { title: string; shots: Shot[] };
 
 const CATEGORIES: Category[] = [
   {
     title: "Pool",
     shots: [
-      {
-        caption: "Wide shot showing the gazebo and fencing, golden hour",
-        image: { src: "/temp-stock/pool-gazebo-fence.jpg", alt: "Stock photo standing in for the pool, gazebo and fencing" },
-      },
-      {
-        caption: "Pool at night, lit",
-        image: { src: "/temp-stock/pool-night.jpg", alt: "Stock photo standing in for the pool at night" },
-      },
+      { caption: "The pool, wide, at night", photo: "pool-wide" },
+      { caption: "Sun loungers beside the pool", photo: "pool-loungers" },
+      { caption: "Seating on the pool terrace", photo: "pool-seating" },
+      { caption: "Loungers at the pool edge", photo: "pool-edge-loungers" },
+      { caption: "Rocking chairs and armchairs on the terrace", photo: "terrace-seating" },
     ],
   },
   {
     title: "The villa",
     shots: [
-      {
-        caption: "Each bedroom, beds made, lights on",
-        image: { src: "/temp-stock/bedroom.jpg", alt: "Stock photo standing in for a bedroom" },
-      },
-      {
-        caption: "Full villa from the entrance approach",
-        image: { src: "/temp-stock/villa-exterior-golden.jpg", alt: "Stock photo standing in for the villa entrance approach" },
-      },
+      { caption: "The villa at sunset", photo: "exterior-sunset" },
+      { caption: "The villa lit up at night", photo: "exterior-night" },
+      { caption: "The villa at night, with a courtyard lamp", photo: "exterior-night-lamp" },
+      { caption: "A bedroom with blue walls", photo: "bedroom-blue" },
+      { caption: "A bedroom with blue walls, with air conditioner", photo: "bedroom-blue-ac" },
+      { caption: "A bedroom with lilac walls", photo: "bedroom-lilac" },
+      { caption: "A bedroom with lilac walls, from the window side", photo: "bedroom-lilac-2" },
+      { caption: "A bedroom with cream walls", photo: "bedroom-cream" },
+      { caption: "A bedroom with cream walls, with TV", photo: "bedroom-cream-2" },
+      { caption: "The bed in the cream bedroom", photo: "bedroom-cream-bed" },
+      { caption: "A blue bedroom, bed and mirrored dressing table", photo: "bedroom-blue-dresser" },
+      { caption: "A bathroom with patterned tiles", photo: "bathroom-patterned" },
+      { caption: "A bathroom with grey tiles", photo: "bathroom-grey" },
     ],
   },
   {
-    title: "Ground & orchard",
+    title: "From above",
     shots: [
-      {
-        caption: "The open ground, wide enough to show the full 150m",
-        image: { src: "/temp-stock/open-ground.jpg", alt: "Stock photo standing in for the open ground" },
-      },
-      {
-        caption: "The orchard",
-        image: { src: "/temp-stock/orchard.jpg", alt: "Stock photo standing in for the orchard" },
-      },
-      {
-        caption: "Drone shot — house, ground and trees together",
-        image: { src: "/temp-stock/drone.jpg", alt: "Stock photo standing in for the drone shot" },
-      },
+      { caption: "From above, at dusk", photo: "aerial-dusk" },
+      { caption: "From above, the path to the villa", photo: "aerial-approach" },
+      { caption: "From above, the fields around the villa", photo: "aerial-fields" },
+      { caption: "From above, at night", photo: "aerial-night" },
     ],
   },
   {
-    title: "Kitchen",
+    title: "Kitchen & sitting area",
     shots: [
-      {
-        caption: "The guest kitchen",
-        image: { src: "/temp-stock/kitchen.jpg", alt: "Stock photo standing in for the guest kitchen" },
-      },
-    ],
-  },
-  {
-    title: "Life at the villa",
-    shots: [
-      {
-        caption: "A group actually using the space — not an empty house",
-        image: { src: "/temp-stock/group-pool.jpg", alt: "Stock photo standing in for a group at the villa" },
-      },
+      { caption: "The kitchen counter", photo: "kitchen-counter" },
+      { caption: "The sitting area beside the kitchen", photo: "sitting-kitchen" },
+      { caption: "The sofa set", photo: "sitting-sofa" },
     ],
   },
 ];
 
-function PhotoTile({ caption, image }: Shot) {
-  if (!image) {
+function PhotoTile({ caption, photo }: Shot) {
+  if (!photo) {
     return (
       <div className="photo-placeholder" style={{ aspectRatio: "4 / 3" }}>
-        <p className="muted text-fine">{caption}</p>
+        <p className="muted text-fine">Photo to come: {caption}</p>
       </div>
     );
   }
@@ -102,14 +90,7 @@ function PhotoTile({ caption, image }: Shot) {
           borderRadius: "var(--radius)",
         }}
       >
-        <Image
-          src={image.src}
-          alt={image.alt}
-          fill
-          sizes="(min-width: 640px) 50vw, 100vw"
-          style={{ objectFit: "cover" }}
-        />
-        <span className="stock-badge">Stock — temp</span>
+        <Photo id={photo} sizes="(min-width: 640px) 50vw, 100vw" />
       </div>
       <figcaption className="muted text-fine mt-2">{caption}</figcaption>
     </figure>
@@ -119,10 +100,7 @@ function PhotoTile({ caption, image }: Shot) {
 export default function GalleryPage() {
   return (
     <main>
-      <HorizonBand
-        caption="DRONE — house, ground and orchard together"
-        image={{ src: "/temp-stock/drone.jpg", alt: "Stock photo standing in for the drone shot" }}
-      />
+      <HorizonBand caption="DRONE — house, ground and orchard together" photo="aerial-dusk" />
 
       <header className="shell settle-next" style={{ paddingBlock: "3rem" }}>
         <h1
@@ -147,7 +125,7 @@ export default function GalleryPage() {
             </h2>
             <div className="grid gap-6 sm:grid-cols-2 mt-10">
               {category.shots.map((shot) => (
-                <PhotoTile key={shot.caption} caption={shot.caption} image={shot.image} />
+                <PhotoTile key={shot.caption} {...shot} />
               ))}
             </div>
           </div>

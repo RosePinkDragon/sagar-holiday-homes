@@ -40,7 +40,7 @@ export default function LocationPage() {
     <main>
       <HorizonBand
         caption="VILLA APPROACH — full villa from the entrance, golden hour"
-        image={{ src: "/temp-stock/villa-exterior-golden.jpg", alt: "Stock photo standing in for the villa entrance approach" }}
+        photo="aerial-approach"
         facts={[
           { icon: Waves, text: `Saldure beach · ${describe.beachDistance()}` },
           ...facts.distances.driveTimes.value.map((d) => ({

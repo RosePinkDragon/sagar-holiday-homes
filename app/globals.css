@@ -641,25 +641,6 @@
     padding: var(--gutter);
   }
 
-  /* Temporary-only: marks a stock stand-in so it never gets mistaken for the
-     real property once this branch is previewed. Delete alongside
-     public/temp-stock when actual photography lands. */
-  .stock-badge {
-    position: absolute;
-    bottom: 0.6rem;
-    left: 0.6rem;
-    z-index: 1;
-    background-color: rgba(42, 36, 28, 0.72);
-    color: var(--bone);
-    font-size: 0.65rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 0.25rem 0.55rem;
-    border-radius: 3px;
-    pointer-events: none;
-  }
-
   /* --- The horizon band -------------------------------------------------- */
 
   /* Full-bleed by being a top-level block, not by a 100vw margin trick — the
@@ -679,12 +660,7 @@
 
   /* Key numbers for the page. Solid bone plaques with a hairline,
      square-cornered — not pills, not glass, no scrim, so the sky stays
-     untouched. The temp stock badge moves to the top corner to clear them. */
-  .band .stock-badge {
-    top: 0.6rem;
-    bottom: auto;
-  }
-
+     untouched. */
   .band-wrap {
     position: relative;
   }

@@ -364,15 +364,33 @@ export const describe = {
   wifi: () => `${facts.wifi.speed.value.downloadMbps} Mbps Wi-Fi`,
 } as const;
 
+export type NearbyPlace = {
+  readonly name: string;
+  /** Drive time, only where confirmed. */
+  readonly detail?: string;
+  /** Google Maps search text. A search, not a pin, until coordinates are confirmed. */
+  readonly mapsQuery: string;
+};
+
 /** BRIEF §8, Location — name the landmarks people actually search for. */
-export const nearbyPlaces = [
-  `Saldure beach — ${facts.distances.saldureBeach.value.minutesByCar} minutes`,
-  "Murud beach",
-  "Harnai fish market",
-  "Kelshi",
-  "Suvarnadurg fort",
-  "International cricket stadium at Royal Goldfield Club Resort",
-] as const;
+export const nearbyPlaces: readonly NearbyPlace[] = [
+  {
+    name: "Saldure beach",
+    detail: `${facts.distances.saldureBeach.value.minutesByCar} minutes`,
+    mapsQuery: "Saldure beach, Dapoli",
+  },
+  { name: "Murud beach", mapsQuery: "Murud beach, Dapoli" },
+  { name: "Harnai fish market", mapsQuery: "Harnai fish market, Dapoli" },
+  { name: "Kelshi", mapsQuery: "Kelshi, Dapoli" },
+  { name: "Suvarnadurg fort", mapsQuery: "Suvarnadurg fort, Harnai" },
+  {
+    name: "International cricket stadium at Royal Goldfield Club Resort",
+    mapsQuery: "Royal Goldfield Club Resort, Dapoli",
+  },
+];
+
+export const mapsSearchHref = (query: string): string =>
+  `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
 
 /**
  * Property-level amenity list (BRIEF §2). Deliberately NOT hotel-room inventory

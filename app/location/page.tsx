@@ -5,6 +5,7 @@ import {
   describe,
   facts,
   identity,
+  mapsSearchHref,
   nearbyPlaces,
   pageMetadata,
   pages,
@@ -101,11 +102,20 @@ export default function LocationPage() {
           <ul className="measure mt-10 space-y-4">
             {nearbyPlaces.map((place) => (
               <li
-                key={place}
+                key={place.name}
                 className="pl-4"
                 style={{ borderLeft: "2px solid var(--laterite)" }}
               >
-                {place}
+                <a
+                  className="link"
+                  href={mapsSearchHref(place.mapsQuery)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {place.name}
+                  <span className="sr-only"> (opens Google Maps)</span>
+                </a>
+                {place.detail ? <> — {place.detail}</> : null}
               </li>
             ))}
           </ul>
@@ -114,12 +124,15 @@ export default function LocationPage() {
 
       <section className="section bg-bone-deep">
         <div className="shell">
-          <h2 className="type-display" style={{ fontSize: "var(--step-2)" }}>
-            Find us
-          </h2>
-          <div className="mt-6 grid gap-8 lg:grid-cols-2 lg:items-start">
+          <div className="grid gap-8 lg:grid-cols-[auto_minmax(0,34rem)] lg:items-center lg:justify-center lg:gap-20">
             <div>
-              <address className="measure not-italic">
+              <h2
+                className="type-display"
+                style={{ fontSize: "var(--step-2)" }}
+              >
+                Find us
+              </h2>
+              <address className="measure mt-6 not-italic">
                 {address.lines.map((line) => (
                   <span key={line} className="block">
                     {line}

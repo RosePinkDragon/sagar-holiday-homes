@@ -24,7 +24,19 @@ module.exports = {
   // /admin is the private booking panel (docs/superpowers/specs/
   // 2026-10-08-admin-panel-design.md): never in the sitemap, always
   // disallowed, even after launch. Its layout also sets noindex.
-  exclude: ["/styleguide", "/styleguide/", "/admin", "/admin/*", "/contact", "/contact/"],
+  exclude: [
+    "/styleguide",
+    "/styleguide/",
+    "/admin",
+    "/admin/*",
+    "/contact",
+    "/contact/",
+    // Next's file-convention icons (app/icon.png, app/apple-icon.png) show up as routes.
+    "/icon.png",
+    "/icon.png/",
+    "/apple-icon.png",
+    "/apple-icon.png/",
+  ],
   robotsTxtOptions: {
     policies: siteIsLive
       ? [{ userAgent: "*", allow: "/", disallow: "/admin/" }]

@@ -57,15 +57,14 @@ export default function PoolAndGroundsPage() {
           <dl className="grid gap-6 sm:grid-cols-2 mt-10">
             <div className="hairline p-6">
               <dt className="label with-icon"><Ruler className="icon" aria-hidden="true" />Size</dt>
-              <dd
-                className="type-display mt-2"
-                style={{ fontSize: "var(--step-1)" }}
-              >
-                {describePoolSize()}
+              <dd className="mt-2">
+                <span className="type-display block" style={{ fontSize: "var(--step-1)" }}>
+                  {describePoolSize()}
+                </span>
+                <p className="muted mt-2 text-fine">
+                  18 × 17 feet — room for a dozen people without taking turns.
+                </p>
               </dd>
-              <p className="muted mt-2 text-fine">
-                18 × 17 feet — room for a dozen people without taking turns.
-              </p>
             </div>
             <div className="hairline p-6">
               <dt className="label with-icon"><ArrowDownToLine className="icon" aria-hidden="true" />Depth</dt>

@@ -749,6 +749,13 @@ export function tariffOfferJsonLd(): Record<string, unknown> | null {
     priceCurrency: "INR",
     lowPrice: rateCard.weekday.offer,
     highPrice: rateCard.peak.offer,
+    priceSpecification: {
+      "@type": "PriceSpecification",
+      priceCurrency: "INR",
+      valueAddedTaxIncluded:
+        tariff.gst.displayTreatment.status === "confirmed" &&
+        tariff.gst.displayTreatment.value === "inclusive",
+    },
     eligibleQuantity: {
       "@type": "QuantitativeValue",
       maxValue: facts.occupancy.max.value,
@@ -1039,7 +1046,7 @@ export const pages = {
       "Private Pool & 150m Ground, Dapoli | Sagar Holiday Homes"
     ),
     description: confirmed(
-      "A private pool under a gazebo, 150m of open ground for cricket, and an orchard of mango and coconut trees that can host a wedding or function. Pool dimensions, depth and safety notes, stated plainly."
+      "A private pool under a gazebo, 150m of open ground for cricket, and a mango and coconut orchard that can host a wedding. Pool depth and safety, stated plainly."
     ),
   },
   gallery: {
@@ -1055,7 +1062,7 @@ export const pages = {
     job: "Kitchen, cook, sample menu, pricing",
     title: confirmed("Kitchen & Konkani Cook | Sagar Holiday Homes, Dapoli"),
     description: confirmed(
-      "A guest kitchen with a fridge and gas stove, plus a local cook for home-style Konkani food and fresh Harnai seafood on request. Priced per dish — you settle with the cook directly."
+      "A guest kitchen with a fridge and gas stove, plus a local cook for Konkani home food and fresh Harnai seafood on request. You settle with the cook directly."
     ),
   },
   location: {
@@ -1073,7 +1080,7 @@ export const pages = {
     route: confirmed("/tariff"),
     job: "Rate card, policy, what's included, plus contact details and the enquiry form",
     title: confirmed(
-      "Tariff, Booking & Enquiries — Dapoli Villa | Sagar Holiday Homes"
+      "Tariff, Booking & Enquiries | Sagar Holiday Homes"
     ),
     description: confirmed(
       "Weekday, weekend and peak rates inclusive of GST, the cancellation policy and stay details for our Dapoli villa — plus how to call, WhatsApp or send an enquiry."
@@ -1212,8 +1219,9 @@ export function lodgingBusinessJsonLd(): Record<string, unknown> {
       ? { "@type": "GeoCoordinates", latitude: geo.lat, longitude: geo.lng }
       : undefined,
     numberOfRooms: seo.numberOfRooms,
+    // CLAUDE.md rule 7: no rate without its GST treatment — structured data included.
     priceRange: rateCard
-      ? `${formatInr(rateCard.weekday.offer)} - ${formatInr(rateCard.peak.offer)}`
+      ? `${formatInr(rateCard.weekday.offer)} - ${formatInr(rateCard.peak.offer)} (${gstNote().charAt(0).toLowerCase()}${gstNote().slice(1)})`
       : undefined,
     amenityFeature: amenities.map((name) => ({
       "@type": "LocationFeatureSpecification",

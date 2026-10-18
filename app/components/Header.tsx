@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { enquiryHref, identity, routes } from "@/content/property";
-import MobileNav from "./MobileNav";
 import EnquireLink from "./EnquireLink";
+import MobileNav from "./MobileNav";
 import NavLinks from "./NavLinks";
+import SiteHeader from "./SiteHeader";
 
 /**
  * `routes` (content/property.ts) is plain path strings with no display name
@@ -21,40 +22,53 @@ const NAV_LABELS: Record<string, string> = {
   "/faq": "FAQ",
 };
 
+/**
+ * Two states, one set of elements (so there is only ever one nav in the
+ * accessibility tree), switched by `data-compact` on the <header> — see
+ * SiteHeader and the `.header-*` rules in globals.css:
+ *
+ *   top of page, 1280px+   [logo] Sagar Holiday Homes        [ Enquire ]
+ *                          [    ] Home  Villa  Pool …
+ *   scrolled               [logo] Home  Villa  Pool …        [ Enquire ]
+ *
+ * Below 1280px there is no link row: the nav is the hamburger + drawer, so
+ * both states are a single row (the name drops out once scrolled).
+ */
 export default function Header() {
   // /contact is a forwarding page now (the form lives on /tariff).
-  const navItems = routes.filter((route) => route !== "/contact").map((route) => ({
-    route,
-    label: NAV_LABELS[route] ?? route,
-  }));
+  const navItems = routes
+    .filter((route) => route !== "/contact")
+    .map((route) => ({ route, label: NAV_LABELS[route] ?? route }));
 
   return (
-    <header className="bg-bone" style={{ borderBottom: "1px solid var(--hairline)" }}>
-      {/* text -- tabs -- button. From 1280px a three-column grid with equal
-          outer columns keeps the tabs on the page's true centre; below that
-          there is no tab row, so it is the wordmark on the left and the
-          Enquire button and hamburger on the right. Below 1280px the nav is a
-          hamburger + right-side drawer (client component); from 1280px it is a
-          flat nav. Only one of the two is ever in the accessibility tree:
-          `hidden`/`xl:hidden` remove the other from it, not just from view.
-          Enquire shows from 768px; phones get the bottom bar. */}
-      <div className="shell flex items-center justify-between gap-4 py-4 xl:grid xl:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]">
-        <Link
-          href="/"
-          className="type-display site-logo shrink-0 whitespace-nowrap"
-        >
+    <SiteHeader>
+      <div className="shell header-grid">
+        <Link href="/" className="header-logo" aria-label={identity.name}>
+          {/* A static export serves public/ as-is, so next/image adds nothing here. */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/brand/logo-160.webp"
+            srcSet="/brand/logo-160.webp 1x, /brand/logo-320.webp 2x"
+            width={160}
+            height={160}
+            alt=""
+          />
+        </Link>
+
+        {/* The logo link above already names the home link for assistive tech. */}
+        <Link href="/" className="header-name type-display" tabIndex={-1} aria-hidden="true">
           {identity.name}
         </Link>
 
         <NavLinks items={navItems} />
 
-        <div className="flex items-center gap-3 xl:justify-self-end">
+        <div className="header-cta">
           <EnquireLink href={enquiryHref} className="btn btn-solid hidden md:inline-flex shrink-0">
             Enquire
           </EnquireLink>
           <MobileNav items={navItems} />
         </div>
       </div>
-    </header>
+    </SiteHeader>
   );
 }

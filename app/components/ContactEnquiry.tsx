@@ -26,7 +26,7 @@ export default function ContactEnquiry() {
       id="enquiry"
       tabIndex={-1}
       className="section bg-bone"
-      style={{ scrollMarginTop: "1rem", outline: "none" }}
+      style={{ outline: "none" }}
     >
       <div className="shell">
         <h2 className="type-display" style={{ fontSize: "var(--step-2)" }}>

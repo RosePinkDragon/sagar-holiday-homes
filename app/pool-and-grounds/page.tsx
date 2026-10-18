@@ -4,11 +4,13 @@ import {
   describe,
   describePoolDepth,
   describePoolSize,
+  enquiryHref,
   facts,
   pageMetadata,
   pages,
   pool,
 } from "@/content/property";
+import EnquireLink from "../components/EnquireLink";
 import HorizonBand from "../components/HorizonBand";
 
 /**
@@ -55,15 +57,14 @@ export default function PoolAndGroundsPage() {
           <dl className="grid gap-6 sm:grid-cols-2 mt-10">
             <div className="hairline p-6">
               <dt className="label with-icon"><Ruler className="icon" aria-hidden="true" />Size</dt>
-              <dd
-                className="type-display mt-2"
-                style={{ fontSize: "var(--step-1)" }}
-              >
-                {describePoolSize()}
+              <dd className="mt-2">
+                <span className="type-display block" style={{ fontSize: "var(--step-1)" }}>
+                  {describePoolSize()}
+                </span>
+                <p className="muted mt-2 text-fine">
+                  18 × 17 feet — room for a dozen people without taking turns.
+                </p>
               </dd>
-              <p className="muted mt-2 text-fine">
-                18 × 17 feet — room for a dozen people without taking turns.
-              </p>
             </div>
             <div className="hairline p-6">
               <dt className="label with-icon"><ArrowDownToLine className="icon" aria-hidden="true" />Depth</dt>
@@ -108,6 +109,20 @@ export default function PoolAndGroundsPage() {
           </h2>
           <p className="measure mt-6">
             {describe.orchard()} — {facts.orchard.value.season}.
+          </p>
+        </div>
+      </section>
+
+      <section className="section bg-bone">
+        <div className="shell">
+          <h2 className="type-display" style={{ fontSize: "var(--step-2)" }}>
+            Weddings and functions
+          </h2>
+          <p className="measure mt-6">{describe.weddingLine()}</p>
+          <p className="mt-6">
+            <EnquireLink href={enquiryHref} className="btn btn-solid">
+              Ask about a wedding
+            </EnquireLink>
           </p>
         </div>
       </section>

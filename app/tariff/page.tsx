@@ -18,6 +18,7 @@ import {
   tariff,
   tariffOfferJsonLd,
 } from "@/content/property";
+import ContactEnquiry from "../components/ContactEnquiry";
 import HorizonBand from "../components/HorizonBand";
 
 /**
@@ -116,15 +117,14 @@ export default function TariffPage() {
             </div>
             <div className="hairline p-6 sm:col-span-2">
               <dt className="label with-icon"><Star className="icon" aria-hidden="true" />Peak dates</dt>
-              <dd
-                className="type-display mt-2"
-                style={{ fontSize: "var(--step-1)" }}
-              >
-                <RateValue rate={rateCard.peak} />
+              <dd className="mt-2">
+                <span className="type-display block" style={{ fontSize: "var(--step-1)" }}>
+                  <RateValue rate={rateCard.peak} />
+                </span>
+                <p className="muted mt-3 text-fine">
+                  {tariff.peakDates.value.join(" · ")}
+                </p>
               </dd>
-              <p className="muted mt-3 text-fine">
-                {tariff.peakDates.value.join(" · ")}
-              </p>
             </div>
           </dl>
           <p className="measure mt-6 text-fine">
@@ -300,6 +300,8 @@ export default function TariffPage() {
           <p className="measure mt-6 text-fine">{policy.forceMajeure.value}</p>
         </div>
       </section>
+
+      <ContactEnquiry />
     </main>
   );
 }

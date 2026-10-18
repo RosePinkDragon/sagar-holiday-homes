@@ -1,6 +1,8 @@
 import { getSupabase } from "@/lib/supabase";
 import type { EnquiryInput } from "@/lib/admin/types";
 
+const MESSAGE_MAX = 4000;
+
 /**
  * Maps the public enquiry form's field names (content/property.ts
  * `enquiryForm.fields`) onto the `enquiries` table. Exported for tests.
@@ -13,6 +15,13 @@ export function toEnquiryRow(data: Record<string, string>): EnquiryInput {
   const date = (k: string) => (/^\d{4}-\d{2}-\d{2}$/.test(data[k] ?? "") ? data[k] : null);
   const guests = Number.parseInt(data.guests ?? "", 10);
 
+  // The table has no occasion column; keep it by leading the message with it,
+  // then apply the message cap to the whole composed string.
+  const occasion = text("occasion", 40);
+  const note = (data.message ?? "").trim();
+  const composed = [occasion ? `Occasion: ${occasion}` : "", note].filter(Boolean).join("\n");
+  const message = composed ? composed.slice(0, MESSAGE_MAX) : null;
+
   return {
     name: text("name", 200) ?? "",
     phone: text("phone", 40) ?? "",
@@ -21,7 +30,7 @@ export function toEnquiryRow(data: Record<string, string>): EnquiryInput {
     check_out: date("checkOut"),
     guests: guests >= 1 && guests <= 100 ? guests : null,
     meals: text("meals", 40),
-    message: text("message", 4000),
+    message,
   };
 }
 

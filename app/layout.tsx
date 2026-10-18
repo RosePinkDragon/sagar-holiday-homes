@@ -1,10 +1,20 @@
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
-import { identity, lodgingBusinessJsonLd, resolved, seo, siteRobots } from "@/content/property";
+import {
+  contact,
+  enquiryHref,
+  identity,
+  lodgingBusinessJsonLd,
+  resolved,
+  seo,
+  siteRobots,
+  whatsAppLink,
+} from "@/content/property";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import ScrollReveal from "./components/ScrollReveal";
 import SiteChrome from "./components/SiteChrome";
+import StickyEnquiryBar from "./components/StickyEnquiryBar";
 import { fontVariables } from "./fonts";
 import "./globals.css";
 
@@ -39,7 +49,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   const jsonLd = lodgingBusinessJsonLd();
 
   return (
-    <html lang="en" className={`${fontVariables} h-full antialiased`}>
+    <html lang="en" data-scroll-behavior="smooth" className={`${fontVariables} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
         {/* Static JSON built from content/property.ts — no user input. */}
         <script
@@ -57,6 +67,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </div>
         <SiteChrome>
           <Footer />
+          <StickyEnquiryBar
+            phone={resolved(contact.phone)}
+            whatsapp={whatsAppLink()}
+            enquiryHref={enquiryHref}
+          />
         </SiteChrome>
         <ScrollReveal />
         {/*

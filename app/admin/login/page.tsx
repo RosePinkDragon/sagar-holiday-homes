@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState, type FormEvent } from "react";
-import { identity } from "@/content/property";
+import { brand, identity } from "@/content/property";
 import { getSupabase } from "@/lib/supabase";
 import { signIn } from "@/lib/admin/queries";
 import { ErrorText, Field } from "../_components/ui";
@@ -38,6 +38,15 @@ export default function LoginPage() {
 
   return (
     <div className="mx-auto max-w-sm">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={brand.logo.src}
+        srcSet={`${brand.logo.src} 1x, ${brand.logo.src2x} 2x`}
+        width={brand.logo.size}
+        height={brand.logo.size}
+        alt=""
+        style={{ width: "4rem", height: "4rem", marginBottom: "1rem" }}
+      />
       <h1 className="type-display" style={{ fontSize: "var(--step-2)" }}>
         Admin sign-in
       </h1>

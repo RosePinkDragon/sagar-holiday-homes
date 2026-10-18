@@ -1,116 +1,44 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { MessageCircle, Phone } from "lucide-react";
-import {
-  contact,
-  formatPhone,
-  pageMetadata,
-  pages,
-  resolved,
-  whatsAppLink,
-} from "@/content/property";
-import HorizonBand from "../components/HorizonBand";
-import EnquiryForm from "../components/EnquiryForm";
+import { enquiryHref, pageMetadata, pages } from "@/content/property";
+import ForwardTo from "../components/ForwardTo";
 
+/**
+ * Contact now lives at the foot of /tariff (one page for "how much" and "how
+ * do I book"). Under `output: 'export'` there are no server redirects, so
+ * this stays as a small page that forwards visitors from the client
+ * (<ForwardTo>; Next's `other` metadata would render a `name="refresh"` tag
+ * browsers ignore) and gives a plain link for anyone it doesn't reach. Its
+ * canonical points at /tariff so search engines treat the merged page as the
+ * real one; robots is left to pageMetadata(), so the pre-launch noindex toggle
+ * still governs it.
+ */
 export function generateMetadata(): Metadata {
-  return pageMetadata(pages.contact, "pages.contact");
+  const base = pageMetadata(pages.contact, "pages.contact");
+  return {
+    ...base,
+    alternates: { canonical: `${pages.tariff.route.value}/` },
+  };
 }
 
 export default function ContactPage() {
-  const phone = resolved(contact.phone);
-  const callback = resolved(contact.callbackWindow);
-  const address = resolved(contact.address);
-  const wa = whatsAppLink();
-
   return (
-    <main>
-      <HorizonBand
-        caption="VILLA — front of the house, daytime"
-        photo="exterior-night"
-      />
-
-      <header className="shell settle-next" style={{ paddingBlock: "3rem" }}>
-        <h1
-          className="type-display type-display-lg mt-3"
-          style={{ fontSize: "var(--step-3)" }}
-        >
+    <main className="section">
+      <ForwardTo href={enquiryHref} />
+      <div className="shell">
+        <h1 className="type-display" style={{ fontSize: "var(--step-2)" }}>
           Contact
         </h1>
-        <p className="measure mt-6">
-          Phone is the fastest way to reach us. The form below works too —
-          {callback ? ` ${callback.confirmationLine.toLowerCase()}` : ""}
+        <p className="measure mt-4">
+          Contact details and the enquiry form are now on the Tariff &amp;
+          booking page.
         </p>
-      </header>
-
-      <section className="section bg-bone-deep">
-        <div className="shell">
-          <h2 className="type-display" style={{ fontSize: "var(--step-2)" }}>
-            Call or WhatsApp
-          </h2>
-          <div className="grid gap-6 sm:grid-cols-2 mt-10">
-            {phone ? (
-              <div className="hairline p-6">
-                <p className="label with-icon"><Phone className="icon" aria-hidden="true" />Phone</p>
-                <p className="mt-2">
-                  <a
-                    href={`tel:${phone}`}
-                    className="type-display"
-                    style={{ fontSize: "var(--step-1)" }}
-                  >
-                    {formatPhone(phone)}
-                  </a>
-                </p>
-                {callback ? (
-                  <p className="muted mt-2 text-fine">
-                    {callback.confirmationLine}
-                  </p>
-                ) : null}
-              </div>
-            ) : null}
-
-            {wa ? (
-              <div className="hairline p-6">
-                <p className="label with-icon"><MessageCircle className="icon" aria-hidden="true" />WhatsApp</p>
-                <p className="mt-2">
-                  <a
-                    href={wa}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="type-display"
-                    style={{ fontSize: "var(--step-1)" }}
-                  >
-                    Chat on WhatsApp
-                  </a>
-                </p>
-              </div>
-            ) : null}
-          </div>
-
-          {address ? (
-            <p className="measure mt-8">
-              {address.lines.join(", ")}. See the{" "}
-              <Link href="/location" className="link">
-                location page
-              </Link>{" "}
-              for drive times and the map.
-            </p>
-          ) : null}
-        </div>
-      </section>
-
-      <section className="section bg-bone">
-        <div className="shell">
-          <h2 className="type-display" style={{ fontSize: "var(--step-2)" }}>
-            Send an enquiry
-          </h2>
-          <p className="measure mt-4 text-fine">
-            Phone is required so we can call you back; email is optional.
-          </p>
-          <div className="mt-10" style={{ maxWidth: "32rem" }}>
-            <EnquiryForm />
-          </div>
-        </div>
-      </section>
+        <p className="mt-6">
+          <Link href={enquiryHref} className="btn btn-solid">
+            Go to the enquiry form
+          </Link>
+        </p>
+      </div>
     </main>
   );
 }

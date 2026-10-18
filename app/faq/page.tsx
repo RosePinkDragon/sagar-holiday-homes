@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import {
   contact,
+  enquiryHref,
   faq,
   faqJsonLd,
   formatPhone,
@@ -9,6 +9,7 @@ import {
   pages,
   resolved,
 } from "@/content/property";
+import EnquireLink from "../components/EnquireLink";
 import HorizonBand from "../components/HorizonBand";
 
 /**
@@ -52,9 +53,9 @@ export default function FaqPage() {
               call {formatPhone(phone)}
             </a>
           ) : (
-            <Link href="/contact" className="link">
+            <EnquireLink href={enquiryHref} className="link">
               get in touch
-            </Link>
+            </EnquireLink>
           )}
           .
         </p>

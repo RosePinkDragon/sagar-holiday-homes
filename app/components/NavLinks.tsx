@@ -18,7 +18,7 @@ export default function NavLinks({ items }: { items: NavItem[] }) {
   return (
     <nav
       aria-label="Primary"
-      className="hidden xl:flex items-center justify-end gap-x-4"
+      className="nav-flat hidden xl:flex items-center justify-center"
     >
       {items.map(({ route, label }) => (
         <Link

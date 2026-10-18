@@ -8,7 +8,6 @@ import {
   resolved,
   seo,
   siteRobots,
-  whatsAppLink,
 } from "@/content/property";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -69,7 +68,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <Footer />
           <StickyEnquiryBar
             phone={resolved(contact.phone)}
-            whatsapp={whatsAppLink()}
             enquiryHref={enquiryHref}
           />
         </SiteChrome>

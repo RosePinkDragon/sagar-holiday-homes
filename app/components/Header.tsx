@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { enquiryHref, identity, navRoutes } from "@/content/property";
+import { brand, enquiryHref, identity, navRoutes } from "@/content/property";
 import EnquireLink from "./EnquireLink";
 import MobileNav from "./MobileNav";
 import NavLinks from "./NavLinks";
@@ -44,10 +44,10 @@ export default function Header() {
           {/* A static export serves public/ as-is, so next/image adds nothing here. */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/brand/logo-160.webp"
-            srcSet="/brand/logo-160.webp 1x, /brand/logo-320.webp 2x"
-            width={160}
-            height={160}
+            src={brand.logo.src}
+            srcSet={`${brand.logo.src} 1x, ${brand.logo.src2x} 2x`}
+            width={brand.logo.size}
+            height={brand.logo.size}
             alt=""
           />
         </Link>

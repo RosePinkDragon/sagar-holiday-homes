@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { identity, routes } from "@/content/property";
+import { enquiryHref, identity, routes } from "@/content/property";
 import MobileNav from "./MobileNav";
 import NavLinks from "./NavLinks";
 
@@ -17,12 +17,12 @@ const NAV_LABELS: Record<string, string> = {
   "/food": "Food",
   "/location": "Location",
   "/tariff": "Tariff & Booking",
-  "/contact": "Contact",
   "/faq": "FAQ",
 };
 
 export default function Header() {
-  const navItems = routes.map((route) => ({
+  // /contact is a forwarding page now (the form lives on /tariff).
+  const navItems = routes.filter((route) => route !== "/contact").map((route) => ({
     route,
     label: NAV_LABELS[route] ?? route,
   }));
@@ -50,6 +50,11 @@ export default function Header() {
         <MobileNav items={navItems} />
 
         <NavLinks items={navItems} />
+
+        {/* Phones get the bottom bar (StickyEnquiryBar) instead. */}
+        <Link href={enquiryHref} className="btn btn-solid hidden md:inline-flex shrink-0">
+          Enquire
+        </Link>
       </div>
     </header>
   );

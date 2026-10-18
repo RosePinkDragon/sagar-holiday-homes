@@ -1054,17 +1054,17 @@ export const pages = {
   },
   tariff: {
     route: confirmed("/tariff"),
-    job: "Rate card, policy, what's included",
+    job: "Rate card, policy, what's included, plus contact details and the enquiry form",
     title: confirmed(
-      "Tariff & Booking — Dapoli Villa | Sagar Holiday Homes"
+      "Tariff, Booking & Enquiries — Dapoli Villa | Sagar Holiday Homes"
     ),
     description: confirmed(
-      "Weekday, weekend and peak rates inclusive of GST, plus the cancellation policy, what the rate covers and stay details for our Dapoli villa."
+      "Weekday, weekend and peak rates inclusive of GST, the cancellation policy and stay details for our Dapoli villa — plus how to call, WhatsApp or send an enquiry."
     ),
   },
   contact: {
     route: confirmed("/contact"),
-    job: "Enquiry form, phone, WhatsApp, address",
+    job: "Forwards to the enquiry form on /tariff (kept as a page: no server redirects in a static export)",
     title: confirmed("Contact & Enquiries | Sagar Holiday Homes, Dapoli"),
     description: confirmed(
       "Call, WhatsApp or send an enquiry — someone answers 10am to 10pm every day. Sagar Holiday Homes, Saldure, Dapoli, Ratnagiri."

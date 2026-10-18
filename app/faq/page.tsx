@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import {
   contact,
+  enquiryHref,
   faq,
   faqJsonLd,
   formatPhone,
@@ -52,7 +53,7 @@ export default function FaqPage() {
               call {formatPhone(phone)}
             </a>
           ) : (
-            <Link href="/contact" className="link">
+            <Link href={enquiryHref} className="link">
               get in touch
             </Link>
           )}

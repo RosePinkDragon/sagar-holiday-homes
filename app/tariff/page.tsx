@@ -18,6 +18,7 @@ import {
   tariff,
   tariffOfferJsonLd,
 } from "@/content/property";
+import ContactEnquiry from "../components/ContactEnquiry";
 import HorizonBand from "../components/HorizonBand";
 
 /**
@@ -300,6 +301,8 @@ export default function TariffPage() {
           <p className="measure mt-6 text-fine">{policy.forceMajeure.value}</p>
         </div>
       </section>
+
+      <ContactEnquiry />
     </main>
   );
 }

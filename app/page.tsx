@@ -1,19 +1,16 @@
 import type { Metadata } from "next";
-import { ArrowRight, Car, Maximize2, MessageSquare, Phone, Users, Waves } from "lucide-react";
+import { ArrowRight, Car, Maximize2, Users, Waves } from "lucide-react";
 import Link from "next/link";
 import {
-  contact,
   describeLaunchOffer,
   describe,
   facts,
   faq,
-  formatPhone,
   identity,
   pageMetadata,
   pages,
   policy,
   pool,
-  resolved,
 } from "@/content/property";
 import type { PhotoId } from "@/content/photos";
 import HorizonBand from "./components/HorizonBand";
@@ -71,7 +68,6 @@ const TEASER_SHOTS: TeaserShot[] = [
 ];
 
 export default function HomePage() {
-  const phone = resolved(contact.phone);
   const launchOffer = describeLaunchOffer();
 
   return (
@@ -313,26 +309,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {phone ? (
-        <div
-          className="bg-canopy"
-          style={{ position: "sticky", bottom: 0, zIndex: 30 }}
-        >
-          <div
-            className="shell flex flex-wrap items-center justify-between gap-4"
-            style={{ paddingBlock: "0.75rem" }}
-          >
-            <a href={`tel:${phone}`} className="footer-link text-fine with-icon">
-              <Phone className="icon" aria-hidden="true" />
-              Call {formatPhone(phone)}
-            </a>
-            <Link href="/contact" className="btn btn-invert pulse-ring">
-              <MessageSquare className="icon" aria-hidden="true" />
-              Send enquiry
-            </Link>
-          </div>
-        </div>
-      ) : null}
     </main>
   );
 }

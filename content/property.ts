@@ -290,13 +290,32 @@ export const facts = {
   }),
   /** BRIEF §1: "Alphonso country. April–May mango season is a marketable event." */
   orchard: confirmed({
-    approxTrees: 30,
+    /** Owner, 18 Oct 2026: replaces the earlier "~30". Coconut is a floor ("20+"), mango an exact count. */
+    mangoTrees: 5,
+    coconutTrees: 20,
     species: ["coconut", "mango"],
     season: "Alphonso, ripe April–May",
   }),
-  kitchen: confirmed("Full kitchen, guest-usable"),
+  /** Owner, 18 Oct 2026: fridge and gas stove. The attached hall is small and deliberately not marketed. */
+  kitchen: confirmed("Fully equipped kitchen with fridge and gas stove, guest-usable"),
   food: confirmed("Not included. Local cook available on order."),
-  indoorGames: confirmed(["Carrom", "TV"]),
+  indoorGames: confirmed(["Carrom"]),
+  /** Owner, 18 Oct 2026. */
+  tv: confirmed({ inches: 43 }),
+  /**
+   * Owner, 18 Oct 2026. The orchard and ground can host a wedding or function.
+   * Deliberately no guest capacity: max occupancy (12) is OVERNIGHT guests, so
+   * the copy must keep the two apart. Capacity and terms are settled by phone.
+   */
+  weddings: {
+    available: confirmed(true),
+    capacity: tbd<string>({
+      question:
+        "Wedding / function: how many day guests can the orchard and ground hold, and what are the rules (music cut-off, outside caterers, decorators, extra charge)? The site gives no number until this is answered.",
+      blocks: "Wedding detail - the enquiry line itself ships without it",
+      severity: "ops",
+    }),
+  },
   /**
    * Added 17 Aug 2026 on the owner's word. NOT in BRIEF §2 - CLAUDE.md names
    * BBQ as an amenity never to assume, so this is here only because the owner
@@ -358,7 +377,10 @@ export const describe = {
   ground: () =>
     `~${facts.ground.value.approxMetres}m of open ground for ${sentenceList(facts.ground.value.activities)}`,
   orchard: () =>
-    `~${facts.orchard.value.approxTrees} ${sentenceList(facts.orchard.value.species)} trees`,
+    `${facts.orchard.value.mangoTrees} mango and ${facts.orchard.value.coconutTrees}+ coconut trees`,
+  tv: () => `${facts.tv.value.inches}-inch TV`,
+  weddingLine: () =>
+    `The orchard and ground can host a wedding or function — ask us about it. Overnight stay is for up to ${facts.occupancy.max.value}.`,
   beachDistance: () =>
     `${facts.distances.saldureBeach.value.minutesByCar} minutes by car`,
   wifi: () => `${facts.wifi.speed.value.downloadMbps} Mbps Wi-Fi`,
@@ -400,13 +422,13 @@ export const mapsSearchHref = (query: string): string =>
 export const amenities = [
   describe.occupancy(),
   "Private pool, shaded, exclusive to your booking",
-  "Full kitchen — cook your own or order from our local cook",
+  "Kitchen with fridge and gas stove — cook your own or order from our local cook",
   "Barbecue on site",
   describe.ground(),
   sentenceCase(`${sentenceList(facts.orchard.value.species)} orchard`),
   "Parking for multiple cars and buses",
   "Generator backup, Wi-Fi, hot water throughout",
-  sentenceList(facts.indoorGames.value),
+  sentenceList([...facts.indoorGames.value, describe.tv()]),
   `Saldure beach, ${facts.distances.saldureBeach.value.minutesByCar} minutes away`,
 ] as const;
 
@@ -446,7 +468,7 @@ export const identity = {
     },
   ],
   supporting:
-    "A full guest-usable kitchen plus an on-call local cook — self-cater or order in. Nearby resorts cannot offer this.",
+    "A guest-usable kitchen with a fridge and gas stove, plus an on-call local cook — self-cater or order in. Nearby resorts cannot offer this.",
   segments: [
     `Extended families, 8–${facts.occupancy.max.value} people`,
     "Friend groups from Mumbai and Pune",
@@ -800,7 +822,7 @@ export const policy = {
 // ---------------------------------------------------------------------------
 
 export const food = {
-  kitchen: confirmed("Full kitchen, yours to use"),
+  kitchen: confirmed("Kitchen with fridge and gas stove, yours to use"),
   cook: confirmed("Local cook available on order"),
   /** Owner, 17 Aug 2026: priced per dish, not per head. */
   pricingModel: confirmed("per-dish"),
@@ -909,6 +931,9 @@ export function whatsAppLink(
 // Enquiry form (BRIEF §8) — one screen, phone required, email not
 // ---------------------------------------------------------------------------
 
+/** Where every "Enquire" button lands: the form, on the merged Tariff & Booking page. */
+export const enquiryHref = "/tariff#enquiry";
+
 export const enquiryForm = {
   fields: [
     { name: "name", label: "Name", type: "text", required: true },
@@ -928,6 +953,13 @@ export const enquiryForm = {
       type: "select",
       required: false,
       options: ["Yes", "No", "Tell me more"],
+    },
+    {
+      name: "occasion",
+      label: "Occasion",
+      type: "select",
+      required: false,
+      options: ["Family stay", "Friends' trip", "Wedding / function", "Other"],
     },
     { name: "message", label: "Message", type: "textarea", required: false },
   ],
@@ -979,7 +1011,7 @@ export const pages = {
     targetQuery: confirmed("3BHK villa Dapoli"),
     title: confirmed("3BHK Villa in Dapoli, Sleeps 12 | Sagar Holiday Homes"),
     description: confirmed(
-      "Three air-conditioned bedrooms, three king beds, sleeps 12. Full kitchen, Wi-Fi, generator backup. Whole-villa buyout only — no per-room sales."
+      "Three air-conditioned bedrooms, three king beds, sleeps 12. Kitchen with fridge and gas stove, Wi-Fi, generator backup. Whole-villa buyout only — no per-room sales."
     ),
   },
   poolAndGrounds: {
@@ -990,7 +1022,7 @@ export const pages = {
       "Private Pool & 150m Ground, Dapoli | Sagar Holiday Homes"
     ),
     description: confirmed(
-      "A private pool under a gazebo, 150m of open ground for cricket, and a 30-tree orchard. Pool dimensions, depth and safety notes, stated plainly."
+      "A private pool under a gazebo, 150m of open ground for cricket, and an orchard of mango and coconut trees that can host a wedding or function. Pool dimensions, depth and safety notes, stated plainly."
     ),
   },
   gallery: {
@@ -1006,7 +1038,7 @@ export const pages = {
     job: "Kitchen, cook, sample menu, pricing",
     title: confirmed("Kitchen & Konkani Cook | Sagar Holiday Homes, Dapoli"),
     description: confirmed(
-      "A full guest kitchen plus a local cook for home-style Konkani food and fresh Harnai seafood on request. Priced per dish — you settle with the cook directly."
+      "A guest kitchen with a fridge and gas stove, plus a local cook for home-style Konkani food and fresh Harnai seafood on request. Priced per dish — you settle with the cook directly."
     ),
   },
   location: {

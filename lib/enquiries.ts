@@ -13,6 +13,11 @@ export function toEnquiryRow(data: Record<string, string>): EnquiryInput {
   const date = (k: string) => (/^\d{4}-\d{2}-\d{2}$/.test(data[k] ?? "") ? data[k] : null);
   const guests = Number.parseInt(data.guests ?? "", 10);
 
+  // The table has no occasion column; keep it by leading the message with it.
+  const occasion = text("occasion", 40);
+  const note = text("message", 4000);
+  const message = occasion ? (note ? `Occasion: ${occasion}\n${note}` : `Occasion: ${occasion}`) : note;
+
   return {
     name: text("name", 200) ?? "",
     phone: text("phone", 40) ?? "",
@@ -21,7 +26,7 @@ export function toEnquiryRow(data: Record<string, string>): EnquiryInput {
     check_out: date("checkOut"),
     guests: guests >= 1 && guests <= 100 ? guests : null,
     meals: text("meals", 40),
-    message: text("message", 4000),
+    message,
   };
 }
 

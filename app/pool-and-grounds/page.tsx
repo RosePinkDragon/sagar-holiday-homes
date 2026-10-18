@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { ArrowDownToLine, Clock, Ruler, ShieldCheck, Waves } from "lucide-react";
 import {
   describe,
   describePoolDepth,
   describePoolSize,
+  enquiryHref,
   facts,
   pageMetadata,
   pages,
@@ -108,6 +110,20 @@ export default function PoolAndGroundsPage() {
           </h2>
           <p className="measure mt-6">
             {describe.orchard()} — {facts.orchard.value.season}.
+          </p>
+        </div>
+      </section>
+
+      <section className="section bg-bone">
+        <div className="shell">
+          <h2 className="type-display" style={{ fontSize: "var(--step-2)" }}>
+            Weddings and functions
+          </h2>
+          <p className="measure mt-6">{describe.weddingLine()}</p>
+          <p className="mt-6">
+            <Link href={enquiryHref} className="btn btn-solid">
+              Ask about a wedding
+            </Link>
           </p>
         </div>
       </section>

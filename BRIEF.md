@@ -19,7 +19,7 @@
 
 1. **Space.** ~150m of open ground for cricket, football, badminton. Most Konkan villas sit on small plots. This is rare and it is the lead.
 2. **Private pool under a gazebo.** Shaded, fenced enclosure, whole-villa exclusive — not shared with other guests.
-3. **Working orchard.** ~30 coconut and mango trees. Alphonso country. April–May mango season is a marketable event, not filler.
+3. **Working orchard.** 5 mango and 20+ coconut trees (owner, 18 Oct 2026). Alphonso country. April–May mango season is a marketable event, not filler.
 
 Supporting: full guest-usable kitchen plus an on-call local cook — groups can self-cater or order. Resorts nearby cannot offer this.
 
@@ -53,8 +53,8 @@ Every one of these becomes site copy and an OTA listing field. Do not publish an
 | Pool                      | Private, gazebo-shaded, fenced enclosure, **6ft depth throughout** |
 | Pool dimensions           | **[TBD]** — required for OTA forms                                 |
 | Ground                    | ~150m open area — cricket, football, badminton                     |
-| Orchard                   | ~30 coconut and mango trees                                        |
-| Kitchen                   | Full, guest-usable                                                 |
+| Orchard                   | 5 mango and 20+ coconut trees                                      |
+| Kitchen                   | Fridge and gas stove, guest-usable. Attached hall is small — not marketed |
 | Food                      | Not included. Local cook available on order.                       |
 | Indoor games              | Carrom                                                             |
 | Kids' play area           | Not present. Under consideration; would reduce ground area.        |
@@ -69,12 +69,13 @@ Every one of these becomes site copy and an OTA listing field. Do not publish an
 
 - Sleeps 12 across 3 bedrooms, all AC
 - Private pool, shaded, whole villa exclusive
-- Full kitchen — cook your own or order from our local cook
+- Kitchen with fridge and gas stove — cook your own or order from our local cook
 - ~150m open ground for cricket, football, badminton
 - Coconut and mango orchard
 - Parking for multiple cars and buses
 - Generator backup, Wi-Fi, hot water throughout
-- Carrom, TV
+- Carrom, 43-inch TV
+- Weddings / functions in the orchard and ground — venue enquiry only, no day-guest number until the owner gives one. Max occupancy 12 is overnight.
 - Beach 5 minutes away
 
 ---
@@ -168,7 +169,7 @@ Worth checking whether the owner's CA has hospitality clients. If not, find one 
 
 ## 6. Food service **[TBD]**
 
-Full kitchen + on-call local cook is a real advantage over room-wise resorts. It cannot go on the site as "budget range" — guests need numbers.
+Kitchen + on-call local cook is a real advantage over room-wise resorts. It cannot go on the site as "budget range" — guests need numbers.
 
 Required from the owner:
 

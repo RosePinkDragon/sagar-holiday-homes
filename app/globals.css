@@ -574,6 +574,7 @@ html {
   /* Below 1280px: one row — logo, name, then Enquire + hamburger on the right. */
   .header-grid {
     height: 100%;
+    transition: row-gap 200ms ease-out;
     display: grid;
     grid-template-columns: auto 1fr auto;
     grid-template-areas: "logo name cta";
@@ -603,12 +604,23 @@ html {
     height: var(--logo-compact);
   }
 
+  /* The name fades and folds away as the bar shrinks, in step with the
+     header's own 200ms height transition, instead of vanishing. max-height
+     lets the two-row layout close up smoothly at 1280px+; overflow: hidden
+     is what makes that clip, so the line-height leaves room for descenders.
+     visibility waits out the fade, then drops it from the tab order. */
   .header-name {
     grid-area: name;
     font-size: var(--step-0);
-    line-height: 1.1;
+    line-height: 1.2;
     text-decoration: none;
     text-wrap: balance;
+    max-height: 3rem;
+    overflow: hidden;
+    transition:
+      opacity 200ms ease-out,
+      max-height 200ms ease-out,
+      visibility 0s;
   }
 
   @media (min-width: 48rem) {
@@ -619,7 +631,13 @@ html {
   }
 
   .site-header[data-compact="true"] .header-name {
-    display: none;
+    opacity: 0;
+    max-height: 0;
+    visibility: hidden;
+    transition:
+      opacity 200ms ease-out,
+      max-height 200ms ease-out,
+      visibility 0s 200ms;
   }
 
   .header-nav {
@@ -658,13 +676,11 @@ html {
       align-self: start;
     }
 
+    /* Scrolled: the name row folds to nothing and the gap with it, leaving
+       the links centred beside the logo. Same grid throughout, so the change
+       animates instead of jumping between two layouts. */
     .site-header[data-compact="true"] .header-grid {
-      grid-template-areas: "logo nav cta";
-      grid-template-rows: auto;
-    }
-
-    .site-header[data-compact="true"] .header-nav {
-      align-self: center;
+      row-gap: 0;
     }
   }
 

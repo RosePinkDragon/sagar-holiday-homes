@@ -1,5 +1,5 @@
 /**
- * Sagar Holiday Homes — single source of truth for all property content.
+ * Sagar Holiday Home — single source of truth for all property content.
  *
  * Derived from BRIEF.md. Every fact, rate, policy line and contact detail lives
  * here; components read from this module and never hardcode content (BRIEF §8,
@@ -452,7 +452,7 @@ export const brand = {
 } as const;
 
 export const identity = {
-  name: "Sagar Holiday Homes",
+  name: "Sagar Holiday Home",
   domain: "sagarholidayhomes.com",
   /**
    * Pre-launch. Website and property go live together (BRIEF §10). Drives
@@ -898,13 +898,13 @@ export const food = {
 
 export const contact = {
   address: confirmed({
-    property: "Sagar Holiday Homes",
+    property: "Sagar Holiday Home",
     village: "Saldure",
     taluka: "Dapoli",
     district: "Ratnagiri",
     state: "Maharashtra",
     country: "IN",
-    lines: ["Sagar Holiday Homes", "Saldure, Dapoli", "Ratnagiri, Maharashtra"],
+    lines: ["Sagar Holiday Home", "Saldure, Dapoli", "Ratnagiri, Maharashtra"],
   }),
   postalCode: confirmed("415713"),
   /** Pinned at the gate, not the village centre (BRIEF §8). */
@@ -924,7 +924,7 @@ export const contact = {
    * established than the property is.
    */
   email: assumed(
-    "sagarholidayhomes@gmail.com",
+    "sagarholidayhome@gmail.com",
     "Interim Gmail. Replace with an address on the property's own domain once domain email is set up; update the OTA listings and Google Business Profile at the same time."
   ),
   /** State this on the enquiry confirmation, verbatim. */
@@ -1007,7 +1007,7 @@ export const pages = {
     job: "Positioning, hero image, key facts, enquiry CTA",
     targetQuery: confirmed("Dapoli villa for family groups"),
     title: confirmed(
-      "Dapoli Private Pool Villa for Groups | Sagar Holiday Homes"
+      "Dapoli Private Pool Villa for Groups | Sagar Holiday Home"
     ),
     description: confirmed(
       "A 3BHK private-pool villa near Dapoli, sleeping 12. Whole-villa buyout, a 150m cricket ground, orchard, and Saldure beach five minutes away."
@@ -1017,7 +1017,7 @@ export const pages = {
     route: confirmed("/villa"),
     job: "Rooms, occupancy, amenities, floor logic",
     targetQuery: confirmed("3BHK villa Dapoli"),
-    title: confirmed("3BHK Villa in Dapoli, Sleeps 12 | Sagar Holiday Homes"),
+    title: confirmed("3BHK Villa in Dapoli, Sleeps 12 | Sagar Holiday Home"),
     description: confirmed(
       "Three air-conditioned bedrooms, three king beds, sleeps 12. Kitchen, Wi-Fi, generator backup. Whole-villa buyout only — no per-room sales."
     ),
@@ -1027,7 +1027,7 @@ export const pages = {
     job: "Pool, gazebo, ground, orchard + safety disclosure",
     targetQuery: confirmed("villa with private pool in Dapoli"),
     title: confirmed(
-      "Private Pool & 150m Ground, Dapoli | Sagar Holiday Homes"
+      "Private Pool & 150m Ground, Dapoli | Sagar Holiday Home"
     ),
     description: confirmed(
       "A private pool under a gazebo, 150m of open ground for cricket, and a mango and coconut orchard that can host a wedding. Pool depth and safety, stated plainly."
@@ -1036,15 +1036,15 @@ export const pages = {
   gallery: {
     route: confirmed("/gallery"),
     job: "Photo grid, categorised",
-    title: confirmed("Photos — Dapoli Pool Villa | Sagar Holiday Homes"),
+    title: confirmed("Photos — Dapoli Pool Villa | Sagar Holiday Home"),
     description: confirmed(
-      "Photographs of the villa, private pool, 150m ground and coconut-mango orchard at Sagar Holiday Homes in Saldure, Dapoli."
+      "Photographs of the villa, private pool, 150m ground and coconut-mango orchard at Sagar Holiday Home in Saldure, Dapoli."
     ),
   },
   food: {
     route: confirmed("/food"),
     job: "Kitchen, cook, sample menu, pricing",
-    title: confirmed("Kitchen & Konkani Cook | Sagar Holiday Homes, Dapoli"),
+    title: confirmed("Kitchen & Konkani Cook | Sagar Holiday Home, Dapoli"),
     description: confirmed(
       "A guest kitchen with a fridge and gas stove, plus a local cook for Konkani home food and fresh Harnai seafood on request. You settle with the cook directly."
     ),
@@ -1054,7 +1054,7 @@ export const pages = {
     job: "Map, drive times, beaches, things to do nearby",
     targetQuery: confirmed("villa near Saldure beach"),
     title: confirmed(
-      "Villa Near Saldure Beach, Dapoli | Sagar Holiday Homes"
+      "Villa Near Saldure Beach, Dapoli | Sagar Holiday Home"
     ),
     description: confirmed(
       "In Saldure, Dapoli — 5 minutes from Saldure beach, about 4.5–5 hrs from Mumbai or Pune via NH66. Drive times, nearby beaches and landmarks."
@@ -1064,7 +1064,7 @@ export const pages = {
     route: confirmed("/tariff"),
     job: "Rate card, policy, what's included, plus contact details and the enquiry form",
     title: confirmed(
-      "Tariff, Booking & Enquiries | Sagar Holiday Homes"
+      "Tariff, Booking & Enquiries | Sagar Holiday Home"
     ),
     description: confirmed(
       "Weekday, weekend and peak rates inclusive of GST, the cancellation policy and stay details for our Dapoli villa — plus how to call, WhatsApp or send an enquiry."
@@ -1075,18 +1075,18 @@ export const pages = {
     /** Not in the nav: it only forwards to /tariff#enquiry. Also excluded in next-sitemap.config.js (plain JS, can't import this). */
     inNav: false,
     job: "Forwards to the enquiry form on /tariff (kept as a page: no server redirects in a static export)",
-    title: confirmed("Contact & Enquiries | Sagar Holiday Homes, Dapoli"),
+    title: confirmed("Contact & Enquiries | Sagar Holiday Home, Dapoli"),
     description: confirmed(
-      "Call, WhatsApp or send an enquiry — someone answers 10am to 10pm every day. Sagar Holiday Homes, Saldure, Dapoli, Ratnagiri."
+      "Call, WhatsApp or send an enquiry — someone answers 10am to 10pm every day. Sagar Holiday Home, Saldure, Dapoli, Ratnagiri."
     ),
   },
   faq: {
     route: confirmed("/faq"),
     job: "Answer booking-deciding questions with real, sourced facts",
     targetQuery: confirmed("Dapoli villa frequently asked questions"),
-    title: confirmed("FAQ | Sagar Holiday Homes, Dapoli"),
+    title: confirmed("FAQ | Sagar Holiday Home, Dapoli"),
     description: confirmed(
-      "Capacity, pool safety, food, Wi-Fi, parking, mango season and booking policy — straight answers about Sagar Holiday Homes in Dapoli."
+      "Capacity, pool safety, food, Wi-Fi, parking, mango season and booking policy — straight answers about Sagar Holiday Home in Dapoli."
     ),
   },
 } as const;

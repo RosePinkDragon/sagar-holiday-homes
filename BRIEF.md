@@ -1,6 +1,6 @@
-# Sagar Holiday Homes — Business & Website Brief
+# Sagar Holiday Home — Business & Website Brief
 
-**Property:** Sagar Holiday Homes, Saldure, Dapoli, Ratnagiri, Maharashtra
+**Property:** Sagar Holiday Home, Saldure, Dapoli, Ratnagiri, Maharashtra
 **Domain:** sagarholidayhomes.com
 **Status:** Pre-launch. Property in finishing stages. Website and property go live together.
 **Document purpose:** Business decisions and content requirements. Hand to owner for sign-off; use as build brief.

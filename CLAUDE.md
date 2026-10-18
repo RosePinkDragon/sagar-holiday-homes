@@ -1,6 +1,6 @@
 @AGENTS.md
 
-# Sagar Holiday Homes — project context
+# Sagar Holiday Home — project context
 
 Marketing website for a holiday villa in Saldure, Dapoli, Ratnagiri, Maharashtra.
 Business requirements live in `BRIEF.md`. **Read the relevant section before building any page.**

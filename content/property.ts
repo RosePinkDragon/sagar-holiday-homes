@@ -1035,7 +1035,7 @@ export const pages = {
     targetQuery: confirmed("3BHK villa Dapoli"),
     title: confirmed("3BHK Villa in Dapoli, Sleeps 12 | Sagar Holiday Homes"),
     description: confirmed(
-      "Three air-conditioned bedrooms, three king beds, sleeps 12. Kitchen with fridge and gas stove, Wi-Fi, generator backup. Whole-villa buyout only — no per-room sales."
+      "Three air-conditioned bedrooms, three king beds, sleeps 12. Kitchen, Wi-Fi, generator backup. Whole-villa buyout only — no per-room sales."
     ),
   },
   poolAndGrounds: {
@@ -1073,7 +1073,7 @@ export const pages = {
       "Villa Near Saldure Beach, Dapoli | Sagar Holiday Homes"
     ),
     description: confirmed(
-      "Sagar Holiday Homes is in Saldure, Dapoli — 5 minutes from Saldure beach, about 4.5–5 hrs from Mumbai or Pune via NH66. Drive times, nearby beaches and landmarks."
+      "In Saldure, Dapoli — 5 minutes from Saldure beach, about 4.5–5 hrs from Mumbai or Pune via NH66. Drive times, nearby beaches and landmarks."
     ),
   },
   tariff: {

@@ -89,17 +89,18 @@
 /* Header heights. Full = top of page, compact = after scrolling (SiteHeader.tsx).
    Anchors clear the compact bar via scroll-padding-top below. */
 :root {
-  --header-full: 4rem;
-  --header-compact: 3.25rem;
-  --logo-full: 2.75rem;
-  --logo-compact: 2.25rem;
+  --header-full: 4.5rem;
+  --header-compact: 3.5rem;
+  --logo-full: 3.5rem;
+  --logo-compact: 2.75rem;
 }
 
 @media (min-width: 80rem) {
   :root {
-    --header-full: 5.5rem;
-    --logo-full: 4rem;
-    --logo-compact: 2.5rem;
+    --header-full: 6.875rem;
+    --header-compact: 4.75rem;
+    --logo-full: 5.5rem;
+    --logo-compact: 4rem;
   }
 }
 
@@ -643,7 +644,7 @@ html {
         "logo name cta"
         "logo nav cta";
       grid-template-rows: auto auto;
-      row-gap: 0;
+      row-gap: 0.5rem;
       align-content: center;
       column-gap: 1rem;
     }
@@ -655,12 +656,6 @@ html {
 
     .header-nav {
       align-self: start;
-    }
-
-    /* Two rows share the bar's height, so the link row is shorter than the
-       44px used elsewhere — still above the 24px WCAG 2.2 minimum target. */
-    .header-nav .nav-link {
-      min-height: 2rem;
     }
 
     .site-header[data-compact="true"] .header-grid {

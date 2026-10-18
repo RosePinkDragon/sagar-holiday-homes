@@ -988,22 +988,6 @@ export const enquiryForm = {
   maxGuests: facts.occupancy.max.value,
   /** Shown above the form. Keep in step with the `required` flags in `fields`. */
   requiredNote: "Phone is required so we can call you back; email is optional.",
-  /**
-   * CLAUDE.md static export constraints: "The enquiry form posts to an
-   * external endpoint (Web3Forms/Formspree)." The form itself is built and
-   * submits to Web3Forms's public API from the browser (no server route
-   * needed under `output: 'export'`), but it needs a real access key —
-   * NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY — before an enquiry actually arrives
-   * anywhere. Nothing to invent here; someone has to create the Web3Forms
-   * account and set the env var.
-   */
-  endpointAccessKey: tbd<string>({
-    question:
-      "Create a Web3Forms account (or Formspree) and set NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY in the deploy environment. Until then the Contact form renders but enquiries submitted through it go nowhere.",
-    blocks: "Contact page — the site's primary job (BRIEF §8)",
-    severity: "content",
-    owner: "developer",
-  }),
 } as const;
 
 // ---------------------------------------------------------------------------

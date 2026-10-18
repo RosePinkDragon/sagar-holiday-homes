@@ -26,6 +26,9 @@ export default function EnquireLink({
   const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
     onClick?.(event);
     if (event.defaultPrevented || !hash || normalise(path) !== pathname) return;
+    // Leave "open in new tab / window" clicks to the browser.
+    const modified = event.metaKey || event.ctrlKey || event.shiftKey || event.altKey;
+    if (modified || event.button !== 0 || props.target === "_blank") return;
     const target = document.getElementById(hash);
     if (!target) return;
 
@@ -33,7 +36,8 @@ export default function EnquireLink({
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     target.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
     target.focus({ preventScroll: true });
-    window.history.replaceState(null, "", `#${hash}`);
+    // Keep the router's own history state; replacing it with null breaks back/forward.
+    window.history.replaceState(window.history.state, "", `#${hash}`);
   };
 
   return <Link href={href} onClick={handleClick} {...props} />;

@@ -1,12 +1,12 @@
 import Link from "next/link";
-import { enquiryHref, identity, routes } from "@/content/property";
+import { enquiryHref, identity, navRoutes } from "@/content/property";
 import EnquireLink from "./EnquireLink";
 import MobileNav from "./MobileNav";
 import NavLinks from "./NavLinks";
 import SiteHeader from "./SiteHeader";
 
 /**
- * `routes` (content/property.ts) is plain path strings with no display name
+ * `navRoutes` (content/property.ts) is plain path strings with no display name
  * attached — BRIEF §8's site-map table is the only place these labels exist.
  * Kept here rather than in content/property.ts: this is nav copy tied to a
  * route, not a property fact (rate, dimension, amenity, phone number, ...).
@@ -35,10 +35,7 @@ const NAV_LABELS: Record<string, string> = {
  * both states are a single row (the name drops out once scrolled).
  */
 export default function Header() {
-  // /contact is a forwarding page now (the form lives on /tariff).
-  const navItems = routes
-    .filter((route) => route !== "/contact")
-    .map((route) => ({ route, label: NAV_LABELS[route] ?? route }));
+  const navItems = navRoutes.map((route) => ({ route, label: NAV_LABELS[route] ?? route }));
 
   return (
     <SiteHeader>

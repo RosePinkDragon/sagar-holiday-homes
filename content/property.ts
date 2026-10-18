@@ -964,6 +964,8 @@ export const enquiryForm = {
     { name: "message", label: "Message", type: "textarea", required: false },
   ],
   maxGuests: facts.occupancy.max.value,
+  /** Shown above the form. Keep in step with the `required` flags in `fields`. */
+  requiredNote: "Phone is required so we can call you back; email is optional.",
   /**
    * CLAUDE.md static export constraints: "The enquiry form posts to an
    * external endpoint (Web3Forms/Formspree)." The form itself is built and
@@ -1064,6 +1066,8 @@ export const pages = {
   },
   contact: {
     route: confirmed("/contact"),
+    /** Not in the nav: it only forwards to /tariff#enquiry. Also excluded in next-sitemap.config.js (plain JS, can't import this). */
+    inNav: false,
     job: "Forwards to the enquiry form on /tariff (kept as a page: no server redirects in a static export)",
     title: confirmed("Contact & Enquiries | Sagar Holiday Homes, Dapoli"),
     description: confirmed(
@@ -1081,8 +1085,10 @@ export const pages = {
   },
 } as const;
 
-/** All eight routes as plain strings — for the sitemap and nav. */
-export const routes = Object.values(pages).map((p) => p.route.value);
+/** The routes that get a link in the header and drawer. */
+export const navRoutes = Object.values(pages)
+  .filter((p) => !("inNav" in p) || p.inNav !== false)
+  .map((p) => p.route.value);
 
 /**
  * Shared shape of `generateMetadata()` across every page: resolve the page's

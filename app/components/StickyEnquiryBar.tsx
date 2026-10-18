@@ -1,6 +1,3 @@
-"use client";
-
-import { usePathname } from "next/navigation";
 import { MessageCircle, MessageSquare, Phone } from "lucide-react";
 import { formatPhone } from "@/content/property";
 import EnquireLink from "./EnquireLink";
@@ -8,12 +5,12 @@ import EnquireLink from "./EnquireLink";
 /**
  * Bar pinned to the bottom of every public page: one tap to call, WhatsApp or
  * reach the form. On phones Call and WhatsApp are icon-only so Enquire fits at
- * 360px; from 768px up the number and labels are written out. Hidden on the
- * page that already has the form on screen.
+ * 360px; from 768px up the number and labels are written out. Shown on every
+ * public page, /tariff included: there the form comes first on phones, so
+ * this is the only tap-to-call within reach.
  *
- * Links arrive as props because this is a client component (it needs the
- * pathname) and the numbers live in content/property.ts — the server layout
- * reads them there and passes them in; nothing is typed here.
+ * The numbers live in content/property.ts — the layout reads them there and
+ * passes them in; nothing is typed here.
  */
 export default function StickyEnquiryBar({
   phone,
@@ -24,10 +21,6 @@ export default function StickyEnquiryBar({
   whatsapp: string | null;
   enquiryHref: string;
 }) {
-  const pathname = usePathname() ?? "";
-  const formPath = enquiryHref.split("#")[0];
-  if (pathname.replace(/\/$/, "") === formPath) return null;
-
   return (
     <div className="bg-canopy" style={{ position: "sticky", bottom: 0, zIndex: 30 }}>
       <div

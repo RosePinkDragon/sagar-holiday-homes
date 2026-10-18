@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import {
   contact,
+  enquiryForm,
   formatPhone,
   resolved,
   whatsAppLink,
@@ -109,7 +110,7 @@ export default function ContactEnquiry() {
               Send an enquiry
             </h3>
             <p className="measure mt-3 text-fine">
-              Phone is required so we can call you back; email is optional.
+              {enquiryForm.requiredNote}
             </p>
             <div className="mt-8">
               <EnquiryForm />

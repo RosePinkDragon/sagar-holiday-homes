@@ -3,11 +3,10 @@ import { formatPhone } from "@/content/property";
 import EnquireLink from "./EnquireLink";
 
 /**
- * Bar pinned to the bottom of every public page: one tap to call, WhatsApp or
- * reach the form. On phones Call and WhatsApp are icon-only so Enquire fits at
- * 360px; from 768px up the number and labels are written out. Shown on every
- * public page, /tariff included: there the form comes first on phones, so
- * this is the only tap-to-call within reach.
+ * Bar pinned to the bottom of every public page — the Home page's original
+ * bar, site-wide: Call and WhatsApp as plain text links on the left, the
+ * animated Send enquiry button on the right. Wraps rather than shrinks on
+ * narrow phones.
  *
  * The numbers live in content/property.ts — the layout reads them there and
  * passes them in; nothing is typed here.
@@ -24,19 +23,14 @@ export default function StickyEnquiryBar({
   return (
     <div className="bg-canopy" style={{ position: "sticky", bottom: 0, zIndex: 30 }}>
       <div
-        className="shell flex items-center gap-2 md:justify-between md:gap-4"
-        style={{ paddingBlock: "0.5rem" }}
+        className="shell flex flex-wrap items-center justify-between gap-4"
+        style={{ paddingBlock: "0.75rem" }}
       >
-        <div className="flex items-center gap-2 md:gap-6">
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
           {phone ? (
-            <a
-              href={`tel:${phone}`}
-              className="btn btn-invert shrink-0"
-              style={{ paddingInline: "0.85rem" }}
-              aria-label={`Call ${formatPhone(phone)}`}
-            >
+            <a href={`tel:${phone}`} className="footer-link text-fine with-icon">
               <Phone className="icon" aria-hidden="true" />
-              <span className="hidden md:inline">Call {formatPhone(phone)}</span>
+              Call {formatPhone(phone)}
             </a>
           ) : null}
           {whatsapp ? (
@@ -44,19 +38,14 @@ export default function StickyEnquiryBar({
               href={whatsapp}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn btn-invert shrink-0"
-              style={{ paddingInline: "0.85rem" }}
-              aria-label="Chat on WhatsApp"
+              className="footer-link text-fine with-icon"
             >
               <MessageCircle className="icon" aria-hidden="true" />
-              <span className="hidden md:inline">WhatsApp</span>
+              WhatsApp
             </a>
           ) : null}
         </div>
-        <EnquireLink
-          href={enquiryHref}
-          className="btn btn-invert pulse-ring min-w-0 flex-1 md:flex-none"
-        >
+        <EnquireLink href={enquiryHref} className="btn btn-invert pulse-ring">
           <MessageSquare className="icon" aria-hidden="true" />
           Send enquiry
         </EnquireLink>

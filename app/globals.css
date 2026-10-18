@@ -889,6 +889,15 @@
   }
 }
 
+/* In-page jumps (the Enquire buttons) glide instead of snapping. Route changes
+   stay instant: <html data-scroll-behavior="smooth"> in layout.tsx tells Next
+   to switch this off for the navigation itself (Next 16 upgrade guide). */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
 /* Belt and braces: neutralise anything added later that forgets the rule. */
 @media (prefers-reduced-motion: reduce) {
   *,

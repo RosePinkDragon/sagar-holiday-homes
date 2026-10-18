@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { enquiryHref, identity, routes } from "@/content/property";
 import MobileNav from "./MobileNav";
+import EnquireLink from "./EnquireLink";
 import NavLinks from "./NavLinks";
 
 /**
@@ -11,12 +12,12 @@ import NavLinks from "./NavLinks";
  */
 const NAV_LABELS: Record<string, string> = {
   "/": "Home",
-  "/villa": "The Villa",
+  "/villa": "Villa",
   "/pool-and-grounds": "Pool & Grounds",
   "/gallery": "Gallery",
   "/food": "Food",
   "/location": "Location",
-  "/tariff": "Tariff & Booking",
+  "/tariff": "Tariff",
   "/faq": "FAQ",
 };
 
@@ -38,23 +39,21 @@ export default function Header() {
           {identity.name}
         </Link>
 
-        {/* Mobile: hamburger + right-side drawer (client component).
-            Desktop (md+, 768px): a separate flat nav, always visible. Only
-            one of the two is ever in the accessibility tree at a time:
-            `hidden`/`md:hidden` remove the other from it, not just from
-            view. Between 768-1024px there isn't room for all 8 links (two
-            of them multi-word) on one line, so the nav wraps onto a second
-            row there instead of switching back to the hamburger — .nav-link
-            keeps white-space: nowrap so it's whole links that wrap, never a
-            link's own text mid-word. */}
-        <MobileNav items={navItems} />
-
-        <NavLinks items={navItems} />
-
-        {/* Phones get the bottom bar (StickyEnquiryBar) instead. */}
-        <Link href={enquiryHref} className="btn btn-solid hidden md:inline-flex shrink-0">
-          Enquire
-        </Link>
+        {/* Below 1280px the nav is a hamburger + right-side drawer (client
+            component); from 1280px it is a flat nav, always visible. Only one
+            of the two is ever in the accessibility tree: `hidden`/`xl:hidden`
+            remove the other from it, not just from view. Eight links, the
+            wordmark and the Enquire button need roughly 1100px of content
+            width, so anything narrower than 1280px used to wrap the nav onto
+            a second row — the hamburger takes over there instead. Enquire
+            stays visible from 768px; phones get the bottom bar. */}
+        <div className="flex items-center gap-3">
+          <NavLinks items={navItems} />
+          <EnquireLink href={enquiryHref} className="btn btn-solid hidden md:inline-flex shrink-0">
+            Enquire
+          </EnquireLink>
+          <MobileNav items={navItems} />
+        </div>
       </div>
     </header>
   );

@@ -49,7 +49,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   const jsonLd = lodgingBusinessJsonLd();
 
   return (
-    <html lang="en" className={`${fontVariables} h-full antialiased`}>
+    <html lang="en" data-scroll-behavior="smooth" className={`${fontVariables} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
         {/* Static JSON built from content/property.ts — no user input. */}
         <script

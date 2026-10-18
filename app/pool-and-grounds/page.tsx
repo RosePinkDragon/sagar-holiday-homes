@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { ArrowDownToLine, Clock, Ruler, ShieldCheck, Waves } from "lucide-react";
 import {
   describe,
@@ -11,6 +10,7 @@ import {
   pages,
   pool,
 } from "@/content/property";
+import EnquireLink from "../components/EnquireLink";
 import HorizonBand from "../components/HorizonBand";
 
 /**
@@ -121,9 +121,9 @@ export default function PoolAndGroundsPage() {
           </h2>
           <p className="measure mt-6">{describe.weddingLine()}</p>
           <p className="mt-6">
-            <Link href={enquiryHref} className="btn btn-solid">
+            <EnquireLink href={enquiryHref} className="btn btn-solid">
               Ask about a wedding
-            </Link>
+            </EnquireLink>
           </p>
         </div>
       </section>

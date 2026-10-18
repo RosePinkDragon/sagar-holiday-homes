@@ -6,7 +6,8 @@ import { createClient, type SupabaseClient } from "@supabase/supabase-js";
  *
  * Returns null when the env vars are missing (local dev without a project,
  * or a deploy before the owner has created one), so callers can degrade:
- * the admin shows a setup notice, the enquiry form skips the insert.
+ * the admin shows a setup notice and the enquiry form shows its error state
+ * (phone/WhatsApp fallback).
  *
  * The env vars are referenced literally so Next inlines them at build time.
  */

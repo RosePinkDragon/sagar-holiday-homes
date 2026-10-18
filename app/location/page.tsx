@@ -58,7 +58,7 @@ export default function LocationPage() {
           Saldure, Dapoli — five minutes from the beach
         </h1>
         <p className="measure mt-6">
-          Sagar Holiday Homes sits in {address.village} village,{" "}
+          Sagar Holiday Home sits in {address.village} village,{" "}
           {address.taluka} taluka, {address.district} district,{" "}
           {address.state} — inland, in the orchard, not on the seafront.
           That&rsquo;s what makes room for {describe.ground()} and a

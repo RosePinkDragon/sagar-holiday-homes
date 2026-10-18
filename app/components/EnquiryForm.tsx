@@ -11,17 +11,12 @@ import { saveEnquiry } from "@/lib/enquiries";
  * hardcoded here — so a field added to the module shows up on the form
  * without touching this file.
  *
- * Submits client-side to Web3Forms (CLAUDE.md static export constraints: no
- * server route under `output: 'export'`). enquiryForm.endpointAccessKey is
- * still `tbd` — see content/property.ts — so this posts with an empty
- * access key until NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY is set, and the error
- * state below is what a visitor sees in the meantime.
- *
- * Also saved to Supabase (lib/enquiries.ts) so it appears in /admin. With
- * either destination configured the form works; with neither, it errors.
+ * Submits from the browser straight to Supabase (lib/enquiries.ts): a static
+ * export has no server route (CLAUDE.md), and the table's RLS lets the public
+ * insert but never read, so the anon key in the bundle is safe. Enquiries
+ * appear in /admin. When Supabase isn't configured the insert returns false
+ * and the visitor sees the error state, which points them at phone/WhatsApp.
  */
-
-const ACCESS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY ?? "";
 
 type FormValues = Record<string, string>;
 
@@ -33,31 +28,9 @@ export default function EnquiryForm() {
   } = useForm<FormValues>();
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
 
-  const sendEmail = async (data: FormValues): Promise<boolean> => {
-    if (!ACCESS_KEY) return false;
-    try {
-      const res = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({
-          access_key: ACCESS_KEY,
-          subject: `Enquiry from ${data.name || "the website"}`,
-          ...data,
-        }),
-      });
-      const result = await res.json();
-      return Boolean(result.success);
-    } catch {
-      return false;
-    }
-  };
-
-  // Saved to the admin panel (Supabase) and emailed (Web3Forms) in parallel.
-  // Either one landing means someone will see it, so either counts as sent.
   const onSubmit = async (data: FormValues) => {
     setStatus("idle");
-    const [saved, emailed] = await Promise.all([saveEnquiry(data), sendEmail(data)]);
-    setStatus(saved || emailed ? "success" : "error");
+    setStatus((await saveEnquiry(data)) ? "success" : "error");
   };
 
   if (status === "success") {

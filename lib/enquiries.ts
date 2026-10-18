@@ -36,8 +36,8 @@ export function toEnquiryRow(data: Record<string, string>): EnquiryInput {
 
 /**
  * Saves a website enquiry so it shows up in /admin. Resolves false (never
- * throws) when Supabase isn't configured or the insert fails — the email
- * notification is sent independently, so the visitor isn't blocked by this.
+ * throws) when Supabase isn't configured or the insert fails, so the form can
+ * show its fallback message — this insert is the only place an enquiry goes.
  *
  * No `.select()` after the insert: the public (anon) role can write
  * enquiries but deliberately can't read them back.

@@ -1,4 +1,4 @@
--- Sagar Holiday Homes — admin panel schema
+-- Sagar Holiday Home — admin panel schema
 --
 -- Run once in Supabase → SQL Editor → New query → paste → Run.
 -- Safe to re-run: tables use IF NOT EXISTS and policies are dropped first.

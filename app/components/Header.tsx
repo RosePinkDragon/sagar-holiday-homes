@@ -27,7 +27,7 @@ const NAV_LABELS: Record<string, string> = {
  * accessibility tree), switched by `data-compact` on the <header> — see
  * SiteHeader and the `.header-*` rules in globals.css:
  *
- *   top of page, 1280px+   [logo] Sagar Holiday Homes        [ Enquire ]
+ *   top of page, 1280px+   [logo] Sagar Holiday Home        [ Enquire ]
  *                          [    ] Home  Villa  Pool …
  *   scrolled               [logo] Home  Villa  Pool …        [ Enquire ]
  *

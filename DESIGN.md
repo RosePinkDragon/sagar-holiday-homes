@@ -1,4 +1,4 @@
-# Sagar Holiday Homes — design direction
+# Sagar Holiday Home — design direction
 
 Read alongside `CLAUDE.md` and `BRIEF.md`. This file governs every visual decision. Where it and a personal preference disagree, this file wins.
 

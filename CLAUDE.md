@@ -1,6 +1,6 @@
 @AGENTS.md
 
-# Sagar Holiday Homes — project context
+# Sagar Holiday Home — project context
 
 Marketing website for a holiday villa in Saldure, Dapoli, Ratnagiri, Maharashtra.
 Business requirements live in `BRIEF.md`. **Read the relevant section before building any page.**
@@ -30,7 +30,7 @@ Business requirements live in `BRIEF.md`. **Read the relevant section before bui
 
 ## Static export constraints
 
-No route handlers, server actions, middleware, or ISR. The enquiry form posts to an external endpoint (Web3Forms/Formspree). `next/image` requires `unoptimized: true`; images are pre-optimised to WebP/AVIF before entering `public/`.
+No route handlers, server actions, middleware, or ISR. The enquiry form inserts into Supabase from the browser (`lib/enquiries.ts`; RLS allows public insert only), and enquiries are read in `/admin`. `next/image` requires `unoptimized: true`; images are pre-optimised to WebP/AVIF before entering `public/`.
 
 ## SEO requirements
 

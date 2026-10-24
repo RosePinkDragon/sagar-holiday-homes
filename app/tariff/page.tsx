@@ -23,7 +23,7 @@ import HorizonBand from "../components/HorizonBand";
 
 /**
  * BRIEF §4 hard-gates all site copy on the GST decision — resolved
- * (tariff.gst.displayTreatment) — and CLAUDE.md rule 7: no rate appears
+ * (tariff.gst.charged) — and CLAUDE.md rule 7: no rate appears
  * without gstNote() beside it. Any fact still `assumed` rather than
  * `confirmed` (content/property.ts) is labelled "Indicative", so the flag
  * clears itself automatically the day someone promotes it to `confirmed`.
@@ -85,8 +85,7 @@ export default function TariffPage() {
           Tariff &amp; booking
         </h1>
         <p className="measure mt-6">
-          Whole-villa buyout only. All rates below are{" "}
-          {gstNote().charAt(0).toLowerCase() + gstNote().slice(1)}.
+          Whole-villa buyout only. {gstNote()} on any rate below.
         </p>
       </header>
 

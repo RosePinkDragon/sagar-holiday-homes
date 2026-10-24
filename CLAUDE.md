@@ -26,7 +26,7 @@ Business requirements live in `BRIEF.md`. **Read the relevant section before bui
 
 **6. Pool safety copy is verbatim.** The disclosure in `BRIEF.md` §3 is used word for word. Do not soften, shorten or paraphrase it.
 
-**7. No rate appears without its GST treatment.** The inclusive/exclusive decision is still open — until it is resolved, rates render from the content module with a `gstNote` field alongside.
+**7. No rate appears without its GST treatment.** No GST is charged (turnover below the registration threshold, owner decision 24 Oct 2026); rates render from the content module with `gstNote()` alongside.
 
 ## Static export constraints
 

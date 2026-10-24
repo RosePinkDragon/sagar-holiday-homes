@@ -79,7 +79,7 @@ constraint covers both):
 | phone, email | text | optional |
 | guests | int | 1–12 when kind='booking' (BRIEF max occupancy) |
 | source | text | `'direct' \| 'airbnb' \| 'booking_com' \| 'other'` |
-| total_amount | numeric(10,2) | agreed amount in ₹, as entered — not computed from the tariff (GST treatment still open, CLAUDE.md rule 7) |
+| total_amount | numeric(10,2) | agreed amount in ₹, as entered — not computed from the tariff |
 | notes / block reason | text | |
 | enquiry_id | uuid fk → enquiries | nullable |
 | created_at, updated_at | timestamptz | trigger maintains `updated_at` |

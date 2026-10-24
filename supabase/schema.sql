@@ -71,8 +71,7 @@ create table if not exists public.bookings (
   email        text check (email is null or char_length(email) <= 200),
   guests       int,
   source       text check (source is null or source in ('direct', 'airbnb', 'booking_com', 'other')),
-  -- Agreed amount in rupees, as entered. Not computed from the tariff: the
-  -- GST-inclusive/exclusive decision is still open (CLAUDE.md rule 7).
+  -- Agreed amount in rupees, as entered. Not computed from the tariff.
   total_amount numeric(10, 2) check (total_amount is null or total_amount >= 0),
   notes        text check (notes is null or char_length(notes) <= 4000),
   enquiry_id   uuid references public.enquiries (id) on delete set null,

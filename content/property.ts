@@ -25,7 +25,7 @@
 //               internal sign-off sheets — never for public copy.
 //
 // A `Fact<T>` is deliberately NOT assignable to ReactNode. Writing
-// `<p>{tariff.gst.displayTreatment}</p>` is a type error, not a blank on the
+// `<p>{tariff.gst.charged}</p>` is a type error, not a blank on the
 // page. Callers must narrow with isResolved() / resolved() / requireFact().
 // ---------------------------------------------------------------------------
 
@@ -123,7 +123,7 @@ export function requireFact<T>(fact: Fact<T>, label: string): T {
 }
 
 export type OpenItem = {
-  /** Dotted path into the content tree, e.g. "tariff.gst.displayTreatment". */
+  /** Dotted path into the content tree, e.g. "tariff.gst.charged". */
   readonly path: string;
   readonly status: "assumed" | "tbd";
   readonly detail: string;
@@ -587,34 +587,16 @@ export type RateCard = {
 
 export const tariff = {
   /**
-   * BRIEF §4 + §11 item 1 — this blocks ALL site copy. Until it is answered,
-   * no page may state a rate, because a rate without its GST treatment is
-   * worse than no rate at all (BRIEF §8, Home).
-   *
-   * Accommodation above ₹7,500/night attracts 18% GST with input tax credit.
-   * Every realistic rate here sits above that line, so 18% applies and the
-   * build-out, furnishings and running costs become creditable.
+   * Owner, 24 Oct 2026: no GST is charged — turnover is below the registration
+   * threshold. Displayed rates are the full amount the guest pays. Revisit
+   * with the CA if turnover approaches the threshold.
    */
   gst: {
-    ratePercent: confirmed(18),
-    /**
-     * Owner's decision, 17 Aug 2026: displayed rates are GST-inclusive. Every
-     * rate on the site is therefore the amount the guest actually pays, and
-     * must be rendered alongside gstNote(). Still worth confirming the
-     * mechanics with a CA — see caQuestions below.
-     */
-    displayTreatment: confirmed("inclusive"),
-    /** Raise these with the CA specifically (BRIEF §4). */
-    caQuestions: [
-      "TCS collected by OTAs under the e-commerce operator provisions — appears in GSTR-8 data, must be reconciled and claimed",
-      "Reverse charge on commission billed by foreign OTA entities",
-      "Credit-note treatment for refunds against issued invoices",
-    ],
+    charged: confirmed(false),
   },
 
   /**
-   * Owner, 8 Oct 2026: published rate and discounted rate per band, both
-   * GST-inclusive (matching gst.displayTreatment). Replaces the BRIEF §4
+   * Owner, 8 Oct 2026: published rate and discounted rate per band, no GST on top. Replaces the BRIEF §4
    * benchmark-midpoint placeholder.
    */
   rateCard: confirmed({
@@ -639,7 +621,7 @@ export const tariff = {
   /**
    * Owner, 17 Aug 2026: ₹1,200 per extra guest per night above base occupancy
    * of 8, up to the maximum of 12. Above the ₹800–₹1,000 benchmark in BRIEF §4,
-   * which is the owner's call. GST-inclusive, like every other rate here.
+   * which is the owner's call.
    */
   extraGuest: confirmed(1_200),
 
@@ -677,16 +659,6 @@ export function describeLaunchOffer(): string | null {
     range.from === range.to ? `${range.to}%` : `${range.from}–${range.to}%`;
   return `${span} off the published rate`;
 }
-
-/**
- * CLAUDE.md hard rule 7: no rate appears without its GST treatment. Render this
- * next to every price on every page.
- */
-export const gstNote = (): string =>
-  requireFact(tariff.gst.displayTreatment, "tariff.gst.displayTreatment") ===
-  "inclusive"
-    ? `Inclusive of ${tariff.gst.ratePercent.value}% GST`
-    : `Plus ${tariff.gst.ratePercent.value}% GST`;
 
 /**
  * BRIEF §4 / audit finding: the guest-count and pricing story (sleeps 12,
@@ -752,9 +724,7 @@ export function tariffOfferJsonLd(): Record<string, unknown> | null {
     priceSpecification: {
       "@type": "PriceSpecification",
       priceCurrency: "INR",
-      valueAddedTaxIncluded:
-        tariff.gst.displayTreatment.status === "confirmed" &&
-        tariff.gst.displayTreatment.value === "inclusive",
+      valueAddedTaxIncluded: false,
     },
     eligibleQuantity: {
       "@type": "QuantitativeValue",
@@ -874,7 +844,7 @@ export const food = {
   /** Guests settle with the cook, not the villa. */
   paidTo: assumed(
     "cook-directly",
-    "Owner said 'mostly paid to cook'. Site copy therefore says you settle with the cook directly. Confirm whether any cases are billed through the villa - if so the copy needs a second sentence, and those meals fall inside the villa's GST invoice rather than outside it."
+    "Owner said 'mostly paid to cook'. Site copy therefore says you settle with the cook directly. Confirm whether any cases are billed through the villa - if so the copy needs a second sentence, and those meals fall inside the villa's bill rather than outside it."
   ),
   /** Roughly one meal's notice - tell the cook at breakfast for lunch. */
   noticeRequired: assumed(
@@ -1067,7 +1037,7 @@ export const pages = {
       "Tariff, Booking & Enquiries | Sagar Holiday Home"
     ),
     description: confirmed(
-      "Weekday, weekend and peak rates inclusive of GST, the cancellation policy and stay details for our Dapoli villa — plus how to call, WhatsApp or send an enquiry."
+      "Weekday, weekend and peak rates, the cancellation policy and stay details for our Dapoli villa — plus how to call, WhatsApp or send an enquiry."
     ),
   },
   contact: {
@@ -1203,9 +1173,8 @@ export function lodgingBusinessJsonLd(): Record<string, unknown> {
       ? { "@type": "GeoCoordinates", latitude: geo.lat, longitude: geo.lng }
       : undefined,
     numberOfRooms: seo.numberOfRooms,
-    // CLAUDE.md rule 7: no rate without its GST treatment — structured data included.
     priceRange: rateCard
-      ? `${formatInr(rateCard.weekday.offer)} - ${formatInr(rateCard.peak.offer)} (${gstNote().charAt(0).toLowerCase()}${gstNote().slice(1)})`
+      ? `${formatInr(rateCard.weekday.offer)} - ${formatInr(rateCard.peak.offer)} `
       : undefined,
     amenityFeature: amenities.map((name) => ({
       "@type": "LocationFeatureSpecification",

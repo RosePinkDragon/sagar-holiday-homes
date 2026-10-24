@@ -661,16 +661,6 @@ export function describeLaunchOffer(): string | null {
 }
 
 /**
- * CLAUDE.md hard rule 7: no rate appears without its GST treatment. No GST is
- * charged (tariff.gst.charged), so this is the short statement to render next
- * to a rate.
- */
-export const gstNote = (): string =>
-  requireFact(tariff.gst.charged, "tariff.gst.charged")
-    ? "GST extra"
-    : "No GST charged";
-
-/**
  * BRIEF §4 / audit finding: the guest-count and pricing story (sleeps 12,
  * rates built around 8, 9 comfortable) is confusing without a worked
  * number. Computed from the same `tariff`/`facts` values the rate card
@@ -1183,9 +1173,8 @@ export function lodgingBusinessJsonLd(): Record<string, unknown> {
       ? { "@type": "GeoCoordinates", latitude: geo.lat, longitude: geo.lng }
       : undefined,
     numberOfRooms: seo.numberOfRooms,
-    // CLAUDE.md rule 7: no rate without its GST treatment — structured data included.
     priceRange: rateCard
-      ? `${formatInr(rateCard.weekday.offer)} - ${formatInr(rateCard.peak.offer)} (${gstNote().charAt(0).toLowerCase()}${gstNote().slice(1)})`
+      ? `${formatInr(rateCard.weekday.offer)} - ${formatInr(rateCard.peak.offer)} `
       : undefined,
     amenityFeature: amenities.map((name) => ({
       "@type": "LocationFeatureSpecification",
